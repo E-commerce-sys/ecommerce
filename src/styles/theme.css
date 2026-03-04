@@ -1,6 +1,29 @@
 :root {
-  --color-primary: 220 38 38; /* red */
-  --color-soft-border: 229 231 235; /* gray */
-  --color-bg: 255 255 255;
-  --color-text: 17 24 39;
+  /* Dark Background */
+  --color-bg-dark: 0 4 26; /* #00041A */
+
+  /* Brand / Primary */
+  --color-primary-main: 219 68 68; /* #DB4444 */
+  --color-primary-light: 231 185 185; /* #E7B9B9 */
+  --color-primary-dark: 200 47 47; /* #C82F2F */
+
+  /* Text Colors */
+  --color-text-main: 27 38 59; /* #1B263B */
+  --color-text-light: 83 96 121; /* #536079 */
+  --color-text-dark: 16 23 35; /* #101723 */
+
+  /* Semantic Text */
+  --color-text-orange: 213 100 45; /* #D5642D */
+  --color-text-green: 64 134 49; /* #408631 */
+  --color-text-blue: 41 104 182; /* #2968B6 */
+  --color-text-red: 180 40 78; /* #B4284E */
+
+  /* Button / UI Background */
+  --color-ui-orange-soft: 255 236 229; /* #FFECE5 */
+  --color-ui-green-soft: 227 249 228; /* #E3F9E4 */
+  --color-ui-blue-soft: 229 240 255; /* #E5F0FF */
+  --color-ui-red-soft: 255 218 219; /* #FFDADB */
+
+  /* Action Colors */
+  --color-discount: 0 218 87; /* #00DA57 */
 }
