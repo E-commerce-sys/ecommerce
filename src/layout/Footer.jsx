@@ -11,31 +11,26 @@ function Footer() {
       
       <div className="gap-30 flex flex-row justify-center content-baseline h-fit" >
             <div className=" flex flex-col gap-4 ">
-            <h3 className="font-bold text-xl ">Exclusive</h3>
-            <p className="font-semibold">Subscribe</p>
-            <p className="text-gray-400 text-sm">Get 10% off your first order</p>
-            <Link to='/about' className="text-gray-400 text-sm hover:text-white transition-colors">About us</Link>
-            <p className="text-gray-400 text-sm hover:text-white transition-colors">Help & Support</p>
+            <h3 className="font-bold text-lg ">Exclusive</h3>
+            <p className="font-semibold text-gray-400">Subscribe</p>
+            <p className="text-gray-400 ">Get 10% off your first order</p>
+            <Link to='/about' className="text-gray-400  hover:text-white transition-colors">About us</Link>
             </div>
 
 
             <div className=" flex flex-col gap-4 ">
             <h3 className="font-semibold text-lg">Account</h3>
-             <ul className="space-y-2.5 text-gray-400 text-sm">
-            <li><Link to="/register" className="hover:text-white transition-colors">Login / Register</Link></li>
-            <li><Link to="/cart" className="hover:text-white transition-colors">Cart</Link></li>
-            <li><Link to="/wishlist" className="hover:text-white transition-colors">Wishlist</Link></li>
-            <li><Link to="/" className="hover:text-white transition-colors">Shop</Link></li>
-          </ul>
+            <p><Link to="/register" className="text-gray-400 hover:text-white transition-colors">Login / Register</Link></p>
+            <p><Link to="/cart" className="text-gray-400 hover:text-white transition-colors">Cart</Link></p>
+            <p><Link to="/wishlist" className="text-gray-400 hover:text-white transition-colors">Wishlist</Link></p>
+            <p><Link to="/" className="text-gray-400 hover:text-white transition-colors">Shop</Link></p>
             </div>
             <div className=" flex flex-col gap-4 ">
             <h3 className="font-semibold text-lg ">Quick Link</h3>
-          <ul className="space-y-2.5 text-gray-400 text-sm">
-            <li><a className="hover:text-white transition-colors">Privacy Policy</a></li>
-            <li><a className="hover:text-white transition-colors">Terms Of Use</a></li>
-            <li><a className="hover:text-white transition-colors">FAQ</a></li>
-            <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-          </ul>
+            <p><a className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></p>
+            <p><a className="text-gray-400 hover:text-white transition-colors">Terms Of Use</a></p>
+            <p><a className="text-gray-400 hover:text-white transition-colors">FAQ</a></p>
+            <p><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></p>
             </div>
             <div>
                 <h3 className="font-semibold text-lg mb-2">Download App</h3>
