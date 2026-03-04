@@ -1,6 +1,7 @@
 :root {
   /* Dark Background */
   --color-bg-dark: 0 4 26; /* #00041A */
+  --color-border: 220 223 228; /*#DCDFE4*/
 
   /* Brand / Primary */
   --color-primary-main: 219 68 68; /* #DB4444 */
