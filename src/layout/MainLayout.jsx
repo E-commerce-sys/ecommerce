@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import CartSummary from "../features/cart/CartSummary";
 import Discounts from "../features/home/Discounts";
 
+
 function MainLayout() {
   return (
     <div className="min-h-screen flex flex-col">
