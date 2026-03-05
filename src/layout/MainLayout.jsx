@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import CartSummary from "../features/cart/CartSummary";
+import Discounts from "../features/home/Discounts";
 
 function MainLayout() {
   return (
@@ -12,7 +13,6 @@ function MainLayout() {
       <Navbar />
       <main className="flex-1">
         <Outlet />
-        <CartSummary/>
       </main>
 
       <Footer />
