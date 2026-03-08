@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 
 function RegisterForm() {
   return (
-    <div className='flex flex-row items-center gap-50'>
-      <img src={SideImage} className='w-149.25 h-146.25 mr-20 my-30'/>
+    <div className='w-full max-w-full flex justify-center lg:justify-normal flex-row items-center lg:gap-50 overflow-hidden'>
+  <img src={SideImage} className='hidden lg:block lg:w-[45%] h-auto mr-20 my-30 shrink-0'/>
       <div className='flex flex-col gap-12.5 items-center '>
       <div className='flex flex-col gap-6 tacking-[4%] '>
       <h1 className='text-[36px] font-medium'>Create your account</h1>
@@ -19,7 +19,7 @@ function RegisterForm() {
         <Input placeholder='Last Name' name='L_Name'   className=' py-2 w-38.75'/>
       </div>
       <Input placeholder='Email' name='Email'  className=' py-2'/>
-      <Input type='password' placeholder='Password' name='password'  className=' py-2'/>
+      <Input type='password' placeholder='Password' naSme='password'  className=' py-2'/>
       <Input type='password' placeholder='Confirm Password' name='confirm_pass'  className=' py-2'/>
       </div>
       <div className='flex flex-col gap-4 items-center'>
