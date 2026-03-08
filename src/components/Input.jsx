@@ -13,6 +13,7 @@ function Input({
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
+  const isRTL = document.documentElement.dir === "rtl";
 
   return (
     <div className="relative w-full">
@@ -22,7 +23,7 @@ function Input({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`w-full pr-10 border-b
+        className={`w-full pr-10 py-1 border-b
         border-b-[rgb(var(--color-border))]
         text-[rgb(var(--color-text-main))]
         placeholder:text-[rgb(var(--color-border))]
@@ -36,7 +37,9 @@ function Input({
         <button
           type="button"
           onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+          className={`absolute top-1/2 -translate-y-1/2 cursor-pointer ${
+            isRTL ? "left-2" : "right-2"
+          }`}
         >
           <img
             src={showPassword ? Eye : EyeOff}
