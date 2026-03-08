@@ -1,5 +1,25 @@
 {
-  "hello": "Hello",
-  "home": "Home",
-  "products": "Products"
+  "navbar": {
+    "search": "Search for products",
+    "basket": "My basket",
+    "favourite": "My favourites",
+    "login": "Log in"
+  },
+  "footer": {
+    "subscribe": "Subscribe",
+    "discount": "Get 10% off your first order",
+    "about": "About us",
+    "account": "Account",
+    "login": "Login / Register",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "shop": "Shop",
+    "link": "Quick Link",
+    "privacy": "Privacy Policy",
+    "terms": "Terms Of Use",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "download": "Download App",
+    "save": "Save $3 with App New User Only"
+  }
 }

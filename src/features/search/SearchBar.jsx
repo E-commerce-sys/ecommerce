@@ -1,8 +1,11 @@
+import { useTranslation } from "react-i18next";
 import search from "../../assets/icons/search-Icon.svg";
 
 function SearchBar() {
+  const { t } = useTranslation();
+
   return (
-    <div className="relative w-150">
+    <div className="relative">
       <img
         src={search}
         alt="search"
@@ -11,19 +14,23 @@ function SearchBar() {
 
       <input
         type="text"
-        placeholder="Search for products . . ."
+        placeholder={`${t("navbar.search")}`}
         className="
-          w-full
+          lg:w-130
+          md:w-100
+          w-50
           pl-10
           pr-4
           py-2
           rounded-sm
-          bg-gray-100
+          bg-[rgb(var(--color-grey))]
           text-normal
           outline-none
-          placeholder:text-gray-500
+          placeholder:text-gray-400
+          placeholder:text-base
           focus:ring-1
           focus:ring-[rgb(var(--color-primary-main))]
+          transition-all duration-300
         "
       />
     </div>
