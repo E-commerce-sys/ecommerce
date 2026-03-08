@@ -5,8 +5,9 @@ import HalfStar from "../../assets/icons/half-filled-Icon.svg"
 function CartSummary(prop) {
   {/* Call should be like this 
     <CartSummary name="RGB liquid CPU Cooler" prev_price="170$" new_price="160$"/>*/}
-  return (<div>
+  return (<div className="flex flex-col gap-5 m-5">
     <CartItem img={CartItems}/>
+    <div className="flex flex-col gap-2">
       <p className="text-[16px] font-medium">{prop.name}</p> 
       <div className="flex flex-row gap-3">
       <span className="text-[rgb(var(--color-primary-main))] gap-3 text-[16px] font-medium">{prop.new_price}</span> 
@@ -19,6 +20,7 @@ function CartSummary(prop) {
       <img src={FullStar}/>
       <img src={HalfStar}/>
       <span className="text-[14px] font-semibold text-[rgb(var(--color-text-main-1))] text-sm m-2">(65)</span> {/*Also a prop to be added later for number of reviewers once there is data */}
+      </div>
       </div>
     </div>);
 }

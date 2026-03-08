@@ -3,9 +3,9 @@ import AddWishlist from "../../assets/icons/heart-Icon.svg";
 import FilledHeart from '../../assets/icons/heart-filled-Icon.svg';
 
 function CartItem(prop) {
-  const [isFilled,setIsFilled]=useState(false)
+  const [isFavorite,setIsFavorite]=useState(false)
   function wishlistHandler(){
-    setIsFilled(prev=>!prev)
+    setIsFavorite(prev=>!prev)
 
 
   }
@@ -21,7 +21,7 @@ function CartItem(prop) {
                    opacity-100"
         onClick={wishlistHandler}
       >
-        <img src={isFilled?FilledHeart:AddWishlist} sizes="18px" />
+        <img src={isFavorite?FilledHeart:AddWishlist} sizes="18px" />
       </button>
     </div>
   );
