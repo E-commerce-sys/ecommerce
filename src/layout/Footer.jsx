@@ -11,8 +11,8 @@ function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="bg-[rgb(var(--color-bg-dark))] text-white h-70 w-full flex items-center justify-center">
-      <div className="lg:gap-30 md:gap-20 mx-2 flex justify-around w-full">
+    <footer className="bg-[rgb(var(--color-bg-dark))] text-white py-10 w-full flex items-center justify-center">
+      <div className="lg:gap-30 md:gap-20 mx-2 flex flex-wrap justify-center gap-10 w-full">
         <div className=" flex flex-col gap-4 ">
           <h3 className="font-bold text-lg ">Exclusive</h3>
           <p className="font-semibold text-[rgb(var(--color-text-main-1))]">
