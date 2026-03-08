@@ -1,12 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { categories } from "../../mock/categories";
 import SubCategoryMenu from "./SubCategoryMenu";
-
+import { categoriesAPI } from "./categoriesAPI";
 import menu from "../../assets/icons/menu.svg";
 
 function CategoryMenu() {
   const parentCategories = categories.filter((cat) => cat.parent_id === null);
   const [activeCategory, setActiveCategory] = useState(parentCategories[0]);
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const data = await categoriesAPI();
+        console.log("API categories:", data);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    }
+
+    fetchCategories();
+  }, []);
 
   return (
     <div className="w-full">
@@ -16,6 +29,7 @@ function CategoryMenu() {
           <img src={menu} alt="" />
           <p>Categories </p>
         </div>
+
         <div className="flex gap-6">
           {parentCategories.map((cat) => (
             <button
@@ -23,8 +37,8 @@ function CategoryMenu() {
               onClick={() => setActiveCategory(cat)}
               className={`pb-2 text-sm font-medium cursor-pointer ${
                 activeCategory.id === cat.id
-                  ? "border-b-2 border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))] "
-                  : "text-[rgb(var(--color-text-main-3))] "
+                  ? "border-b-2 border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
+                  : "text-[rgb(var(--color-text-main-3))]"
               }`}
             >
               {cat.name}

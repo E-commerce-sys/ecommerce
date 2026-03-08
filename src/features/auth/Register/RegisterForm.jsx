@@ -1,7 +1,7 @@
-import SideImage from "../../assets/img/Side-Image.png";
-import Button from "../../components/Button";
-import Input from "../../components/Input";
-import GoogleIcon from "../../assets/icons/Icon-Google.svg";
+import SideImage from "../../../assets/img/Side-Image.png";
+import Button from "../../../components/Button";
+import Input from "../../../components/Input";
+import GoogleIcon from "../../../assets/icons/Icon-Google.svg";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
