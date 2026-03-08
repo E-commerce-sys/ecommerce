@@ -7,15 +7,18 @@ function CartSummary(prop) {
     <CartSummary name="RGB liquid CPU Cooler" prev_price="170$" new_price="160$"/>*/}
   return (<div>
     <CartItem img={CartItems}/>
-      <p>{prop.name}</p> 
-      <span className="text-[rgb(var(--color-primary-dark))] gap-3">{prop.new_price}</span> <span style={{ textDecoration: 'line-through' }}>{prop.prev_price}</span>
+      <p className="text-[16px] font-medium">{prop.name}</p> 
+      <div className="flex flex-row gap-3">
+      <span className="text-[rgb(var(--color-primary-main))] gap-3 text-[16px] font-medium">{prop.new_price}</span> 
+      <span className="line-through text-[16px] font-medium text-[rgb(var(--color-text-main-1))]">{prop.prev_price}</span>
+      </div>
       <div className="px-0.5 flex flex-row">
       <img src={FullStar}/>
       <img src={FullStar}/>
       <img src={FullStar}/>
       <img src={FullStar}/>
       <img src={HalfStar}/>
-      <span className="text-[rgb(var(--color-text-light))] text-sm m-2">(65)</span> {/*Also a prop to be added later for number of reviewers once there is data */}
+      <span className="text-[14px] font-semibold text-[rgb(var(--color-text-main-1))] text-sm m-2">(65)</span> {/*Also a prop to be added later for number of reviewers once there is data */}
       </div>
     </div>);
 }
