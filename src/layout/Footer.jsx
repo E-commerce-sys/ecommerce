@@ -15,11 +15,15 @@ function Footer() {
       <div className="lg:gap-30 md:gap-20 mx-2 flex justify-around w-full">
         <div className=" flex flex-col gap-4 ">
           <h3 className="font-bold text-lg ">Exclusive</h3>
-          <p className="font-semibold text-gray-400">{t("footer.subscribe")}</p>
-          <p className="text-gray-400 ">{t("footer.discount")}</p>
+          <p className="font-semibold text-[rgb(var(--color-text-main-1))]">
+            {t("footer.subscribe")}
+          </p>
+          <p className="text-[rgb(var(--color-text-main-1))] ">
+            {t("footer.discount")}
+          </p>
           <Link
             to="/about"
-            className="text-gray-400  hover:text-white transition-colors"
+            className="text-[rgb(var(--color-text-main-1))]  hover:text-white transition-colors"
           >
             {t("footer.about")}
           </Link>
@@ -30,7 +34,7 @@ function Footer() {
           <p>
             <Link
               to="/register"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
             >
               {t("footer.login")}
             </Link>
@@ -38,7 +42,7 @@ function Footer() {
           <p>
             <Link
               to="/cart"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
             >
               {t("footer.cart")}
             </Link>
@@ -46,7 +50,7 @@ function Footer() {
           <p>
             <Link
               to="/wishlist"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
             >
               {t("footer.wishlist")}
             </Link>
@@ -54,7 +58,7 @@ function Footer() {
           <p>
             <Link
               to="/"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
             >
               {t("footer.shop")}
             </Link>
@@ -63,24 +67,24 @@ function Footer() {
         <div className=" flex flex-col gap-4 ">
           <h3 className="font-semibold text-lg ">{t("footer.shop")}</h3>
           <p>
-            <a className="text-gray-400 hover:text-white transition-colors">
+            <a className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.privacy")}
             </a>
           </p>
           <p>
-            <a className="text-gray-400 hover:text-white transition-colors">
+            <a className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.terms")}
             </a>
           </p>
           <p>
-            <a className="text-gray-400 hover:text-white transition-colors">
+            <a className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.faq")}
             </a>
           </p>
           <p>
             <Link
               to="/contact"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
             >
               {t("footer.contact")}
             </Link>
@@ -88,7 +92,9 @@ function Footer() {
         </div>
         <div>
           <h3 className="font-semibold text-lg mb-2">{t("footer.download")}</h3>
-          <p className="text-gray-400 text-xs mb-3">{t("footer.save")}</p>
+          <p className="text-[rgb(var(--color-text-main-1))] text-xs mb-3">
+            {t("footer.save")}
+          </p>
           <div className="flex gap-2 mb-4">
             <div className="bg-white p-1 rounded w-16 h-16" />
             <div className="flex flex-col gap-2">
