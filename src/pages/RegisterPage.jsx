@@ -1,5 +1,9 @@
+import RegisterForm from "../features/register/RegisterForm";
+
 function RegisterPage() {
-  return <div></div>;
+  return <div>
+    <RegisterForm/>
+  </div>;
 }
 
 export default RegisterPage;

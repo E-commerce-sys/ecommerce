@@ -16,7 +16,7 @@ function Button({
     primary:
       "bg-[rgb(var(--color-primary-main))] text-white hover:bg-[rgb(var(--color-primary-5))] active:bg-[rgb(var(--color-primary-6))]",
     outline:
-      "border border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-text-main))] hover:bg-[rgb(var(--color-primary-3))]",
+      "border border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-text-main))] hover:bg-[rgb(var(--color-primary-1))]",
     ghost:
       "text-[rgb(var(--color-primary-main))] hover:bg-[rgb(var(--color-primary-5))]",
     danger: "bg-red-600 text-white hover:bg-red-700",
