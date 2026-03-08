@@ -23,7 +23,7 @@ function Input({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`w-full pr-10 py-1 border-b
+        className={`w-full py-1 border-b
         border-b-[rgb(var(--color-border))]
         text-[rgb(var(--color-text-main))]
         placeholder:text-[rgb(var(--color-border))]

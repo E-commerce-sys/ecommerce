@@ -2,6 +2,7 @@
   "email": "Email",
   "password": "Password",
   "details": "Enter your details below",
+  "log_in": "Log In",
 
   "navbar": {
     "search": "Search for products",
@@ -29,7 +30,6 @@
   "login": {
     "welcome": "Log in to Exclusive",
     "about": "About us",
-    "login": "Log In",
     "forget": "Forget Password?",
     "noAccount": "Don't have an account?",
     "signUp": "sign up"
