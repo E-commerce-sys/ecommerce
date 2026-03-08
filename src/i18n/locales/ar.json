@@ -32,5 +32,13 @@
     "forget": "هل نسيت كلمة المرور؟",
     "noAccount": "ليس لديك حساب؟",
     "signUp": "إنشاء حساب"
+  },
+  "register": {
+    "create": "إنشاء حسابك",
+    "first_name": "الاسم الأول",
+"last_name": "الاسم الثاني",
+    "confirm_password": "تأكيد كلمة المرور",
+    "google": "التسجيل باستخدام Google",
+    "have_account": "هل لديك حساب بالفعل؟"
   }
 }

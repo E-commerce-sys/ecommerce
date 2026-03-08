@@ -33,5 +33,13 @@
     "forget": "Forget Password?",
     "noAccount": "Don't have an account?",
     "signUp": "sign up"
+  },
+  "register": {
+    "create": "Create your account",
+    "first_name": "First Name",
+    "last_name": "Last Name",
+    "confirm_password": "Confirm Password",
+    "google": "Sign up using Google",
+    "have_account": "You already have an account?"
   }
 }
