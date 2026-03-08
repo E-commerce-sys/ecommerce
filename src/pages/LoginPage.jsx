@@ -1,5 +1,11 @@
+import LoginForm from "../features/Login/LoginForm";
+
 function LoginPage() {
-  return <div>log in</div>;
+  return (
+    <div>
+      <LoginForm />
+    </div>
+  );
 }
 
 export default LoginPage;
