@@ -3,12 +3,14 @@
   "password": "Password",
   "details": "Enter your details below",
   "log_in": "Log In",
+  "category": "Categories",
 
   "navbar": {
     "search": "Search for products",
     "basket": "My basket",
     "favourite": "My favourites",
-    "login": "Log in"
+    "login": "Log in",
+    "account": "My account"
   },
   "footer": {
     "subscribe": "Subscribe",

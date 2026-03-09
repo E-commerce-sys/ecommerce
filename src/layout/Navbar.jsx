@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 
+import { isLoggedIn } from "../helpers/auth";
 import heart from "../assets/icons/heart-Icon.svg";
 import profile from "../assets/icons/profile-icon.svg";
 import basket from "../assets/icons/basket-icon.svg";
@@ -17,7 +18,7 @@ function Navbar() {
   const { dir } = useLanguage();
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
-
+  const loggedIn = isLoggedIn();
   const languages = ["en", "ar", "ku"];
 
   useEffect(() => {
@@ -79,18 +80,33 @@ function Navbar() {
             <p className="text-sm">{t("navbar.favourite")}</p>
           </NavLink>
 
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `flex justify-center items-center gap-1 cursor-pointer ${
-                isActive &&
-                "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
-              }`
-            }
-          >
-            <img src={profile} className="w-6 h-6" />
-            <p className="text-sm">{t("navbar.login")}</p>
-          </NavLink>
+          {loggedIn ? (
+            <NavLink
+              to="/account"
+              className={({ isActive }) =>
+                `flex justify-center items-center gap-1 cursor-pointer ${
+                  isActive &&
+                  "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+                }`
+              }
+            >
+              <img src={profile} className="w-6 h-6" />
+              <p className="text-sm">{t("navbar.account")}</p>
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `flex justify-center items-center gap-1 cursor-pointer ${
+                  isActive &&
+                  "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+                }`
+              }
+            >
+              <img src={profile} className="w-6 h-6" />
+              <p className="text-sm">{t("navbar.login")}</p>
+            </NavLink>
+          )}
         </div>
 
         {/* menu Icon (mobile only) */}
