@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
@@ -15,10 +15,24 @@ function Navbar() {
   const { t } = useTranslation();
   const { language, changeLanguage } = useLanguage();
   const { dir } = useLanguage();
-
+  const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
 
   const languages = ["en", "ar", "ku"];
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="py-3 border-b border-b-[rgb(var(--color-border))] relative">
@@ -90,7 +104,8 @@ function Navbar() {
       {/* Mobile Menu */}
       {open && (
         <div
-          className={`lg:hidden absolute top-14 bg-white border border-[rgb(var(--color-border))] rounded-md shadow-md flex flex-col p-3 gap-3
+          ref={menuRef}
+          className={`lg:hidden absolute top-14 bg-white border border-[rgb(var(--color-border))] rounded-md shadow-md flex flex-col p-3 gap-3 z-1000
   ${dir === "rtl" ? "left-1 md:left-6" : "right-1 md:right-6"}`}
         >
           <NavLink

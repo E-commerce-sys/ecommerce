@@ -36,20 +36,20 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex items-center gap-32.5">
+    <div className="flex lg:items-center justify-center lg:justify-normal gap-32.5">
       <img
         src={shopImg}
         alt=""
         className="hidden lg:block lg:w-[45%] h-auto my-30 shrink-0"
       />
 
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-6 mb-4">
+      <div className="flex flex-col gap-4  items-center lg:items-start w-[370px] my-10">
+        <div className="flex flex-col gap-6 mb-4 items-center lg:items-start text-center lg:text-right">
           <p className="font-medium text-4xl">{t("login.welcome")}</p>
           <p>{t("details")}</p>
         </div>
 
-        <Form onSubmit={handleSubmit} className="flex flex-col gap-10">
+        <Form onSubmit={handleSubmit} className="flex flex-col gap-10 ">
           <Input
             placeholder={t("email")}
             value={email}
@@ -68,7 +68,7 @@ function LoginForm() {
           </Button>
         </Form>
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 w-full">
           <p className="text-[rgb(var(--color-text-main-3))]">
             {t("login.forget")}
           </p>
