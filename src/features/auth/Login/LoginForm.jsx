@@ -21,9 +21,6 @@ function LoginForm() {
 
     try {
       const res = await loginAPI(email, password);
-
-      console.log(res);
-
       // save token if backend returns it
       localStorage.setItem("token", res.data.token);
 
@@ -43,7 +40,7 @@ function LoginForm() {
         className="hidden lg:block lg:w-[45%] h-auto my-30 shrink-0"
       />
 
-      <div className="flex flex-col gap-4  items-center lg:items-start w-[370px] my-10">
+      <div className="flex flex-col gap-4  items-center lg:items-start w-92.5 my-10">
         <div className="flex flex-col gap-6 mb-4 items-center lg:items-start text-center lg:text-right">
           <p className="font-medium text-4xl">{t("login.welcome")}</p>
           <p>{t("details")}</p>
