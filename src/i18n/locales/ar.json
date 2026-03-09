@@ -3,12 +3,14 @@
   "password": "كلمة المرور",
   "details": "أدخل بياناتك أدناه",
   "log_in": "تسجيل الدخول",
+  "category": "الفئات",
 
   "navbar": {
     "search": "ابحث عن المنتجات",
     "basket": "سلة التسوق",
     "favourite": "المفضلة",
-    "login": "تسجيل الدخول"
+    "login": "تسجيل الدخول",
+    "account": "حسابي"
   },
   "footer": {
     "subscribe": "اشترك",

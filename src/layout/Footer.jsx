@@ -4,11 +4,13 @@ import Linkedin from "../assets/icons/Icon-Linkedin.svg";
 import Twitter from "../assets/icons/Icon-Twitter.svg";
 import GooglePlay from "../assets/img/Google_Play.svg";
 import AppleStore from "../assets/img/App_Store.svg";
+import { isLoggedIn } from "../helpers/auth";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function Footer() {
   const { t } = useTranslation();
+  const loggedIn = isLoggedIn();
 
   return (
     <footer className="bg-[rgb(var(--color-bg-dark))] text-white py-10 w-full flex items-center justify-center">
@@ -32,12 +34,21 @@ function Footer() {
         <div className=" flex flex-col gap-4 ">
           <h3 className="font-semibold text-lg">{t("footer.account")}</h3>
           <p>
-            <Link
-              to="/register"
-              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
-            >
-              {t("footer.login")}
-            </Link>
+            {loggedIn ? (
+              <Link
+                to="/account"
+                className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
+              >
+                {t("navbar.account")}
+              </Link>
+            ) : (
+              <Link
+                to="/register"
+                className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
+              >
+                {t("footer.login")}
+              </Link>
+            )}
           </p>
           <p>
             <Link

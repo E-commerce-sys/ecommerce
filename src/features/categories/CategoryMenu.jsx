@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 function CategoryMenu() {
   const { i18n } = useTranslation();
-
+  const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -48,7 +48,7 @@ function CategoryMenu() {
       <div className="flex gap-10 px-6 py-3 border-b border-[rgb(var(--color-text-main-2))] overflow-x-auto whitespace-nowrap">
         <div className="flex items-center gap-2 font-semibold text-[rgb(var(--color-text-main-3))]">
           <img src={menu} alt="" />
-          <p>Categories</p>
+          <p>{t("category")}</p>
         </div>
 
         <div className="flex gap-6">
