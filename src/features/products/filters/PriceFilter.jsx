@@ -69,11 +69,11 @@ function ProductFilters() {
 
           {/* Slider track */}
           <div className="relative h-1 mb-6">
-            <div className="absolute w-full h-1 bg-[rgb(var(--color-primary-1))] rounded" />
-            <div
-              className="absolute h-1  rounded"
+             <div className="absolute w-full h-1 bg-[rgb(var(--color-border))] rounded" />
+              <div
+              className="absolute h-1 bg-[rgb(var(--color-primary-main))] rounded"
               style={{ left: `${minPercent}%`, width: `${maxPercent - minPercent}%` }}
-            />
+              />
             <input
               type="range"
               min={0}
