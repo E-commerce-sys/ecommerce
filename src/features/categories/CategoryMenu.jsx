@@ -14,7 +14,6 @@ function CategoryMenu() {
     async function fetchCategories() {
       try {
         const res = await categoriesAPI();
-        console.log(res);
         const normalized = res.data.map((cat) => ({
           id: cat.id,
           name:
