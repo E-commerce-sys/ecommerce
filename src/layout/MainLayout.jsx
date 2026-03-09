@@ -16,9 +16,6 @@ function MainLayout() {
       <Navbar />
       <main className="flex-1">
         <Outlet />
-        {/* <CartSummary name="RGB liquid CPU Cooler" prev_price="170$" new_price="160$"/>
-        <PriceFilter/>
-        <DiscountFilter/> */}
       </main>
 
       <Footer />

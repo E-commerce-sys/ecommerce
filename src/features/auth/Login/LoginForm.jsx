@@ -5,70 +5,123 @@ import { Form, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { loginAPI } from "./loginAPI";
 import { useState } from "react";
+import { loginSchema } from "./loginSchema";
 
 function LoginForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-
   const location = useLocation();
+
   const from = location.state?.from?.pathname || "/";
 
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const isFormValid =
+    email.trim() !== "" &&
+    password.trim() !== "" &&
+    !errors.email &&
+    !errors.password;
 
   async function handleSubmit(e) {
     e.preventDefault();
 
+    const formData = { email, password };
+    const result = loginSchema.safeParse(formData);
+
+    if (!result.success) {
+      setErrors(result.error.flatten().fieldErrors);
+      return;
+    }
+
+    setErrors({});
+    setFormError("");
+
     try {
+      setLoading(true);
       const res = await loginAPI(email, password);
 
-      console.log(res);
-
-      // save token if backend returns it
       localStorage.setItem("token", res.data.token);
 
-      // redirect to home
       navigate(from, { replace: true });
-      console.log(from);
     } catch (error) {
-      console.error("Login failed", error);
+      console.log("Login error:", error?.response?.data);
+
+      setFormError("Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="flex items-center gap-32.5">
+    <div className="flex lg:items-center justify-center lg:justify-normal gap-32.5">
       <img
         src={shopImg}
         alt=""
         className="hidden lg:block lg:w-[45%] h-auto my-30 shrink-0"
       />
 
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-6 mb-4">
+      <div className="flex flex-col gap-4 items-center lg:items-start w-92.5 my-10">
+        <div className="flex flex-col gap-6 mb-4 items-center lg:items-start text-center lg:text-right">
           <p className="font-medium text-4xl">{t("login.welcome")}</p>
           <p>{t("details")}</p>
         </div>
 
-        <Form onSubmit={handleSubmit} className="flex flex-col gap-10">
-          <Input
-            placeholder={t("email")}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <Form onSubmit={handleSubmit} className="flex flex-col gap-6 w-full">
+          {/* Email */}
+          <div>
+            <Input
+              placeholder={t("email")}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors((prev) => ({ ...prev, email: undefined }));
+                setFormError("");
+              }}
+            />
 
-          <Input
-            type="password"
-            placeholder={t("password")}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+            {errors.email && (
+              <p className="text-red-600 text-sm mt-1">{errors.email[0]}</p>
+            )}
+          </div>
 
-          <Button size="lg" type="submit">
+          {/* Password */}
+          <div>
+            <Input
+              type="password"
+              placeholder={t("password")}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrors((prev) => ({ ...prev, password: undefined }));
+                setFormError("");
+              }}
+            />
+
+            {errors.password && (
+              <p className="text-red-600 text-sm mt-1">{errors.password[0]}</p>
+            )}
+          </div>
+
+          {/* API Error */}
+          {formError && (
+            <p className="text-red-600 text-sm text-center">{formError}</p>
+          )}
+
+          <Button
+            size="lg"
+            type="submit"
+            loading={loading}
+            disabled={!isFormValid}
+          >
             {t("log_in")}
           </Button>
         </Form>
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 w-full">
           <p className="text-[rgb(var(--color-text-main-3))]">
             {t("login.forget")}
           </p>

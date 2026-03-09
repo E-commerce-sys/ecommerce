@@ -1,33 +1,54 @@
 import { useState, useEffect } from "react";
-import { categories } from "../../mock/categories";
 import SubCategoryMenu from "./SubCategoryMenu";
 import { categoriesAPI } from "./categoriesAPI";
 import menu from "../../assets/icons/menu.svg";
+import { useTranslation } from "react-i18next";
 
 function CategoryMenu() {
-  const parentCategories = categories.filter((cat) => cat.parent_id === null);
-  const [activeCategory, setActiveCategory] = useState(parentCategories[0]);
+  const { i18n } = useTranslation();
+
+  const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
 
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const data = await categoriesAPI();
-        console.log("API categories:", data);
+        const res = await categoriesAPI();
+        const normalized = res.data.map((cat) => ({
+          id: cat.id,
+          name:
+            i18n.language === "ar"
+              ? cat.attributes.nameAr
+              : i18n.language === "ku"
+                ? cat.attributes.nameKu
+                : cat.attributes.nameEn,
+          icon: cat.attributes.icon,
+          parent_id: cat.included?.parent?.id ?? null,
+        }));
+
+        setCategories(normalized);
+
+        const parents = normalized.filter((c) => c.parent_id === null);
+        setActiveCategory(parents[0]);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       }
     }
 
     fetchCategories();
-  }, []);
+  }, [i18n.language]);
+
+  const parentCategories = categories.filter((cat) => cat.parent_id === null);
+
+  if (!activeCategory) return null;
 
   return (
     <div className="w-full">
       {/* Parent categories */}
       <div className="flex gap-10 px-6 py-3 border-b border-[rgb(var(--color-text-main-2))] overflow-x-auto whitespace-nowrap">
-        <div className="flex items-center gap-2 font-semibold text-[rgb(var(--color-text-main-3))] ">
+        <div className="flex items-center gap-2 font-semibold text-[rgb(var(--color-text-main-3))]">
           <img src={menu} alt="" />
-          <p>Categories </p>
+          <p>Categories</p>
         </div>
 
         <div className="flex gap-6">
@@ -48,52 +69,9 @@ function CategoryMenu() {
       </div>
 
       {/* Subcategories */}
-      <SubCategoryMenu parentId={activeCategory.id} />
+      <SubCategoryMenu parentId={activeCategory.id} categories={categories} />
     </div>
   );
 }
 
 export default CategoryMenu;
-
-// import { useEffect, useState } from "react";
-// import SubCategoryMenu from "./SubCategoryMenu";
-
-// function CategoryMenu() {
-//   const [categories, setCategories] = useState([]);
-//   const [activeCategory, setActiveCategory] = useState(null);
-
-//   useEffect(() => {
-//     fetch("/api/categories/parents")
-//       .then((res) => res.json())
-//       .then((data) => {
-//         setCategories(data);
-//         setActiveCategory(data[0]); // default first category
-//       });
-//   }, []);
-
-//   return (
-//     <div className="w-full">
-//       {/* Parent Categories */}
-//       <div className="flex gap-6 border-b px-6 py-3">
-//         {categories.map((cat) => (
-//           <button
-//             key={cat.id}
-//             onClick={() => setActiveCategory(cat)}
-//             className={`text-sm font-medium pb-2 ${
-//               activeCategory?.id === cat.id
-//                 ? "border-b-2 border-orange-500 text-orange-500"
-//                 : "text-gray-600"
-//             }`}
-//           >
-//             {cat.name}
-//           </button>
-//         ))}
-//       </div>
-
-//       {/* Subcategories */}
-//       {activeCategory && <SubCategoryMenu parentId={activeCategory.id} />}
-//     </div>
-//   );
-// }
-
-// export default CategoryMenu;
