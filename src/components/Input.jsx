@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import Eye from "../assets/icons/eye.svg";
 import EyeOff from "../assets/icons/eyeOff.svg";
 
@@ -12,9 +13,10 @@ function Input({
   ...props
 }) {
   const [showPassword, setShowPassword] = useState(false);
-  const isPassword = type === "password";
-  const isRTL = document.documentElement.dir === "rtl";
+  const { i18n } = useTranslation();
 
+  const isPassword = type === "password";
+  const isRTL = i18n.language === "ar" || i18n.language === "ku";
   return (
     <div className="relative w-full">
       <input
