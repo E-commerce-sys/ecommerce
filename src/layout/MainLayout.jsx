@@ -8,7 +8,7 @@ import CartSummary from "../features/cart/CartSummary";
 import Discounts from "../features/home/Discounts";
 import PriceFilter from '../features/products/filters/PriceFilter'
 import DiscountFilter from "../features/products/filters/DiscountFilter";
-import RatingFilter from "../features/products/filters/RatingFilter";
+
 
 function MainLayout() {
   return (
@@ -18,9 +18,7 @@ function MainLayout() {
         <Outlet />
         {/* <CartSummary name="RGB liquid CPU Cooler" prev_price="170$" new_price="160$"/>
         <PriceFilter/>
-        <DiscountFilter/> 
-        <RatingFilter/>*/}
-        
+        <DiscountFilter/> */}
       </main>
 
       <Footer />
