@@ -1,9 +1,9 @@
-import {productsAPI} from '../home/productAPI'
-import { useState,useEffect } from 'react';
+import { productsAPI } from "./productAPI";
+import { useState, useEffect } from "react";
 import CartItemSummary from "../../features/cart/CartSummary";
 
 function ProductList() {
-  const [products,setProducts]=useState([])
+  const [products, setProducts] = useState([]);
   useEffect(() => {
     async function fetchProducts() {
       const res = await productsAPI();

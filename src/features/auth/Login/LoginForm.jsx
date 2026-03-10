@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { loginAPI } from "./loginAPI";
 import { useState } from "react";
 import { loginSchema } from "./loginSchema";
+import { useAuth } from "../../../context/AuthContext";
 
 function LoginForm() {
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ function LoginForm() {
   const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -44,7 +46,7 @@ function LoginForm() {
       setLoading(true);
       const res = await loginAPI(email, password);
 
-      localStorage.setItem("token", res.data.token);
+      login(res.data.token);
 
       navigate(from, { replace: true });
     } catch (error) {

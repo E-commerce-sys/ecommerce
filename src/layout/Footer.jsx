@@ -4,13 +4,14 @@ import Linkedin from "../assets/icons/Icon-Linkedin.svg";
 import Twitter from "../assets/icons/Icon-Twitter.svg";
 import GooglePlay from "../assets/img/Google_Play.svg";
 import AppleStore from "../assets/img/App_Store.svg";
-import { isLoggedIn } from "../helpers/auth";
+
+import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function Footer() {
   const { t } = useTranslation();
-  const loggedIn = isLoggedIn();
+  const { loggedIn } = useAuth();
 
   return (
     <footer className="bg-[rgb(var(--color-bg-dark))] text-white py-10 w-full flex items-center justify-center">
