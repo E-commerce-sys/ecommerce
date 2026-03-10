@@ -36,7 +36,8 @@ function Navbar() {
   }, []);
 
   return (
-    <div className="py-3 border-b border-b-[rgb(var(--color-border))] relative">
+    <div className="fixed top-0 left-0 w-full py-3 border-b border-b-[rgb(var(--color-border))] bg-white z-[1000]">
+      {" "}
       <div className="flex w-full text-lg justify-around items-center text-[rgb(var(--color-text-main))]">
         {/* Logo */}
         <NavLink to="/">
@@ -116,7 +117,6 @@ function Navbar() {
           </button>
         </div>
       </div>
-
       {/* Mobile Menu */}
       {open && (
         <div

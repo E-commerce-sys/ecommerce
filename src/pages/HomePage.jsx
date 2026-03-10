@@ -1,13 +1,13 @@
 import CategoryMenu from "../features/categories/CategoryMenu";
+import BestProducts from "../features/home/BestProducts";
 import FeaturedProducts from "../features/home/FeaturedProducts";
-import OurProducts from "../features/home/OurProducts";
 
 function HomePage() {
   return (
-    <div>
+    <div className="mt-17">
       <CategoryMenu />
+      <BestProducts />
       <FeaturedProducts />
-      <OurProducts />
     </div>
   );
 }
