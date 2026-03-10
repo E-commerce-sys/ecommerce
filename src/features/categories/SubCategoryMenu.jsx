@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-function SubCategoryMenu({ parentId, categories }) {
-  const subCategories = categories.filter((cat) => cat.parent_id === parentId);
+function SubCategoryMenu({ subCategories }) {
   const [activeSub, setActiveSub] = useState(null);
 
   return (
@@ -13,17 +12,13 @@ function SubCategoryMenu({ parentId, categories }) {
           className="flex flex-col items-center min-w-22.5 cursor-pointer"
         >
           <div
-            className={`w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-200 ${
+            className={`w-12 h-12 rounded-full border border-[rgb(var(--color-text-main))] flex items-center justify-center  ${
               activeSub === sub.id
-                ? "border-[rgb(var(--color-primary-main))] shadow-sm shadow-[rgb(var(--color-primary-main))] mb-1"
-                : "border-[rgb(var(--color-text-main))] hover:shadow-md hover:shadow-[rgb(var(--color-primary-main-2))]"
+                ? "shadow-md shadow-[rgb(var(--color-primary-3))]"
+                : "hover:shadow-md hover:shadow-[rgb(var(--color-text-main-1))]"
             }`}
           >
-            <img
-              src={sub.icon}
-              alt={sub.name}
-              className="w-7 h-7 object-contain"
-            />
+            <img src={sub.icon} alt={sub.name} className="w-7 h-7" />
           </div>
 
           <p className="text-xs text-center mt-2">{sub.name}</p>
