@@ -12,17 +12,12 @@ function CartItem({
   return (
     <div
       className={`
-        bg-[rgb(var(--color-grey))] 
-        relative 
-        group 
-        overflow-hidden 
-        rounded-lg
-        ${className}
+        relative w-full aspect-square bg-[rgb(var(--color-grey))] group overflow-hidden rounded-lg ${className}
       `}
     >
       {/* NEW Badge */}
       {isNew && (
-        <span className="absolute top-3 left-3 bg-[rgb(var(--color-discount))] text-white text-xs px-2 py-1 rounded">
+        <span className="absolute top-1 left-1 md:top-3 md:left-3 bg-[rgb(var(--color-discount))] text-white text-[10px] md:text-xs px-2 py-1 rounded">
           NEW
         </span>
       )}
@@ -30,12 +25,12 @@ function CartItem({
       {/* Product Image */}
       <img
         src={img}
-        className="w-full transition-transform duration-300 py-27.75 px-11.25 group-hover:scale-105"
+        className="w-full h-full p-2 md:p-5 object-contain transition-transform duration-300 group-hover:scale-105"
       />
 
       {/* Favorite */}
       <button
-        className="absolute top-3 right-3 w-8.5 h-8.5 bg-white p-1 rounded-full shadow-md"
+        className="absolute top-1 right-1 md:top-3 md:right-3 w-5 h-5 md:w-8.5 md:h-8.5 bg-white p-1 rounded-full shadow-md"
         onClick={onFavorite}
       >
         <img
@@ -50,10 +45,10 @@ function CartItem({
         className="
           absolute bottom-0 left-0 w-full
           bg-[rgb(var(--color-bg-dark))] text-white
-          py-3 lg:py-4 text-sm font-medium
-          opacity-0 translate-y-5
-          group-hover:opacity-100
-          group-hover:translate-y-0
+          py-1 md:py-2 lg:py-4 text-[10px] md:text-sm font-medium
+          lg:opacity-0 lg;translate-y-5
+          lg:group-hover:opacity-100
+          lg:group-hover:translate-y-0
           transition-all duration-300
           cursor-pointer
         "
