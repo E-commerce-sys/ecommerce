@@ -1,9 +1,20 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-function ProductFilters() {
+function PriceFilters() {
   const [open, setOpen] = useState(false);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(5000);
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleMin = (e) => {
     const value = Math.min(Number(e.target.value), max - 100);
@@ -38,7 +49,7 @@ function ProductFilters() {
   `;
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block" ref={wrapperRef}>
       <button
         className="flex justify-center items-center gap-2 px-8 py-4 rounded text-[16px] bg-[#F5F5F5] font-normal w-39.5 h-10 hover:bg-[rgb(var(--color-primary-1))] transition-colors"
         onClick={() => setOpen(!open)}
@@ -56,56 +67,28 @@ function ProductFilters() {
 
       {open && (
         <div className="absolute top-full mt-2 left-0 bg-white border border-[rgb(var(--color-primary-1))] rounded-lg shadow-lg p-4 w-64 z-50">
-          
-          {/* Price display */}
           <div className="flex justify-between text-sm mb-4">
-            <span className="px-2 py-0.5 rounded font-medium">
-              ${min}
-            </span>
-            <span className="px-2 py-0.5 rounded font-medium">
-              ${max}
-            </span>
+            <span className="px-2 py-0.5 rounded font-medium">${min}</span>
+            <span className="px-2 py-0.5 rounded font-medium">${max}</span>
           </div>
 
-          {/* Slider track */}
           <div className="relative h-1 mb-6">
-             <div className="absolute w-full h-1 bg-[rgb(var(--color-border))] rounded" />
-              <div
+            <div className="absolute w-full h-1 bg-[rgb(var(--color-border))] rounded" />
+            <div
               className="absolute h-1 bg-[rgb(var(--color-primary-main))] rounded"
               style={{ left: `${minPercent}%`, width: `${maxPercent - minPercent}%` }}
-              />
-            <input
-              type="range"
-              min={0}
-              max={5000}
-              step={100}
-              value={min}
-              onChange={handleMin}
-              className={thumbClasses}
-              style={{ zIndex: minZ }}
             />
-            <input
-              type="range"
-              min={0}
-              max={5000}
-              step={100}
-              value={max}
-              onChange={handleMax}
-              className={thumbClasses}
-              style={{ zIndex: maxZ }}
-            />
+            <input type="range" min={0} max={5000} step={100} value={min} onChange={handleMin} className={thumbClasses} style={{ zIndex: minZ }} />
+            <input type="range" min={0} max={5000} step={100} value={max} onChange={handleMax} className={thumbClasses} style={{ zIndex: maxZ }} />
           </div>
 
-          {/* Min/Max labels */}
           <div className="flex justify-between text-xs text-[rgb(var(--color-text-main-5))] font-medium mb-4">
             <span>$0</span>
             <span>$5000</span>
           </div>
 
-          {/* Apply button */}
           <button
-            className="w-full py-2 rounded bg-[rgb(var(--color-primary-main))] text-white text-sm font-medium 
-            hover:bg-[rgb(var(--color-primary-5))] active:bg-[rgb(var(--color-primary-6))] transition-colors"
+            className="w-full py-2 rounded bg-[rgb(var(--color-primary-main))] text-white text-sm font-medium hover:bg-[rgb(var(--color-primary-5))] active:bg-[rgb(var(--color-primary-6))] transition-colors"
             onClick={() => setOpen(false)}
           >
             Apply
@@ -116,4 +99,4 @@ function ProductFilters() {
   );
 }
 
-export default ProductFilters;
+export default PriceFilters;
