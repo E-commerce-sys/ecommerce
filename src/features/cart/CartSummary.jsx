@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import imgProduct from "../../assets/img/Cart.png";
 
-function CartItemSummary({ product }) {
+function CartItemSummary({ product, className }) {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -23,10 +23,11 @@ function CartItemSummary({ product }) {
         ? attributes.nameKu
         : attributes.nameEn;
 
-  const price = attributes.price;
   const rating = Math.round(parseFloat(attributes.averageRating));
   const ratingCount = attributes.ratingCount;
   const isNew = attributes.isNew;
+  const price = attributes.price;
+  const colors = attributes.colors || [];
 
   /* ---------- LOGIN CHECK ---------- */
 
@@ -58,26 +59,26 @@ function CartItemSummary({ product }) {
     <div className="flex flex-col gap-5 m-5">
       <CartItem
         img={imgProduct}
-        className="w-95.75 h-95.75"
+        className={className}
         isNew={isNew}
         onAddToCart={handleAddToCart}
         onFavorite={handleFavorite}
         isFavorite={isFavorite}
       />
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col md:gap-2">
         {/* PRODUCT NAME */}
-        <p className="text-[16px] text-[rgb(var(--color-text-main))]  font-medium">
+        <p className="text-sm md:text-[16px] text-[rgb(var(--color-text-main))] font-medium">
           {name}
         </p>
 
         {/* PRICE */}
-        <div className="flex gap-2">
-          <span className="text-[rgb(var(--color-primary-main))] text-[16px] font-medium">
+        <div className="flex gap-2 flex-col">
+          <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
             ${price}
           </span>
           {/* RATING */}
-          <div className="flex flex-row gap-0.5 items-center">
+          <div className="flex flex-row gap-0.5 items-center w-3 h-3">
             {stars}
 
             <span className="text-[14px] mx-2 font-semibold text-[rgb(var(--color-text-main-1))] ">
@@ -85,6 +86,18 @@ function CartItemSummary({ product }) {
             </span>
           </div>
         </div>
+        {/* COLORS */}
+        {colors.length > 0 && (
+          <div className="flex gap-2 mt-1">
+            {colors.map((color, index) => (
+              <span
+                key={index}
+                className="w-4 h-4 rounded-full border"
+                style={{ backgroundColor: color }}
+              ></span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
