@@ -8,7 +8,7 @@ import CartSummary from "../features/cart/CartSummary";
 import Discounts from "../features/home/Discounts";
 import PriceFilter from '../features/products/filters/PriceFilter'
 import DiscountFilter from "../features/products/filters/DiscountFilter";
-
+import Pagination from "../features/products/Pagination";
 
 function MainLayout() {
   return (
