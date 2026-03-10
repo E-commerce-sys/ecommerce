@@ -1,6 +1,7 @@
 import CategoryMenu from "../features/categories/CategoryMenu";
 import BestProducts from "../features/home/BestProducts";
 import FeaturedProducts from "../features/home/FeaturedProducts";
+import NewArrivals from "../features/home//NewArrivals";
 
 function HomePage() {
   return (
@@ -8,6 +9,7 @@ function HomePage() {
       <CategoryMenu />
       <BestProducts />
       <FeaturedProducts />
+      <NewArrivals />
     </div>
   );
 }

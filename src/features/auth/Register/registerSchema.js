@@ -20,6 +20,8 @@ export const registerSchema = z
       .string()
       .min(1, "Password is required")
       .min(8, "Min 8 characters")
+      .regex(/[A-Z]/, "Must include an uppercase letter")
+      .regex(/[a-z]/, "Must include a lowercase letter")
       .regex(/[0-9]/, "Must include a number")
       .regex(/[^A-Za-z0-9]/, "Must include a symbol"),
 
