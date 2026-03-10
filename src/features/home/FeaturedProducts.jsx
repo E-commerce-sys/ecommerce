@@ -9,15 +9,8 @@ function FeaturedProducts() {
     async function fetchProducts() {
       const res = await featuredProductAPI();
       console.log(res);
-      const featuredProducts = res.filter(
-        (product) => product.attributes.isFeatured === true,
-      );
-
       // shuffle randomly
-      const randomThree = [...featuredProducts]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 8);
-
+      const randomThree = [...res].sort(() => Math.random() - 0.5).slice(0, 8);
       setProducts(randomThree);
     }
 
@@ -31,15 +24,15 @@ function FeaturedProducts() {
         <div className="flex justify-between mx-5 md:mx-10 items-center">
           <div className="flex flex-col gap-2 md:gap-5">
             <div className="flex items-center gap-2 md:gap-4">
-              <span className="w-3 h-6 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
+              <span className="w-3 h-6 md:w-4 md:h-7 lg:w-5 lg:h-8 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
               <span className="text-[rgb(var(--color-primary-main))] font-medium text-sm md:text-base">
                 Our Products
               </span>
             </div>
 
-            <h2 className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
+            <p className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
               Explore Our Products
-            </h2>
+            </p>
           </div>
 
           <Button variant="outline" size="sm">

@@ -124,18 +124,33 @@ function Navbar() {
           className={`lg:hidden absolute top-14 bg-white border border-[rgb(var(--color-border))] rounded-md shadow-md flex flex-col p-3 gap-3 z-1000
   ${dir === "rtl" ? "left-1 md:left-6" : "right-1 md:right-6"}`}
         >
-          <NavLink
-            to="/login"
-            className={({ isActive }) =>
-              `flex items-center gap-2 ${
-                isActive &&
-                "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
-              }`
-            }
-          >
-            <img src={profile} className="w-5 h-5" />
-            {t("navbar.login")}
-          </NavLink>
+          {isLoggedIn ? (
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `flex items-center gap-2 ${
+                  isActive &&
+                  "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+                }`
+              }
+            >
+              <img src={profile} className="w-5 h-5" />
+              {t("navbar.account")}
+            </NavLink>
+          ) : (
+            <NavLink
+              to="/login"
+              className={({ isActive }) =>
+                `flex items-center gap-2 ${
+                  isActive &&
+                  "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+                }`
+              }
+            >
+              <img src={profile} className="w-5 h-5" />
+              {t("navbar.login")}
+            </NavLink>
+          )}
 
           <NavLink
             to="/wishlist"
