@@ -12,8 +12,8 @@ function ProductsPage() {
       <PriceFilters/>
       <DiscountFilter/>
       <RatingFilter/>
-      <ProductList />
       </div>
+      <ProductList />
       <Pagination/>
     </div>
   );
