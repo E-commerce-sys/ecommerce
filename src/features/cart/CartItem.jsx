@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import heart from "../../assets/icons/heart-Icon.svg";
 import filledHeart from "../../assets/icons/heart-filled-Icon.svg";
 
@@ -9,6 +10,7 @@ function CartItem({
   onFavorite,
   isFavorite,
 }) {
+  const { t } = useTranslation();
   return (
     <div
       className={`
@@ -18,7 +20,7 @@ function CartItem({
       {/* NEW Badge */}
       {isNew && (
         <span className="absolute top-1 left-1 md:top-3 md:left-3 bg-[rgb(var(--color-discount))] text-white text-[10px] md:text-xs px-2 py-1 rounded">
-          NEW
+          {t("new")}
         </span>
       )}
 
@@ -53,7 +55,7 @@ function CartItem({
           cursor-pointer
         "
       >
-        Add to Cart
+        {t("add")}
       </button>
     </div>
   );

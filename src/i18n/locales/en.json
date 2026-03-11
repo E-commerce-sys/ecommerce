@@ -4,6 +4,9 @@
   "details": "Enter your details below",
   "log_in": "Log In",
   "category": "Categories",
+  "view": "View All",
+  "add": "Add to Cart",
+  "new": "New",
 
   "navbar": {
     "search": "Search for products",
@@ -43,5 +46,18 @@
     "confirm_password": "Confirm Password",
     "google": "Sign up using Google",
     "have_account": "You already have an account?"
+  },
+  "bestProduct": {
+    "month": "This Month",
+    "best": "Best Selling Prosucts"
+  },
+  "feasturedProduct": {
+    "products": "Our Products",
+    "explore": "Explore Our Products"
+  },
+  "newArrival": {
+    "feature": "Featured",
+    "new": "New Arrival",
+    "buy": "Buy Now"
   }
 }

@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
+import { useTranslation } from "react-i18next";
 
 function FeaturedProducts({ data }) {
   // randomly pick 8 products
+  const { t } = useTranslation();
   const products = useMemo(() => {
     // eslint-disable-next-line react-hooks/purity
     return [...data].sort(() => Math.random() - 0.5).slice(0, 8);
@@ -18,17 +20,17 @@ function FeaturedProducts({ data }) {
             <div className="flex items-center gap-2 md:gap-4">
               <span className="w-3 h-6 md:w-4 md:h-7 lg:w-5 lg:h-8 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
               <span className="text-[rgb(var(--color-primary-main))] font-medium text-sm md:text-base">
-                Our Products
+                {t("feasturedProduct.products")}
               </span>
             </div>
 
             <p className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
-              Explore Our Products
+              {t("feasturedProduct.explore")}
             </p>
           </div>
 
           <Button variant="outline" size="sm">
-            View All
+            {t("view")}
           </Button>
         </div>
 

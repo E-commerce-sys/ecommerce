@@ -4,6 +4,9 @@
   "details": "أدخل بياناتك أدناه",
   "log_in": "تسجيل الدخول",
   "category": "الفئات",
+  "view": "عرض الكل",
+  "add": "أضف إلى السلة",
+  "new": "جديد",
 
   "navbar": {
     "search": "ابحث عن المنتجات",
@@ -42,5 +45,18 @@
     "confirm_password": "تأكيد كلمة المرور",
     "google": "التسجيل باستخدام Google",
     "have_account": "هل لديك حساب بالفعل؟"
+  },
+  "bestProduct": {
+    "month": "هذا الشهر",
+    "best": "أفضل المنتجات مبيعاً"
+  },
+  "feasturedProduct": {
+    "products": "منتجاتنا",
+    "explore": "استكشف منتجاتنا"
+  },
+  "newArrival": {
+    "feature": "مميز",
+    "new": "وصل حديثاً",
+    "buy": "اشتر الآن"
   }
 }
