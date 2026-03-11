@@ -1,7 +1,11 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
+import {productsAPI} from "../productAPI"
 
 export default function(){
     const [isDiscounted, setIsDiscounted] = useState(false)
+    function handleDiscount(){
+        setIsDiscounted(!isDiscounted)
+    }
     return(
         <button
         className={`flex justify-center items-center gap-2 px-8 py-4 rounded text-[16px] font-normal w-39.5 h-10 transition-colors
@@ -9,7 +13,7 @@ export default function(){
             ? 'bg-[rgb(var(--color-primary-main))] text-white' 
             : 'bg-[#F5F5F5] text-black hover:bg-[rgb(var(--color-primary-1))]'
             }`}
-        onClick={() => setIsDiscounted(!isDiscounted)}
+        onClick={handleDiscount}
         >
         Discounts
         </button>
