@@ -1,23 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { productsPage } from "./productAPI";
 
-export default function Pagination({ totalPages = 5 }) {    //The total pages are determined by the product array
-  const [current, setCurrent] = useState(1);
+export default function Pagination({ current, setCurrent }) {
+  const [totalPages, setTotalPages] = useState(1);
+
+  useEffect(() => {
+    async function fetchPageNum() {
+      const res = await productsPage();
+      setTotalPages(res.last_page);
+    }
+    fetchPageNum();
+  }, []);
+
+  const getPages = () => {
+    if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+    if (current <= 4) return [1, 2, 3, 4, 5, "...", totalPages];
+    if (current >= totalPages - 3) return [1, "...", totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    return [1, "...", current - 1, current, current + 1, "...", totalPages];
+  };
 
   return (
-    <div className="flex items-center gap-2">
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-        <button
-          key={page}
-          onClick={() => setCurrent(page)}
-          className={`w-8 h-8 rounded text-[14px] font-medium transition-colors
-            ${current === page
-              ? "bg-[rgb(var(--color-primary-main))] text-white"
-              : "bg-[#F5F5F5] text-black hover:bg-[rgb(var(--color-primary-1))]"
-            }`}
-        >
-          {page}
-        </button>
-      ))}
+    <div className="flex justify-center items-center gap-2">
+      {getPages().map((page, index) =>
+        page === "..." ? (
+          <span key={`dots-${index}`} className="w-8 h-8 flex items-center justify-center text-sm">...</span>
+        ) : (
+          <button
+            key={page}
+            onClick={() => setCurrent(page)}
+            className={`w-8 h-8 rounded text-[14px] font-medium transition-colors
+              ${current === page
+                ? "bg-[rgb(var(--color-primary-main))] text-white"
+                : "bg-[#F5F5F5] text-black hover:bg-[rgb(var(--color-primary-1))]"
+              }`}
+          >
+            {page}
+          </button>
+        )
+      )}
     </div>
   );
 }
