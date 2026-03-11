@@ -1,9 +1,11 @@
-import axiosInstance from "../../axios/axiosInterceptor";
+import axiosInstance from "../../axios/axiosInstance";
 
 export async function subCategoriesAPI(parentId) {
-  const response = await axiosInstance.get(
+  if (!parentId) return []; // prevent bad request
+
+  const res = await axiosInstance.get(
     `/api/categories?filter[parentCategory]=${parentId}&include=parent`,
   );
 
-  return response.data.data;
+  return res.data.data;
 }

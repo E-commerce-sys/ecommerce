@@ -1,25 +1,15 @@
-import { newArrivalProductAPI } from "./API/newArrivalProduct";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import playstation from "../../assets/img/playstation.png";
 import speaker from "../../assets/img/echo.png";
 import woman from "../../assets/img/woman.png";
 import perfume from "../../assets/img/perfume.png";
 
-function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const res = await newArrivalProductAPI();
-      console.log(res);
-      // shuffle randomly
-      const randomThree = [...res].sort(() => Math.random() - 0.5).slice(0, 4);
-      setProducts(randomThree);
-    }
-
-    fetchProducts();
-  }, []);
+function NewArrivals({ data }) {
+  const products = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
+    return [...data].sort(() => Math.random() - 0.5).slice(0, 4);
+  }, [data]);
 
   return (
     <section className="flex justify-center py-12">
@@ -33,6 +23,7 @@ function FeaturedProducts() {
                 Featured
               </span>
             </div>
+
             <p className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
               New Arrival
             </p>
@@ -42,7 +33,6 @@ function FeaturedProducts() {
         {/* Products */}
         <div className="flex justify-center px-5 md:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-[600px_600px] gap-2 justify-center">
-            {" "}
             {/* PLAYSTATION */}
             {products[0] && (
               <div className="relative w-full lg:w-142.5 h-98 lg:h-150 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-4 text-white">
@@ -66,6 +56,7 @@ function FeaturedProducts() {
                 </div>
               </div>
             )}
+
             {/* RIGHT SIDE */}
             <div className="grid grid-rows-[auto_auto] gap-2">
               {/* WOMEN */}
@@ -128,8 +119,9 @@ function FeaturedProducts() {
                       <p className="text-lg md:text-lg font-semibold">
                         {products[3].attributes.nameEn}
                       </p>
+
                       <p className="text-[12px] md:text-sm text-[rgb(var(--color-border))] mt-2 line-clamp-2">
-                        {products[2].attributes.descriptionEn}
+                        {products[3].attributes.descriptionEn}
                       </p>
 
                       <button className="mt-2 underline text-sm font-medium">
@@ -147,4 +139,4 @@ function FeaturedProducts() {
   );
 }
 
-export default FeaturedProducts;
+export default NewArrivals;

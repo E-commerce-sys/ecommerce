@@ -1,21 +1,10 @@
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
-import { bestProductAPI } from "./API/bestProduct";
-import { useEffect, useState } from "react";
 
-function BestProducts() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const res = await bestProductAPI();
-      // shuffle randomly
-      const randomThree = [...res].sort(() => Math.random() - 0.5).slice(0, 3);
-      setProducts(randomThree);
-    }
-
-    fetchProducts();
-  }, []);
+function BestProducts({ data }) {
+  // shuffle randomly and take 3
+  // eslint-disable-next-line react-hooks/purity
+  const products = [...data].sort(() => Math.random() - 0.5).slice(0, 3);
 
   return (
     <section className="flex justify-center py-12">
@@ -29,6 +18,7 @@ function BestProducts() {
                 This Month
               </span>
             </div>
+
             <p className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
               Best Selling Products
             </p>
@@ -45,7 +35,7 @@ function BestProducts() {
             <CartItemSummary
               key={product.id}
               product={product}
-              className={"w-full aspect-square"}
+              className="w-full aspect-square"
             />
           ))}
         </div>

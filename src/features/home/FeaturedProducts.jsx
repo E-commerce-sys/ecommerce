@@ -1,21 +1,13 @@
+import { useMemo } from "react";
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
-import { featuredProductAPI } from "./API/featuredProduct";
-import { useEffect, useState } from "react";
-function FeaturedProducts() {
-  const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    async function fetchProducts() {
-      const res = await featuredProductAPI();
-      console.log(res);
-      // shuffle randomly
-      const randomThree = [...res].sort(() => Math.random() - 0.5).slice(0, 8);
-      setProducts(randomThree);
-    }
-
-    fetchProducts();
-  }, []);
+function FeaturedProducts({ data }) {
+  // randomly pick 8 products
+  const products = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
+    return [...data].sort(() => Math.random() - 0.5).slice(0, 8);
+  }, [data]);
 
   return (
     <section className="flex justify-center py-12">
@@ -46,7 +38,7 @@ function FeaturedProducts() {
             <CartItemSummary
               key={product.id}
               product={product}
-              className={"w-full aspect-square lg:w-[270px] lg:h-[270px]"}
+              className="w-full aspect-square lg:w-67.5 lg:h-67.5"
             />
           ))}
         </div>

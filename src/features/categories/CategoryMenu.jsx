@@ -1,48 +1,36 @@
 import { useState, useEffect } from "react";
 import SubCategoryMenu from "./SubCategoryMenu";
-import { categoriesAPI } from "./categoriesAPI";
 import { subCategoriesAPI } from "./subCategoriesAPI";
 import menu from "../../assets/icons/menu.svg";
 import { useTranslation } from "react-i18next";
 
-function CategoryMenu() {
+function CategoryMenu({ categories }) {
   const { i18n, t } = useTranslation();
 
-  const [categories, setCategories] = useState([]);
+  const [activeCategoryId, setActiveCategoryId] = useState();
   const [subCategories, setSubCategories] = useState([]);
-  const [activeCategoryId, setActiveCategoryId] = useState(null);
 
-  // Fetch categories once
+  // Normalize category names based on language
+  const normalizedCategories = categories.map((cat) => ({
+    id: cat.id,
+    name:
+      i18n.language === "ar"
+        ? cat.attributes.nameAr
+        : i18n.language === "ku"
+          ? cat.attributes.nameKu
+          : cat.attributes.nameEn,
+    icon: cat.attributes.icon,
+  }));
+
+  // Set default active category
   useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const cats = await categoriesAPI();
-
-        const normalized = cats.map((cat) => ({
-          id: cat.id,
-          name:
-            i18n.language === "ar"
-              ? cat.attributes.nameAr
-              : i18n.language === "ku"
-                ? cat.attributes.nameKu
-                : cat.attributes.nameEn,
-          icon: cat.attributes.icon,
-        }));
-
-        setCategories(normalized);
-
-        if (normalized.length > 0) {
-          setActiveCategoryId(normalized[0].id);
-        }
-      } catch (err) {
-        console.error("Failed to fetch categories:", err);
-      }
+    if (normalizedCategories.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setActiveCategoryId(normalizedCategories[0].id);
     }
+  }, [categories]);
 
-    fetchCategories();
-  }, [i18n.language]);
-
-  // Fetch subcategories when active category changes
+  // Fetch subcategories when category changes
   useEffect(() => {
     async function fetchSubCategories() {
       if (!activeCategoryId) return;
@@ -80,7 +68,7 @@ function CategoryMenu() {
         </div>
 
         <div className="flex gap-6">
-          {categories.map((cat) => (
+          {normalizedCategories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategoryId(cat.id)}
