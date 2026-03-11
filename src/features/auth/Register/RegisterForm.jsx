@@ -7,46 +7,69 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { registerAPI } from "../../auth/Register/registerAPI";
 import { registerSchema } from "./registerSchema";
+import { useAuth } from "../../../context/AuthContext";
 
 function RegisterForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
 
   const from = location.state?.from?.pathname || "/";
 
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const [errors, setErrors] = useState({});
 
+  function validateForm(data) {
+    const result = registerSchema.safeParse(data);
+
+    if (!result.success) {
+      return result.error.flatten().fieldErrors;
+    }
+
+    return {};
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+
+    const updatedForm = {
+      ...form,
+      [name]: value,
+    };
+
+    setForm(updatedForm);
+
+    if (submitted) {
+      const newErrors = validateForm(updatedForm);
+      setErrors(newErrors);
+    }
+  }
+
   const isFormValid =
-    firstName.trim() !== "" &&
-    email.trim() !== "" &&
-    password.trim() !== "" &&
-    confirmPassword.trim() !== "" &&
-    !errors.firstName &&
-    !errors.email &&
-    !errors.password &&
-    !errors.confirmPassword;
+    Object.keys(errors).length === 0 &&
+    form.firstName &&
+    form.lastName &&
+    form.email &&
+    form.password &&
+    form.confirmPassword;
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const formData = {
-      firstName,
-      lastName,
-      email,
-      password,
-      confirmPassword,
-    };
+    setSubmitted(true);
 
-    const result = registerSchema.safeParse(formData);
+    const result = registerSchema.safeParse(form);
 
     if (!result.success) {
       setErrors(result.error.flatten().fieldErrors);
@@ -59,20 +82,18 @@ function RegisterForm() {
       setLoading(true);
 
       const res = await registerAPI(
-        firstName,
-        lastName,
-        email,
-        password,
-        confirmPassword,
+        form.firstName,
+        form.lastName,
+        form.email,
+        form.password,
+        form.confirmPassword,
       );
 
-      localStorage.setItem("token", res.data.token);
+      login(res.data.token);
 
       navigate(from, { replace: true });
     } catch (e) {
       const apiError = e?.response?.data;
-
-      console.log("Error details:", apiError);
 
       const emailError = apiError?.errors?.["data.attributes.email"]?.[0];
 
@@ -106,15 +127,12 @@ function RegisterForm() {
             <div className="flex flex-row gap-15">
               <div className="w-38.75">
                 <Input
+                  name="firstName"
                   placeholder={t("register.first_name")}
-                  value={firstName}
-                  onChange={(e) => {
-                    setFirstName(e.target.value);
-                    setErrors((prev) => ({ ...prev, firstName: undefined }));
-                  }}
-                  className="w-full"
+                  value={form.firstName}
+                  onChange={handleChange}
                 />
-                {errors.firstName && (
+                {submitted && errors.firstName && (
                   <p className="text-red-600 text-sm mt-1">
                     {errors.firstName[0]}
                   </p>
@@ -123,12 +141,12 @@ function RegisterForm() {
 
               <div className="w-38.75">
                 <Input
+                  name="lastName"
                   placeholder={t("register.last_name")}
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="w-full"
+                  value={form.lastName}
+                  onChange={handleChange}
                 />
-                {errors.lastName && (
+                {submitted && errors.lastName && (
                   <p className="text-red-600 text-sm mt-1">
                     {errors.lastName[0]}
                   </p>
@@ -137,35 +155,29 @@ function RegisterForm() {
             </div>
 
             {/* Email */}
-            <div className="w-full">
+            <div>
               <Input
-                placeholder={t("email")}
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setErrors((prev) => ({ ...prev, email: undefined }));
-                }}
-                className="py-2"
+                name="email"
                 type="email"
+                placeholder={t("email")}
+                value={form.email}
+                onChange={handleChange}
               />
-              {errors.email && (
+              {submitted && errors.email && (
                 <p className="text-red-600 text-sm mt-1">{errors.email[0]}</p>
               )}
             </div>
 
             {/* Password */}
-            <div className="w-full">
+            <div>
               <Input
+                name="password"
                 type="password"
                 placeholder={t("password")}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setErrors((prev) => ({ ...prev, password: undefined }));
-                }}
-                className="py-2"
+                value={form.password}
+                onChange={handleChange}
               />
-              {errors.password && (
+              {submitted && errors.password && (
                 <p className="text-red-600 text-sm mt-1">
                   {errors.password[0]}
                 </p>
@@ -173,21 +185,15 @@ function RegisterForm() {
             </div>
 
             {/* Confirm Password */}
-            <div className="w-full">
+            <div>
               <Input
+                name="confirmPassword"
                 type="password"
                 placeholder={t("register.confirm_password")}
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setErrors((prev) => ({
-                    ...prev,
-                    confirmPassword: undefined,
-                  }));
-                }}
-                className="py-2"
+                value={form.confirmPassword}
+                onChange={handleChange}
               />
-              {errors.confirmPassword && (
+              {submitted && errors.confirmPassword && (
                 <p className="text-red-600 text-sm mt-1">
                   {errors.confirmPassword[0]}
                 </p>

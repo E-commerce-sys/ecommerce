@@ -20,13 +20,14 @@ function Navbar() {
   const { loggedIn } = useAuth();
   const languages = ["en", "ar", "ku"];
 
+  console.log(loggedIn);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpen(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
