@@ -57,7 +57,7 @@ export default function RatingFilter() {
             className={`flex justify-center items-center gap-2 px-8 py-4 rounded text-[12px] font-normal w-44 h-10 transition-colors border-b border-[rgb(var(--color-primary-1))] whitespace-nowrap
                 ${selected === 'high'
                 ? 'bg-[rgb(var(--color-primary-main))] text-white'
-                : 'bg-[#F5F5F5] text-black hover:bg-[rgb(var(--color-primary-1))]'
+                : 'bg-white text-black hover:bg-[rgb(var(--color-primary-1))]'
                 }`}
             >
               Sort High to Low
@@ -68,7 +68,7 @@ export default function RatingFilter() {
             className={`flex justify-center items-center gap-2 px-8 py-4 rounded text-[12px] font-normal w-44 h-10 transition-colors whitespace-nowrap
                 ${selected === 'low'
                 ? 'bg-[rgb(var(--color-primary-main))] text-white'
-                : 'bg-[#F5F5F5] text-black hover:bg-[rgb(var(--color-primary-1))]'
+                : 'bg-white text-black hover:bg-[rgb(var(--color-primary-1))]'
                 }`}
             >
               Sort Low to High
