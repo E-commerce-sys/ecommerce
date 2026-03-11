@@ -26,6 +26,7 @@ import AdminAdsPage from "../pages/admin/AdminAdsPage.jsx";
 
 import NotFoundPage from "../pages/NotFoundPage";
 import { homeLoader } from "../features/home/homeLoader.js";
+import { productsLoader } from "../features/products/productsLoader.js";
 
 // Route Guards
 import ProtectedRoute from "../routes/ProtectedRoute";
@@ -38,7 +39,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage />, loader: homeLoader },
 
-      { path: "products", element: <ProductsPage /> },
+      { path: "products", element: <ProductsPage />, loader: productsLoader },
       { path: "products/:productId", element: <ProductDetailPage /> },
 
       { path: "about", element: <AboutPage /> },
