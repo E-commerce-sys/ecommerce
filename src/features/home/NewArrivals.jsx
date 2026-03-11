@@ -4,12 +4,26 @@ import playstation from "../../assets/img/playstation.png";
 import speaker from "../../assets/img/echo.png";
 import woman from "../../assets/img/woman.png";
 import perfume from "../../assets/img/perfume.png";
+import { useTranslation } from "react-i18next";
 
 function NewArrivals({ data }) {
+  const { t, i18n } = useTranslation();
   const products = useMemo(() => {
     // eslint-disable-next-line react-hooks/purity
     return [...data].sort(() => Math.random() - 0.5).slice(0, 4);
   }, [data]);
+
+  const lang = i18n.language;
+
+  const nameKey =
+    lang === "ar" ? "nameAr" : lang === "ku" ? "nameKu" : "nameEn";
+
+  const descriptionKey =
+    lang === "ar"
+      ? "descriptionAr"
+      : lang === "ku"
+        ? "descriptionKu"
+        : "descriptionEn";
 
   return (
     <section className="flex justify-center py-12">
@@ -20,12 +34,12 @@ function NewArrivals({ data }) {
             <div className="flex items-center gap-2 md:gap-4">
               <span className="w-3 h-6 md:w-4 md:h-7 lg:w-5 lg:h-8 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
               <span className="text-[rgb(var(--color-primary-main))] font-medium text-sm md:text-base">
-                Featured
+                {t("newArrival.feature")}
               </span>
             </div>
 
             <p className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
-              New Arrival
+              {t("newArrival.new")}
             </p>
           </div>
         </div>
@@ -43,15 +57,15 @@ function NewArrivals({ data }) {
 
                 <div className="relative z-10 max-w-65">
                   <p className="text-lg md:text-xl lg:text-2xl font-semibold">
-                    {products[0].attributes.nameEn}
+                    {products[0].attributes[nameKey]}
                   </p>
 
                   <p className="text-[12px] md:text-sm text-[rgb(var(--color-border))] mt-2 line-clamp-3">
-                    {products[0].attributes.descriptionEn}
+                    {products[0].attributes[descriptionKey]}
                   </p>
 
                   <button className="mt-4 underline text-sm font-medium">
-                    Buy Now
+                    {t("newArrival.buy")}
                   </button>
                 </div>
               </div>
@@ -69,15 +83,15 @@ function NewArrivals({ data }) {
 
                   <div className="relative z-10 max-w-65">
                     <p className="text-lg md:text-lg lg:text-xl font-semibold">
-                      {products[1].attributes.nameEn}
+                      {products[1].attributes[nameKey]}
                     </p>
 
                     <p className="text-[12px] md:text-sm text-[rgb(var(--color-border))] mt-2 line-clamp-2">
-                      {products[1].attributes.descriptionEn}
+                      {products[1].attributes[descriptionKey]}
                     </p>
 
                     <button className="mt-3 underline text-sm font-medium">
-                      Buy Now
+                      {t("newArrival.buy")}
                     </button>
                   </div>
                 </div>
@@ -94,15 +108,15 @@ function NewArrivals({ data }) {
 
                     <div className="relative z-10">
                       <p className="text-lg md:text-lg font-semibold">
-                        {products[2].attributes.nameEn}
+                        {products[2].attributes[nameKey]}
                       </p>
 
                       <p className="text-[12px] md:text-sm text-[rgb(var(--color-border))] mt-2 line-clamp-2">
-                        {products[2].attributes.descriptionEn}
+                        {products[2].attributes[descriptionKey]}
                       </p>
 
                       <button className="mt-2 underline text-sm font-medium">
-                        Buy Now
+                        {t("newArrival.buy")}
                       </button>
                     </div>
                   </div>
@@ -117,15 +131,15 @@ function NewArrivals({ data }) {
 
                     <div className="relative z-10">
                       <p className="text-lg md:text-lg font-semibold">
-                        {products[3].attributes.nameEn}
+                        {products[3].attributes[nameKey]}
                       </p>
 
                       <p className="text-[12px] md:text-sm text-[rgb(var(--color-border))] mt-2 line-clamp-2">
-                        {products[3].attributes.descriptionEn}
+                        {products[3].attributes[descriptionKey]}
                       </p>
 
                       <button className="mt-2 underline text-sm font-medium">
-                        Buy Now
+                        {t("newArrival.buy")}
                       </button>
                     </div>
                   </div>

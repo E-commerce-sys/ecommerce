@@ -1,10 +1,12 @@
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
+import { useTranslation } from "react-i18next";
 
 function BestProducts({ data }) {
   // shuffle randomly and take 3
   // eslint-disable-next-line react-hooks/purity
   const products = [...data].sort(() => Math.random() - 0.5).slice(0, 3);
+  const { t } = useTranslation();
 
   return (
     <section className="flex justify-center py-12">
@@ -15,17 +17,17 @@ function BestProducts({ data }) {
             <div className="flex items-center gap-2 md:gap-4">
               <span className="w-3 h-6 md:w-4 md:h-7 lg:w-5 lg:h-8 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
               <span className="text-[rgb(var(--color-primary-main))] font-medium text-sm md:text-base">
-                This Month
+                {t("bestProduct.month")}
               </span>
             </div>
 
             <p className="text-[20px] md:text-2xl lg:text-3xl font-semibold">
-              Best Selling Products
+              {t("bestProduct.best")}
             </p>
           </div>
 
           <Button variant="outline" size="sm">
-            View All
+            {t("view")}
           </Button>
         </div>
 
