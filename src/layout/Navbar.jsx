@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 
-import { isLoggedIn } from "../helpers/auth";
+import { useAuth } from "../context/AuthContext";
 import heart from "../assets/icons/heart-Icon.svg";
 import profile from "../assets/icons/profile-icon.svg";
 import basket from "../assets/icons/basket-icon.svg";
@@ -14,11 +14,10 @@ import LanguageList from "../features/langauge/LanguageList";
 
 function Navbar() {
   const { t } = useTranslation();
-  const { language, changeLanguage } = useLanguage();
-  const { dir } = useLanguage();
+  const { language, changeLanguage, dir } = useLanguage();
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const loggedIn = isLoggedIn();
+  const { loggedIn } = useAuth();
   const languages = ["en", "ar", "ku"];
 
   useEffect(() => {
@@ -124,9 +123,9 @@ function Navbar() {
           className={`lg:hidden absolute top-14 bg-white border border-[rgb(var(--color-border))] rounded-md shadow-md flex flex-col p-3 gap-3 z-1000
   ${dir === "rtl" ? "left-1 md:left-6" : "right-1 md:right-6"}`}
         >
-          {isLoggedIn ? (
+          {loggedIn ? (
             <NavLink
-              to="/login"
+              to="/account"
               className={({ isActive }) =>
                 `flex items-center gap-2 ${
                   isActive &&

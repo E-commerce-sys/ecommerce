@@ -4,11 +4,14 @@ import "./index.css";
 import "./styles/theme.css";
 import App from "./app/App";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
+import { AuthProvider } from "./context/AuthContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <LanguageProvider>
-      <App />
-    </LanguageProvider>{" "}
+    <AuthProvider>
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>{" "}
+    </AuthProvider>
   </StrictMode>,
 );

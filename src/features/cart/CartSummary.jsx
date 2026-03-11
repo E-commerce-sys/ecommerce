@@ -11,8 +11,6 @@ function CartItemSummary({ product, className }) {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(false);
-
-  console.log(product);
   const attributes = product.attributes;
 
   /* ---------- LANGUAGE BASED NAME ---------- */
