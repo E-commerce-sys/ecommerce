@@ -1,26 +1,42 @@
 import DiscountButton from "../../components/DiscountButton";
+import { useState } from "react";
+
 function Discounts() {
+  const [selectedDiscount, setSelectedDiscount] = useState(null);
+
+  function handleDiscount(discount) {
+    console.log("Selected discount:", discount);
+    setSelectedDiscount(discount);
+  }
+
   return (
-    <div className="flex">
+    <div className="grid grid-cols-2  md:grid-cols-4 gap-6 my-15 md:my-25 max-w-6xl mx-auto px-4">
       <DiscountButton
-        discount_rate="5%"
-        color_var="--color-orange-soft"
-        color_text="--color-text-orange"
+        discountRate={5}
+        colorVar="--color-orange-soft"
+        colorText="--color-text-orange"
+        onSelect={handleDiscount}
       />
+
       <DiscountButton
-        discount_rate="10%"
-        color_var="--color-green-soft"
-        color_text="--color-text-green"
+        discountRate={10}
+        colorVar="--color-green-soft"
+        colorText="--color-text-green"
+        onSelect={handleDiscount}
       />
+
       <DiscountButton
-        discount_rate="30%"
-        color_var="--color-blue-soft"
-        color_text="--color-text-blue"
+        discountRate={20}
+        colorVar="--color-blue-soft"
+        colorText="--color-text-blue"
+        onSelect={handleDiscount}
       />
+
       <DiscountButton
-        discount_rate="50%"
-        color_var="--color-red-soft"
-        color_text="--color-text-red"
+        discountRate={30}
+        colorVar="--color-red-soft"
+        colorText="--color-text-red"
+        onSelect={handleDiscount}
       />
     </div>
   );

@@ -25,7 +25,7 @@ function BannerSlider({ banners }) {
   if (!banners?.length) return null;
 
   return (
-    <section className="hidden w-full md:flex justify-center py-6">
+    <section className="hidden w-full md:flex justify-center py-10">
       <div className="relative w-[90%] max-w-300 overflow-hidden rounded-md">
         {/* SLIDER */}
         <div
