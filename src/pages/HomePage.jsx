@@ -6,6 +6,7 @@ import FeaturedProducts from "../features/home/FeaturedProducts";
 import NewArrivals from "../features/home/NewArrivals";
 import BannerSlider from "../features/home/BannerSlider";
 import Discounts from "../features/home/Discounts";
+import Services from "../features/home/Services";
 
 function HomePage() {
   const { bestProducts, categories, newArrivals, ourProducts, banners } =
@@ -19,6 +20,7 @@ function HomePage() {
       <Discounts />
       <FeaturedProducts data={ourProducts} />
       <NewArrivals data={newArrivals} />
+      <Services />
     </div>
   );
 }
