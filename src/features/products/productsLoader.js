@@ -1,16 +1,15 @@
+import axiosInstance from "../../axios/axiosInstance";
 import { categoriesAPI } from "../categories/categoriesAPI";
-import { productsAPI, productsPage } from "../products/productAPI";
 
 export async function productsLoader() {
-  const [categories, products, meta] = await Promise.all([
+  const [categories, productsRes] = await Promise.all([
     categoriesAPI(),
-    productsAPI(1),
-    productsPage(),
+    axiosInstance.get("/api/products", { params: { page: 1 } }),
   ]);
 
   return {
     categories,
-    products,
-    totalPages: meta.last_page,
+    products: productsRes.data.data,
+    totalPages: productsRes.data.meta.last_page,
   };
 }

@@ -30,6 +30,7 @@ function BannerSlider({ banners }) {
     startSlider();
 
     return () => clearInterval(sliderRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [banners]);
 
   if (!banners?.length) return null;

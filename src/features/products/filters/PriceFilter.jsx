@@ -1,53 +1,27 @@
-import { useState, useRef, useEffect } from 'react';
-import { useProductContext } from "../ProductContext";
+import { useState, useRef, useEffect } from "react";
+import { useProductFilters } from "../useProductFilters";
 
 function PriceFilters() {
   const [open, setOpen] = useState(false);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(5000);
+  const [priceSort, setPriceSort] = useState(null);
+
   const wrapperRef = useRef(null);
-  const { setMinPrice, setMaxPrice, setPage } = useProductContext();
+  const { updateFilters } = useProductFilters();
+
+  const [error, setError] = useState("");
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         setOpen(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const handleMin = (e) => {
-    const value = Math.min(Number(e.target.value), max - 100);
-    setMin(value);
-  };
-
-  const handleMax = (e) => {
-    const value = Math.max(Number(e.target.value), min + 100);
-    setMax(value);
-  };
-
-  const minPercent = (min / 5000) * 100;
-  const maxPercent = (max / 5000) * 100;
-
-  const minZ = min > 4500 ? 5 : max - min < 500 ? 5 : 4;
-  const maxZ = min > 4500 ? 4 : max - min < 500 ? 4 : 5;
-
-  const thumbClasses = `
-    absolute w-full h-1 appearance-none bg-transparent cursor-pointer pointer-events-none
-    [&::-webkit-slider-thumb]:appearance-none
-    [&::-webkit-slider-thumb]:w-3
-    [&::-webkit-slider-thumb]:h-3
-    [&::-webkit-slider-thumb]:rounded-full
-    [&::-webkit-slider-thumb]:bg-[rgb(var(--color-primary-main))]
-    [&::-webkit-slider-thumb]:cursor-pointer
-    [&::-webkit-slider-thumb]:border-2
-    [&::-webkit-slider-thumb]:border-white
-    [&::-webkit-slider-thumb]:shadow-[0_0_0_1px_rgb(var(--color-primary-main))]
-    [&::-webkit-slider-thumb]:pointer-events-auto
-    [&::-webkit-slider-thumb]:hover:bg-[rgb(var(--color-primary-5))]
-    [&::-webkit-slider-thumb]:transition-colors
-  `;
 
   return (
     <div className="relative inline-block" ref={wrapperRef}>
@@ -62,38 +36,118 @@ function PriceFilters() {
           stroke="currentColor"
           viewBox="0 0 24 24"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
         </svg>
       </button>
 
       {open && (
         <div className="absolute top-full mt-2 left-0 bg-white border border-[rgb(var(--color-primary-1))] rounded-lg shadow-lg p-4 w-64 z-50">
-          <div className="flex justify-between text-sm mb-4">
-            <span className="px-2 py-0.5 rounded font-medium">${min}</span>
-            <span className="px-2 py-0.5 rounded font-medium">${max}</span>
-          </div>
+          {/* inputs */}
+          <div className="flex gap-2 mb-4">
+            <input
+              type="number"
+              placeholder="Min"
+              min={0}
+              onChange={(e) => {
+                let value = Number(e.target.value);
 
-          <div className="relative h-1 mb-6">
-            <div className="absolute w-full h-1 bg-[rgb(var(--color-border))] rounded" />
-            <div
-              className="absolute h-1 bg-[rgb(var(--color-primary-main))] rounded"
-              style={{ left: `${minPercent}%`, width: `${maxPercent - minPercent}%` }}
+                if (value < 0) {
+                  setError("Negative values are not allowed");
+                  return;
+                }
+
+                setMin(value);
+
+                if (max && value >= max) {
+                  setError("Max should be bigger than Min");
+                } else {
+                  setError("");
+                }
+              }}
+              className="w-1/2 px-2 py-1 border rounded text-sm"
             />
-            <input type="range" min={0} max={5000} step={100} value={min} onChange={handleMin} className={thumbClasses} style={{ zIndex: minZ }} />
-            <input type="range" min={0} max={5000} step={100} value={max} onChange={handleMax} className={thumbClasses} style={{ zIndex: maxZ }} />
-          </div>
 
-          <div className="flex justify-between text-xs text-[rgb(var(--color-text-main-5))] font-medium mb-4">
-            <span>$0</span>
-            <span>$5000</span>
-          </div>
+            <input
+              type="number"
+              placeholder="Max"
+              min={0}
+              onChange={(e) => {
+                let value = Number(e.target.value);
 
+                if (value < 0) {
+                  setError("Negative values are not allowed");
+                  return;
+                }
+
+                setMax(value);
+
+                if (value <= min) {
+                  setError("Max should be bigger than Min");
+                } else {
+                  setError("");
+                }
+              }}
+              className="w-1/2 px-2 py-1 border rounded text-sm"
+            />
+          </div>
+          {error && (
+            <p className="text-red-600 text-xs mb-2 font-medium">{error}</p>
+          )}{" "}
+          {/* price sorting */}
+          <div className="flex flex-col gap-2 mb-4">
+            <button
+              onClick={() => setPriceSort("low")}
+              className={`px-3 py-2 rounded text-sm border transition
+              ${
+                priceSort === "low"
+                  ? "border-2 border-[rgb(var(--color-primary-main))]"
+                  : "hover:bg-[rgb(var(--color-primary-1))]"
+              }`}
+            >
+              Sort Low → High
+            </button>
+
+            <button
+              onClick={() => setPriceSort("high")}
+              className={`px-3 py-2 rounded text-sm border transition
+              ${
+                priceSort === "high"
+                  ? "border-2 border-[rgb(var(--color-primary-main))]"
+                  : "hover:bg-[rgb(var(--color-primary-1))]"
+              }`}
+            >
+              Sort High → Low
+            </button>
+          </div>
+          {/* apply */}
           <button
-          className="w-full py-2 rounded bg-[rgb(var(--color-primary-main))] text-white text-sm font-medium hover:bg-[rgb(var(--color-primary-5))] active:bg-[rgb(var(--color-primary-6))] transition-colors"
-          onClick={() => { setMinPrice(min); setMaxPrice(max); setPage(1); setOpen(false); }}
-        >
-          Apply
-        </button>
+            disabled={!!error}
+            className={`w-full py-2 rounded text-white text-sm font-medium transition-colors
+    ${
+      error
+        ? "bg-gray-300 cursor-not-allowed"
+        : "bg-[rgb(var(--color-primary-main))] hover:bg-[rgb(var(--color-primary-5))]"
+    }`}
+            onClick={() => {
+              if (error) return;
+
+              updateFilters({
+                minPrice: min,
+                maxPrice: max,
+                priceSort,
+                page: 1,
+              });
+
+              setOpen(false);
+            }}
+          >
+            Apply
+          </button>
         </div>
       )}
     </div>

@@ -27,11 +27,11 @@ function BestProducts({ data }) {
             </p>
           </div>
 
-          <Button variant="outline" size="sm">
-            <Link to="/products" state={{ isBestSelling: true }}>
-            {t("view")}
-            </Link>
-          </Button>
+          <Link to="/products?bestSelling=true">
+            <Button variant="outline" size="sm">
+              {t("view")}
+            </Button>
+          </Link>
         </div>
 
         {/* Products */}
