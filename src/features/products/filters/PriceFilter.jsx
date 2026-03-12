@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { useProductContext } from "../ProductContext";
 
 function PriceFilters() {
   const [open, setOpen] = useState(false);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(5000);
   const wrapperRef = useRef(null);
-
+  const { setMinPrice, setMaxPrice, setPage } = useProductContext();
   useEffect(() => {
     function handleClickOutside(e) {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -88,11 +89,11 @@ function PriceFilters() {
           </div>
 
           <button
-            className="w-full py-2 rounded bg-[rgb(var(--color-primary-main))] text-white text-sm font-medium hover:bg-[rgb(var(--color-primary-5))] active:bg-[rgb(var(--color-primary-6))] transition-colors"
-            onClick={() => setOpen(false)}
-          >
-            Apply
-          </button>
+          className="w-full py-2 rounded bg-[rgb(var(--color-primary-main))] text-white text-sm font-medium hover:bg-[rgb(var(--color-primary-5))] active:bg-[rgb(var(--color-primary-6))] transition-colors"
+          onClick={() => { setMinPrice(min); setMaxPrice(max); setPage(1); setOpen(false); }}
+        >
+          Apply
+        </button>
         </div>
       )}
     </div>

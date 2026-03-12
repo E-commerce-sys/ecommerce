@@ -1,16 +1,9 @@
-import { useState, useEffect } from "react";
-import { productsPage } from "./productAPI";
+
+import {useProductContext} from "./ProductContext"
 
 export default function Pagination({ current, setCurrent }) {
-  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    async function fetchPageNum() {
-      const res = await productsPage();
-      setTotalPages(res.last_page);
-    }
-    fetchPageNum();
-  }, []);
+  const { totalPages, page, setPage } = useProductContext();
 
   const getPages = () => {
     if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);

@@ -1,24 +1,26 @@
-import { productsAPI } from "./productAPI";
 import { useState, useEffect } from "react";
+import { useProductContext } from "./ProductContext";
 import CartItemSummary from "../../features/cart/CartSummary";
 import Pagination from "./Pagination";
 import Arrow from "../../assets/icons/icons-arrow-left.svg";
+import {filtersAPI} from './filters/filtersAPI'
 
-function ProductList({ data, totalPages }) {
-  const [products, setProducts] = useState(data);
-  const [page, setPage] = useState(1);
+function ProductList() {
+  const [products, setProducts] = useState([]);
+  const { isDiscounted, minPrice, maxPrice, page, setPage, setTotalPages, totalPages, ratingSort } = useProductContext();
+  
 
   useEffect(() => {
-    async function fetchProducts() {
-      if (page === 1) return; // first page already loaded by loader
+  async function fetchProducts() {
 
-      const res = await productsAPI(page);
-      setProducts(res);
-      window.scrollTo(0, 0);
-    }
+    const { data, meta } = await filtersAPI(page, isDiscounted, minPrice, maxPrice, ratingSort);
+    setProducts(data ?? []);
+    setTotalPages(meta.last_page);
 
-    fetchProducts();
-  }, [page]);
+    window.scrollTo(0, 0);
+  }
+  fetchProducts();
+}, [page, isDiscounted, minPrice, maxPrice,ratingSort]);
 
   return (
     <section className="flex justify-center py-12 flex-wrap">
