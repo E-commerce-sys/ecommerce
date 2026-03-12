@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
 import heart from "../../assets/icons/heart-Icon.svg";
 import filledHeart from "../../assets/icons/heart-filled-Icon.svg";

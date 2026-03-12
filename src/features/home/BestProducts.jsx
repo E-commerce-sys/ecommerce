@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
@@ -5,7 +7,6 @@ import { Link } from "react-router-dom";
 
 function BestProducts({ data }) {
   // shuffle randomly and take 3
-  // eslint-disable-next-line react-hooks/purity
   const products = [...data].sort(() => Math.random() - 0.5).slice(0, 3);
   const { t } = useTranslation();
 

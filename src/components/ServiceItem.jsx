@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 function ServiceItem({ icon, title, subtitle }) {
   return (
     <div className="flex flex-col items-center text-center gap-4 px-4">

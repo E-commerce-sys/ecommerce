@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { createContext, useContext, useState } from "react";
 
 const ProductContext = createContext();
@@ -12,7 +14,6 @@ export function ProductProvider({ children, initialTotalPages = 1 }) {
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useProductContext() {
   return useContext(ProductContext);
 }

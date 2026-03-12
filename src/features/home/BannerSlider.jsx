@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
 import Button from "../../components/Button";
 import iphone from "../../assets/img/iphone.svg";
@@ -30,7 +32,6 @@ function BannerSlider({ banners }) {
     startSlider();
 
     return () => clearInterval(sliderRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [banners]);
 
   if (!banners?.length) return null;

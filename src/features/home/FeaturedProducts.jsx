@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useMemo } from "react";
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
@@ -8,7 +10,6 @@ function FeaturedProducts({ data }) {
   // randomly pick 8 products
   const { t } = useTranslation();
   const products = useMemo(() => {
-    // eslint-disable-next-line react-hooks/purity
     return [...data].sort(() => Math.random() - 0.5).slice(0, 8);
   }, [data]);
 
@@ -30,11 +31,11 @@ function FeaturedProducts({ data }) {
             </p>
           </div>
 
-          <Button variant="outline" size="sm">
-            <Link to="/products">
-            {t("view")}
-            </Link>
-          </Button>
+          <Link to="/products">
+            <Button variant="outline" size="sm">
+              {t("view")}
+            </Button>
+          </Link>
         </div>
 
         {/* Products */}

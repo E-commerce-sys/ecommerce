@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useLoaderData } from "react-router-dom";
 import { ProductProvider } from "../features/products/ProductContext";
 

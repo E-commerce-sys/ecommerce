@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
 import search from "../../assets/icons/search-Icon.svg";
 

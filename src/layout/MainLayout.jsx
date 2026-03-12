@@ -1,14 +1,9 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { Outlet, useNavigation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Spinner from "../components/Spinner";
-
-import Button from "../components/Button";
-import Input from "../components/Input";
-import CartSummary from "../features/cart/CartSummary";
-import Discounts from "../features/home/Discounts";
-import PriceFilter from "../features/products/filters/PriceFilter";
-import DiscountFilter from "../features/products/filters/DiscountFilter";
 
 function MainLayout() {
   const navigation = useNavigation();

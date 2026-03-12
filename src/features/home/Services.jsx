@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import ServiceItem from "../../components/ServiceItem";
 
 import deliveryIcon from "../../assets/icons/icon-delivery.svg";

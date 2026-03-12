@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Eye from "../assets/icons/eye.svg";

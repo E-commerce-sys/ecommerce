@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import SubCategoryMenu from "./SubCategoryMenu";
 import { subCategoriesAPI } from "./subCategoriesAPI";
@@ -25,7 +27,6 @@ function CategoryMenu({ categories }) {
   // Set default active category
   useEffect(() => {
     if (normalizedCategories.length > 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveCategoryId(normalizedCategories[0].id);
     }
   }, [categories]);

@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useMemo } from "react";
 
 import playstation from "../../assets/img/playstation.png";
@@ -9,7 +11,6 @@ import { useTranslation } from "react-i18next";
 function NewArrivals({ data }) {
   const { t, i18n } = useTranslation();
   const products = useMemo(() => {
-    // eslint-disable-next-line react-hooks/purity
     return [...data].sort(() => Math.random() - 0.5).slice(0, 4);
   }, [data]);
 

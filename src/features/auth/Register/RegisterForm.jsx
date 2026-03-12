@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import SideImage from "../../../assets/img/Side-Image.png";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";

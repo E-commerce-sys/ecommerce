@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import Facebook from "../assets/icons/Icon-Facebook.svg";
 import Instagram from "../assets/icons/Icon-instagram.svg";
 import Linkedin from "../assets/icons/Icon-Linkedin.svg";
