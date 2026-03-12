@@ -5,6 +5,7 @@ import BestProducts from "../features/home/BestProducts";
 import FeaturedProducts from "../features/home/FeaturedProducts";
 import NewArrivals from "../features/home/NewArrivals";
 import BannerSlider from "../features/home/BannerSlider";
+import Discounts from "../features/home/Discounts";
 
 function HomePage() {
   const { bestProducts, categories, newArrivals, ourProducts, banners } =
@@ -15,6 +16,7 @@ function HomePage() {
       <CategoryMenu categories={categories} />
       <BannerSlider banners={banners} />
       <BestProducts data={bestProducts} />
+      <Discounts />
       <FeaturedProducts data={ourProducts} />
       <NewArrivals data={newArrivals} />
     </div>

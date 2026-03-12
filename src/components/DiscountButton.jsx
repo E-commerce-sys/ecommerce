@@ -1,15 +1,19 @@
-function DiscountButton(props) {
+function DiscountButton({ discountRate, colorVar, colorText, onSelect }) {
   return (
-    <div className="flex gap-3 p-2">
-      <button className={`flex flex-col items-center justify-center w-72 h-28 rounded-lg px-4 py-3`} style={{ 
-          backgroundColor: `rgb(var(${props.color_var}))`,
-          color: `rgb(var(${props.color_text}))`
-        }}>
-        <span className="text-4xl font-bold">{props.discount_rate}</span>
-        <span className="text-s mt-1">ve üzeri indirim</span>
+    <button
+      onClick={() => onSelect(discountRate)}
+      className="flex flex-col items-center justify-center w-full h-28 rounded-lg px-4 py-3 cursor-pointer hover:shadow-md transition"
+      style={{
+        backgroundColor: `rgb(var(${colorVar}))`,
+        color: `rgb(var(${colorText}))`,
+      }}
+    >
+      <span className="text-2xl md:text-3xl lg:4xl font-bold">
+        %{discountRate}
+      </span>
+      <span className="text-md md:text-lg lg:2xl mt-1">Discount</span>
     </button>
-    </div>
-);
+  );
 }
 
 export default DiscountButton;
