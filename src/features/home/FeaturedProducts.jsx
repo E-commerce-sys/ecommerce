@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 function FeaturedProducts({ data }) {
   // randomly pick 8 products
@@ -30,7 +31,9 @@ function FeaturedProducts({ data }) {
           </div>
 
           <Button variant="outline" size="sm">
+            <Link to="/products">
             {t("view")}
+            </Link>
           </Button>
         </div>
 
