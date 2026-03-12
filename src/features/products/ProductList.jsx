@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useProductContext } from "./ProductContext";
 import CartItemSummary from "../../features/cart/CartSummary";
 import Pagination from "./Pagination";
-import Arrow from "../../assets/icons/icons-arrow-left.svg";
+// import Arrow from "../../assets/icons/icons-arrow-left.svg";
 import {filtersAPI} from './filters/filtersAPI'
 import { useLocation } from "react-router-dom";
 import {bestProductAPI} from '../home/API/bestProduct'
@@ -58,7 +58,7 @@ function ProductList() {
         <div className="flex flex-col items-center gap-4 px-4">
           <Pagination current={page} setCurrent={setPage} />
 
-          <div className="hidden md:flex items-center gap-4">
+          {/* <div className="hidden md:flex items-center gap-4">
             <button
               onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
               className="flex items-center shrink-0 disabled:opacity-30 disabled:cursor-not-allowed"
@@ -82,7 +82,7 @@ function ProductList() {
                 className="scale-x-[-1] w-7 h-7 rounded-full hover:bg-[rgb(var(--color-border))] transition-colors cursor-pointer"
               />
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
