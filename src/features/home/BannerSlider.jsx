@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Button from "../../components/Button";
 import iphone from "../../assets/img/iphone.svg";
 import { Link } from "react-router-dom";
@@ -7,19 +7,29 @@ import i18n from "../../i18n/i18n";
 
 function BannerSlider({ banners }) {
   const [active, setActive] = useState(0);
+  const sliderRef = useRef(null);
   const { t } = useTranslation();
 
   const isRTL = i18n.language === "ar" || i18n.language === "ku";
 
-  // auto slide
-  useEffect(() => {
+  function startSlider() {
     if (!banners?.length) return;
 
-    const interval = setInterval(() => {
+    sliderRef.current = setInterval(() => {
       setActive((prev) => (prev + 1) % banners.length);
     }, 3000);
+  }
 
-    return () => clearInterval(interval);
+  function resetSlider(index) {
+    clearInterval(sliderRef.current);
+    setActive(index);
+    startSlider();
+  }
+
+  useEffect(() => {
+    startSlider();
+
+    return () => clearInterval(sliderRef.current);
   }, [banners]);
 
   if (!banners?.length) return null;
@@ -69,7 +79,7 @@ function BannerSlider({ banners }) {
           {banners.map((_, index) => (
             <button
               key={index}
-              onClick={() => setActive(index)}
+              onClick={() => resetSlider(index)}
               className={`w-3 h-3 rounded-full transition cursor-pointer ${
                 index === active
                   ? "bg-[rgb(var(--color-primary-main))] scale-110 border border-white"

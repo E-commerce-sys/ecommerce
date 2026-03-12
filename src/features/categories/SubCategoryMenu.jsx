@@ -14,8 +14,8 @@ function SubCategoryMenu({ subCategories }) {
           <div
             className={`w-12 h-12 rounded-full border border-[rgb(var(--color-text-main))] flex items-center justify-center  ${
               activeSub === sub.id
-                ? "shadow-md shadow-[rgb(var(--color-primary-3))]"
-                : "hover:shadow-md hover:shadow-[rgb(var(--color-text-main-1))]"
+                ? "shadow-sm shadow-[rgb(var(--color-primary-3))]"
+                : "hover:shadow-md"
             }`}
           >
             <img src={sub.icon} alt={sub.name} className="w-7 h-7" />

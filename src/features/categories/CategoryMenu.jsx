@@ -72,10 +72,10 @@ function CategoryMenu({ categories }) {
             <button
               key={cat.id}
               onClick={() => setActiveCategoryId(cat.id)}
-              className={`pb-2 text-sm font-medium ${
+              className={` text-sm font-medium cursor-pointer ${
                 activeCategoryId === cat.id
-                  ? "border-b-2 border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
-                  : "text-[rgb(var(--color-text-main-3))]"
+                  ? "border-b-2 pb-2 border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
+                  : "text-[rgb(var(--color-text-main-3))] hover:text-[rgb(var(--color-primary-3))]"
               }`}
             >
               {cat.name}
