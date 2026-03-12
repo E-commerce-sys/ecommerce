@@ -4,7 +4,7 @@ function SubCategoryMenu({ subCategories }) {
   const [activeSub, setActiveSub] = useState(null);
 
   return (
-    <div className="flex gap-6 px-6 py-4 overflow-x-auto">
+    <div className="flex gap-2 px-6 py-4 overflow-x-auto">
       {subCategories.map((sub) => (
         <div
           key={sub.id}
