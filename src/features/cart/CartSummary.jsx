@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import CartItem from "./CartItem";
 import FullStar from "../../assets/icons/filled-star-Icon.svg";
@@ -27,6 +29,7 @@ function CartItemSummary({ product, className }) {
   const isNew = attributes.isNew;
   const price = attributes.price;
   const colors = attributes.colors || [];
+  const newPrice = attributes.priceAfterDiscount || null;
 
   /* ---------- LOGIN CHECK ---------- */
 
@@ -73,9 +76,16 @@ function CartItemSummary({ product, className }) {
 
         {/* PRICE */}
         <div className="flex gap-2 flex-col">
-          <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
-            ${price}
-          </span>
+          <div className="flex gap-2 items-center">
+            <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
+              {newPrice ? newPrice : price}
+            </span>
+            {newPrice && (
+              <span className="text-[rgb(var(--color-text-main-1))] text-sm md:text-[16px] font-medium line-through">
+                ${price}
+              </span>
+            )}
+          </div>
           {/* RATING */}
           <div className="flex flex-row gap-0.5 items-center w-3 h-3">
             {stars}

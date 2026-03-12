@@ -2,28 +2,17 @@ import { createContext, useContext, useState } from "react";
 
 const ProductContext = createContext();
 
-export function ProductProvider({ children }) {
-  const [page, setPage] = useState(1);
-  const [isDiscounted, setIsDiscounted] = useState(false);
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(5000);
-  const [ratingSort, setRatingSort] = useState(null); // 'high' | 'low' | null
-  const [totalPages, setTotalPages] = useState(1);
+export function ProductProvider({ children, initialTotalPages = 1 }) {
+  const [totalPages, setTotalPages] = useState(initialTotalPages);
 
   return (
-    <ProductContext.Provider value={{
-      page, setPage,
-      isDiscounted, setIsDiscounted,
-      minPrice, setMinPrice,
-      maxPrice, setMaxPrice,
-      ratingSort, setRatingSort,
-      totalPages, setTotalPages
-    }}>
+    <ProductContext.Provider value={{ totalPages, setTotalPages }}>
       {children}
     </ProductContext.Provider>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useProductContext() {
   return useContext(ProductContext);
 }
