@@ -1,6 +1,7 @@
 import CartItemSummary from "../cart/CartSummary";
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 function BestProducts({ data }) {
   // shuffle randomly and take 3
@@ -27,7 +28,9 @@ function BestProducts({ data }) {
           </div>
 
           <Button variant="outline" size="sm">
+            <Link to="/products" state={{ isBestSelling: true }}>
             {t("view")}
+            </Link>
           </Button>
         </div>
 
