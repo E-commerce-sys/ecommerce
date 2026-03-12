@@ -4,23 +4,37 @@ import CartItemSummary from "../../features/cart/CartSummary";
 import Pagination from "./Pagination";
 import Arrow from "../../assets/icons/icons-arrow-left.svg";
 import {filtersAPI} from './filters/filtersAPI'
+import { useLocation } from "react-router-dom";
+import {bestProductAPI} from '../home/API/bestProduct'
 
 function ProductList() {
   const [products, setProducts] = useState([]);
-  const { isDiscounted, minPrice, maxPrice, page, setPage, setTotalPages, totalPages, ratingSort } = useProductContext();
-  
+  const { isDiscounted, minPrice, maxPrice, page, setPage, setTotalPages, totalPages, ratingSort} = useProductContext();
+  const location = useLocation();
+  const isBestSelling = location.state?.isBestSelling ?? false;
+
+//   useEffect(() => {
+//   async function fetchProducts() {
+
+//     const { data, meta } = await filtersAPI(page, isDiscounted, minPrice, maxPrice, ratingSort);
+//     setProducts(data ?? []);
+//     setTotalPages(meta.last_page);
+
+//     window.scrollTo(0, 0);
+//   }
+//   fetchProducts();
+// }, [page, isDiscounted, minPrice, maxPrice,ratingSort]);
 
   useEffect(() => {
-  async function fetchProducts() {
-
-    const { data, meta } = await filtersAPI(page, isDiscounted, minPrice, maxPrice, ratingSort);
-    setProducts(data ?? []);
-    setTotalPages(meta.last_page);
-
-    window.scrollTo(0, 0);
-  }
-  fetchProducts();
-}, [page, isDiscounted, minPrice, maxPrice,ratingSort]);
+    async function fetchProducts() {
+      const { data, meta } = await filtersAPI(page, isDiscounted, minPrice, maxPrice, ratingSort, isBestSelling);
+      
+      setProducts(data ?? []);
+      setTotalPages(meta.last_page);
+      window.scrollTo(0, 0);
+    }
+    fetchProducts();
+  }, [page, isDiscounted, minPrice, maxPrice, ratingSort, isBestSelling]);
 
   return (
     <section className="flex justify-center py-12 flex-wrap">
