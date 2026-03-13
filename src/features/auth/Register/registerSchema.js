@@ -4,17 +4,15 @@ export const registerSchema = z
   .object({
     firstName: z
       .string()
-      .trim()
       .min(3, "Must be at least 3 characters")
       .max(32, "Must not exceed 32 characters")
-      .regex(/^[A-Za-z]+$/, "Must contain letters only"),
+      .regex(/^[A-Za-z]+$/, "Only letters allowed, no spaces"),
 
     lastName: z
       .string()
-      .trim()
       .min(3, "Must be at least 3 characters")
       .max(32, "Must not exceed 32 characters")
-      .regex(/^[A-Za-z]+$/, "Must contain letters only"),
+      .regex(/^[A-Za-z]+$/, "Only letters allowed, no spaces"),
 
     email: z.string().trim().min(1, "Email is required").email("Invalid email"),
 
