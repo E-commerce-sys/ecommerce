@@ -5,26 +5,28 @@ import ServiceItem from "../../components/ServiceItem";
 import deliveryIcon from "../../assets/icons/icon-delivery.svg";
 import supportIcon from "../../assets/icons/Icon-Customer service.svg";
 import secureIcon from "../../assets/icons/Icon-secure.svg";
+import { useTranslation } from "react-i18next";
 
 function Services() {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-3 gap-6 lg:gap-10 py-20 px-6 lg:px-20 w-full">
       <ServiceItem
         icon={deliveryIcon}
-        title="FREE AND FAST DELIVERY"
-        subtitle="Free delivery for all orders over $140"
+        title={t("services.freeDeliveryTitle")}
+        subtitle={t("services.freeDeliveryDes")}
       />
 
       <ServiceItem
         icon={supportIcon}
-        title="24/7 CUSTOM SERVICE"
-        subtitle="Friendly 24/7 customer support"
+        title={t("services.supportTitle")}
+        subtitle={t("services.supportDes")}
       />
 
       <ServiceItem
         icon={secureIcon}
-        title="MONEY BACK GUARANTEE"
-        subtitle="We return money within 30 days"
+        title={t("services.securityTitle")}
+        subtitle={t("services.securityDes")}
       />
     </div>
   );

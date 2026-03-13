@@ -5,17 +5,17 @@ import CartItem from "./CartItem";
 import FullStar from "../../assets/icons/filled-star-Icon.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
 import { isLoggedIn } from "../../helpers/auth";
-import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import imgProduct from "../../assets/img/Cart.png";
+import AuthModal from "../auth/AuthModal";
 
-function CartItemSummary({ product, className }) {
-  const navigate = useNavigate();
-  const { i18n } = useTranslation();
+function CartSummary({ product, className }) {
+  const { t, i18n } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(false);
-  const attributes = product.attributes;
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authAction, setAuthAction] = useState("");
 
-  /* ---------- LANGUAGE BASED NAME ---------- */
+  const attributes = product.attributes;
 
   const name =
     i18n.language === "ar"
@@ -27,15 +27,22 @@ function CartItemSummary({ product, className }) {
   const rating = Math.round(parseFloat(attributes.averageRating));
   const ratingCount = attributes.ratingCount;
   const isNew = attributes.isNew;
-  const price = attributes.price;
+  const price = Number(attributes.price);
+  const hasDiscount = attributes.hasDiscount;
+  const discountPercentage = attributes.discountPercentage;
+  const newPrice = attributes.priceAfterDiscount
+    ? Number(attributes.priceAfterDiscount)
+    : null;
   const colors = attributes.colors || [];
-  const newPrice = attributes.priceAfterDiscount || null;
 
-  /* ---------- LOGIN CHECK ---------- */
+  function openAuthModal(action) {
+    setAuthAction(action);
+    setShowAuthModal(true);
+  }
 
   function handleAddToCart() {
     if (!isLoggedIn()) {
-      navigate("/login");
+      openAuthModal("cart");
       return;
     }
 
@@ -44,72 +51,97 @@ function CartItemSummary({ product, className }) {
 
   function handleFavorite() {
     if (!isLoggedIn()) {
-      navigate("/login");
+      openAuthModal("favorite");
       return;
     }
 
     setIsFavorite((prev) => !prev);
   }
 
-  /* ---------- STAR RENDERING ---------- */
   const stars = [];
   for (let i = 1; i <= 5; i++) {
-    stars.push(<img key={i} src={i <= rating ? FullStar : EmptyStar} />);
+    stars.push(
+      <img key={i} src={i <= rating ? FullStar : EmptyStar} alt="star" />,
+    );
   }
 
+  const modalTitle =
+    authAction === "favorite" ? t("products.save") : t("products.ready");
+
+  const modalMessage =
+    authAction === "favorite"
+      ? t("products.saveToFav")
+      : t("products.saveToCart");
+
   return (
-    <div className="flex flex-col gap-5 m-5">
-      <CartItem
-        img={imgProduct}
-        className={className}
-        isNew={isNew}
-        onAddToCart={handleAddToCart}
-        onFavorite={handleFavorite}
-        isFavorite={isFavorite}
-      />
+    <>
+      <div className="flex flex-col gap-5 m-5">
+        <CartItem
+          img={imgProduct}
+          className={className}
+          isNew={isNew}
+          onAddToCart={handleAddToCart}
+          onFavorite={handleFavorite}
+          isFavorite={isFavorite}
+        />
 
-      <div className="flex flex-col md:gap-2">
-        {/* PRODUCT NAME */}
-        <p className="text-sm md:text-[16px] text-[rgb(var(--color-text-main))] font-medium">
-          {name}
-        </p>
+        <div className="flex flex-col md:gap-2">
+          <p className="text-sm md:text-[16px] text-[rgb(var(--color-text-main))] font-medium">
+            {name}
+          </p>
 
-        {/* PRICE */}
-        <div className="flex gap-2 flex-col">
-          <div className="flex gap-2 items-center">
-            <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
-              {newPrice ? newPrice : price}
-            </span>
-            {newPrice && (
-              <span className="text-[rgb(var(--color-text-main-1))] text-sm md:text-[16px] font-medium line-through">
-                ${price}
+          <div className="flex gap-2 flex-col">
+            <div className="flex gap-2 items-center flex-wrap">
+              <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
+                $
+                {hasDiscount && newPrice
+                  ? newPrice.toFixed(2)
+                  : price.toFixed(2)}
               </span>
-            )}
-          </div>
-          {/* RATING */}
-          <div className="flex flex-row gap-0.5 items-center w-3 h-3">
-            {stars}
 
-            <span className="text-[14px] mx-2 font-semibold text-[rgb(var(--color-text-main-1))] ">
-              ({ratingCount})
-            </span>
+              {hasDiscount && newPrice && (
+                <span className="text-[rgb(var(--color-text-main-1))] text-sm md:text-[16px] font-medium line-through">
+                  ${price.toFixed(2)}
+                </span>
+              )}
+
+              {hasDiscount && discountPercentage > 0 && (
+                <span className="text-xs md:text-sm font-semibold text-[rgb(var(--color-primary-main))]">
+                  -{discountPercentage}%
+                </span>
+              )}
+            </div>
+
+            <div className="flex flex-row gap-0.5 items-center w-3 h-3">
+              {stars}
+              <span className="text-[14px] mx-2 font-semibold text-[rgb(var(--color-text-main-1))]">
+                ({ratingCount})
+              </span>
+            </div>
           </div>
+
+          {colors.length > 0 && (
+            <div className="flex gap-2 mt-1">
+              {colors.map((color, index) => (
+                <span
+                  key={index}
+                  className="w-4 h-4 rounded-full border"
+                  style={{ backgroundColor: color }}
+                />
+              ))}
+            </div>
+          )}
         </div>
-        {/* COLORS */}
-        {colors.length > 0 && (
-          <div className="flex gap-2 mt-1">
-            {colors.map((color, index) => (
-              <span
-                key={index}
-                className="w-4 h-4 rounded-full border"
-                style={{ backgroundColor: color }}
-              ></span>
-            ))}
-          </div>
-        )}
       </div>
-    </div>
+
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        title={modalTitle}
+        message={modalMessage}
+      />
+    </>
   );
 }
 
-export default CartItemSummary;
+export default CartSummary;

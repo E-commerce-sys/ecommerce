@@ -12,8 +12,8 @@ function ProductsPage() {
 
   return (
     <ProductProvider initialTotalPages={totalPages}>
-      <div className="w-full px-4 md:px-8 py-8 mt-17">
-        <CategoryMenu categories={categories} />
+      <CategoryMenu categories={categories} />
+      <div className="w-full px-4 md:px-8 py-8 ">
         <Filters />
         <ProductList initialProducts={products} />
       </div>

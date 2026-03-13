@@ -76,7 +76,7 @@ function NewArrivals({ data }) {
             <div className="grid grid-rows-[auto_auto] gap-2">
               {/* WOMEN */}
               {products[1] && (
-                <div className="relative w-full lg:w-142.5 h-48 lg:h-71 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-center p-8 text-white">
+                <div className="relative w-full lg:w-142.5 h-48 lg:h-77 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-center p-8 text-white">
                   <img
                     src={woman}
                     className="absolute right-0 bottom-0 max-h-[90%] object-contain"

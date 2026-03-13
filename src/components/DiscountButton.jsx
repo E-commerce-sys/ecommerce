@@ -1,6 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
+
+import { useTranslation } from "react-i18next";
+
 /* eslint-disable react/prop-types */
 function DiscountButton({ discountRate, colorVar, colorText, onSelect }) {
+  const { t } = useTranslation();
   return (
     <button
       onClick={() => onSelect(discountRate)}
@@ -13,7 +17,7 @@ function DiscountButton({ discountRate, colorVar, colorText, onSelect }) {
       <span className="text-2xl md:text-3xl lg:4xl font-bold">
         %{discountRate}
       </span>
-      <span className="text-md md:text-lg lg:2xl mt-1">Discount</span>
+      <span className="text-md md:text-lg lg:2xl mt-1">{t("discount")}</span>
     </button>
   );
 }

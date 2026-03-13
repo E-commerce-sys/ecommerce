@@ -1,9 +1,16 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
 import SortingUp from "../../../assets/icons/sorting-up-Icon.svg";
 import SortingDown from "../../../assets/icons/sorting-down-Icon.svg";
 import { useProductFilters } from "../useProductFilters";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../../context/LanguageContext";
 
 export default function RatingFilter() {
+  const { t } = useTranslation();
+  const { dir } = useLanguage();
+
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
@@ -35,7 +42,7 @@ export default function RatingFilter() {
     <div className="flex items-center gap-2" ref={wrapperRef}>
       <div className="relative">
         <button
-          className={`flex justify-center items-center gap-2 px-8 py-4 rounded text-[16px] font-normal w-39.5 h-10 transition-colors
+          className={`flex justify-center items-center gap-2 rounded text-sm md:text-base font-normal w-30 h-8 md:w-39.5 md:h-10 transition-colors
             ${
               ratingSort
                 ? "bg-[rgb(var(--color-primary-main))] text-white"
@@ -49,11 +56,26 @@ export default function RatingFilter() {
             }
           }}
         >
-          Rating
+          {t("products.rate")}
+          <svg
+            className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
         </button>
 
         {open && (
-          <div className="absolute top-full mt-2 left-0 z-50 bg-white border border-[rgb(var(--color-primary-1))] rounded-lg shadow-lg overflow-hidden w-46">
+          <div
+            className={`absolute top-full mt-2 ${dir === "rtl" ? "riht-0" : "left-0"} z-50 bg-white border border-[rgb(var(--color-primary-1))] rounded-lg shadow-lg overflow-hidden w-46`}
+          >
             <div className="border-b border-[rgb(var(--color-border))] ">
               <button
                 onClick={() => handleSelect("high")}
@@ -64,7 +86,8 @@ export default function RatingFilter() {
                     : "bg-white text-[rgb(var(--color-text-main))] hover:bg-[rgb(var(--color-primary-1))]"
                 }`}
               >
-                Sort High to Low
+                {t("products.high")}
+
                 <img src={SortingDown} className="w-5.5 h-5.5" />
               </button>
             </div>
@@ -79,7 +102,7 @@ export default function RatingFilter() {
                     : "bg-white text-[rgb(var(--color-text-main))] hover:bg-[rgb(var(--color-primary-1))]"
                 }`}
               >
-                Sort Low to High
+                {t("products.low")}
                 <img src={SortingUp} className="w-5.5 h-5.5" />
               </button>
             </div>
