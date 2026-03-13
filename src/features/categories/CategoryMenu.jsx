@@ -62,7 +62,7 @@ function CategoryMenu({ categories }) {
   return (
     <div className="w-full">
       {/* Parent categories */}
-      <div className="flex gap-10 px-6 py-3 border-b border-[rgb(var(--color-text-main-2))] overflow-x-auto whitespace-nowrap">
+      <div className="flex gap-10 mt-17 px-6 py-3 border-b border-[rgb(var(--color-text-main-2))] overflow-x-auto whitespace-nowrap">
         <div className="flex items-center gap-2 font-semibold text-[rgb(var(--color-text-main-3))]">
           <img src={menu} alt="" />
           <p>{t("category")}</p>

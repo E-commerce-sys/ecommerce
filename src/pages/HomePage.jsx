@@ -15,7 +15,7 @@ function HomePage() {
     useLoaderData();
 
   return (
-    <div className="mt-17">
+    <div className="">
       <CategoryMenu categories={categories} />
       <BannerSlider banners={banners} />
       <BestProducts data={bestProducts} />

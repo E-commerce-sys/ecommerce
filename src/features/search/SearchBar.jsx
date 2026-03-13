@@ -1,10 +1,24 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import search from "../../assets/icons/search-Icon.svg";
 
 function SearchBar() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const [value, setValue] = useState("");
+
+  function handleChange(e) {
+    const val = e.target.value;
+    setValue(val);
+
+    if (val.trim() === "") return;
+
+    navigate(`/products?search=${encodeURIComponent(val)}`);
+  }
 
   return (
     <div className="relative">
@@ -16,7 +30,9 @@ function SearchBar() {
 
       <input
         type="text"
-        placeholder={`${t("navbar.search")}`}
+        value={value}
+        onChange={handleChange}
+        placeholder={t("navbar.search")}
         className="
           lg:w-130
           md:w-100

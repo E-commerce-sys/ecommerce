@@ -7,6 +7,7 @@
   "view": "View All",
   "add": "Add to Cart",
   "new": "New",
+  "discount": "Discount",
 
   "navbar": {
     "search": "Search for products",
@@ -59,5 +60,36 @@
     "feature": "Featured",
     "new": "New Arrival",
     "buy": "Buy Now"
+  },
+  "services": {
+    "freeDeliveryTitle": "FREE AND FAST DELIVERY",
+    "freeDeliveryDes": "Free delivery for all orders over $140",
+    "supportTitle": "24/7 CUSTOM SERVICE",
+    "supportDes": "Friendly 24/7 customer support",
+    "securityTitle": "MONEY BACK GUARANTEE",
+    "securityDes": "We return money within 30 days"
+  },
+  "products": {
+    "filter": "Filters",
+    "prev": "Prev",
+    "next": "Next",
+    "discount": "Discounts",
+    "price": "Price",
+    "rate": "Rating",
+    "low": "Sort Low → High",
+    "high": "Sort High → Low",
+    "apply": "Apply",
+    "noProduct": "No products found",
+    "try": "Try adjusting your filters or search for something else.",
+    "join": "Join us first",
+    "create": "Please log in or create an account first to continue.",
+    "signUp": "Sign up",
+
+    "save": "Save your favorites",
+    "ready": "Ready to add this item?",
+    "saveToFav": "Please log in or create an account first to save products to your favorites.",
+    "saveToCart": "Please log in or create an account first to add products to your cart.",
+    "min": "Min",
+    "max": "Max"
   }
 }

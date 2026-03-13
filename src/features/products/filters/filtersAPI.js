@@ -2,6 +2,7 @@ import axiosInstance from "../../../axios/axiosInstance";
 
 export async function filtersAPI(
   page = 1,
+  search = "",
   isDiscounted = false,
   minPrice = 0,
   maxPrice = 5000,
@@ -11,10 +12,15 @@ export async function filtersAPI(
 ) {
   const params = { page };
 
+  if (search) {
+    params["filter[nameEnContains]"] = search;
+  }
+
   if (isDiscounted) params["filter[hasDiscount]"] = true;
 
-  if (minPrice > 0 || maxPrice)
-    params["filter[priceBetween]"] = `${minPrice},${maxPrice}`;
+  if (minPrice !== null || maxPrice !== null) {
+    params["filter[priceBetween]"] = `${minPrice ?? ""},${maxPrice ?? ""}`;
+  }
 
   const sorts = [];
 

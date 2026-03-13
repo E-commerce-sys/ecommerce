@@ -1,15 +1,20 @@
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
 import { useProductFilters } from "../useProductFilters";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../../context/LanguageContext";
 
 function PriceFilters() {
+  const { t } = useTranslation();
+  const { dir } = useLanguage();
+  console.log(dir);
   const [open, setOpen] = useState(false);
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(5000);
+  const [min, setMin] = useState("");
+  const [max, setMax] = useState("");
   const [priceSort, setPriceSort] = useState(null);
-
   const wrapperRef = useRef(null);
   const { updateFilters } = useProductFilters();
-
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -26,10 +31,10 @@ function PriceFilters() {
   return (
     <div className="relative inline-block" ref={wrapperRef}>
       <button
-        className="flex justify-center items-center gap-2 px-8 py-4 rounded text-[16px] bg-[#F5F5F5] font-normal w-39.5 h-10 hover:bg-[rgb(var(--color-primary-1))] transition-colors"
+        className="flex justify-center items-center gap-2 rounded text-sm md:text-base bg-[#F5F5F5] font-normal w-30 h-8 md:w-39.5 md:h-10 hover:bg-[rgb(var(--color-primary-1))] transition-colors"
         onClick={() => setOpen(!open)}
       >
-        Price
+        {t("products.price")}
         <svg
           className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`}
           fill="none"
@@ -46,16 +51,17 @@ function PriceFilters() {
       </button>
 
       {open && (
-        <div className="absolute top-full mt-2 left-0 bg-white border border-[rgb(var(--color-primary-1))] rounded-lg shadow-lg p-4 w-64 z-50">
+        <div
+          className={`absolute top-full mt-2 ${dir === "rtl" ? "riht-0" : "left-0"} bg-white border border-[rgb(var(--color-primary-1))] rounded-lg shadow-lg p-4 w-64 z-50`}
+        >
           {/* inputs */}
           <div className="flex gap-2 mb-4">
             <input
               type="number"
-              placeholder="Min"
+              placeholder={t("products.min")}
               min={0}
               onChange={(e) => {
-                let value = Number(e.target.value);
-
+                let value = e.target.value === "" ? "" : Number(e.target.value);
                 if (value < 0) {
                   setError("Negative values are not allowed");
                   return;
@@ -69,16 +75,15 @@ function PriceFilters() {
                   setError("");
                 }
               }}
-              className="w-1/2 px-2 py-1 border rounded text-sm"
+              className="w-1/2 px-2 py-1 border border-[rgb(var(--color-border))] rounded text-sm"
             />
 
             <input
               type="number"
-              placeholder="Max"
+              placeholder={t("products.max")}
               min={0}
               onChange={(e) => {
-                let value = Number(e.target.value);
-
+                let value = e.target.value === "" ? "" : Number(e.target.value);
                 if (value < 0) {
                   setError("Negative values are not allowed");
                   return;
@@ -92,7 +97,7 @@ function PriceFilters() {
                   setError("");
                 }
               }}
-              className="w-1/2 px-2 py-1 border rounded text-sm"
+              className="w-1/2 px-2 py-1 border border-[rgb(var(--color-border))] rounded text-sm"
             />
           </div>
           {error && (
@@ -102,26 +107,26 @@ function PriceFilters() {
           <div className="flex flex-col gap-2 mb-4">
             <button
               onClick={() => setPriceSort("low")}
-              className={`px-3 py-2 rounded text-sm border transition
+              className={`px-3 py-2 rounded text-sm border border-[rgb(var(--color-border))] transition cursor-pointer
               ${
                 priceSort === "low"
                   ? "border-2 border-[rgb(var(--color-primary-main))]"
-                  : "hover:bg-[rgb(var(--color-primary-1))]"
+                  : ""
               }`}
             >
-              Sort Low → High
+              {t("products.low")}
             </button>
 
             <button
               onClick={() => setPriceSort("high")}
-              className={`px-3 py-2 rounded text-sm border transition
+              className={`px-3 py-2 rounded text-sm border border-[rgb(var(--color-border))] transition cursor-pointer
               ${
                 priceSort === "high"
                   ? "border-2 border-[rgb(var(--color-primary-main))]"
-                  : "hover:bg-[rgb(var(--color-primary-1))]"
+                  : ""
               }`}
             >
-              Sort High → Low
+              {t("products.high")}
             </button>
           </div>
           {/* apply */}
@@ -137,8 +142,8 @@ function PriceFilters() {
               if (error) return;
 
               updateFilters({
-                minPrice: min,
-                maxPrice: max,
+                minPrice: min || null,
+                maxPrice: max || null,
                 priceSort,
                 page: 1,
               });
@@ -146,7 +151,7 @@ function PriceFilters() {
               setOpen(false);
             }}
           >
-            Apply
+            {t("products.apply")}
           </button>
         </div>
       )}

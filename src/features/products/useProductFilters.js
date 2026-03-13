@@ -5,6 +5,9 @@ export function useProductFilters() {
 
   const filters = {
     page: Number(searchParams.get("page") || 1),
+
+    search: searchParams.get("search") || "",
+
     bestSelling: searchParams.get("bestSelling") === "true",
     hasDiscount: searchParams.get("hasDiscount") === "true",
     discount: Number(searchParams.get("discount") || 0),
