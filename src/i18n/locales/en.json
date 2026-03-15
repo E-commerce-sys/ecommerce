@@ -91,5 +91,10 @@
     "saveToCart": "Please log in or create an account first to add products to your cart.",
     "min": "Min",
     "max": "Max"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "Sorry, the page you are looking for doesn't exist or has been moved.",
+    "back": "Go back to home"
   }
 }
