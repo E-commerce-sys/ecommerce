@@ -15,7 +15,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import CartPage from "../pages/CartPage";
 import WishlistPage from "../pages/WishlistPage";
-import CheckoutPage from "../pages/CheckoutPage";
+import CheckoutPage from "../pages/CheckoutPage.jsx";
 import AccountLayout from "../pages/account/AccountLayout";
 import ProfilePage from "../pages/account/ProfilePage";
 import OrdersPage from "../pages/account/OrdersPage";
