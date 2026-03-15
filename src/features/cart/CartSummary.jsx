@@ -4,17 +4,19 @@ import { useState } from "react";
 import CartItem from "./CartItem";
 import FullStar from "../../assets/icons/filled-star-Icon.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
-import { isLoggedIn } from "../../helpers/auth";
+// import { loggedIn } from "../../helpers/auth";
 import { useTranslation } from "react-i18next";
 import imgProduct from "../../assets/img/Cart.png";
 import AuthModal from "../auth/AuthModal";
+import { useAuth } from "../../context/AuthContext";
 
 function CartSummary({ product, className }) {
   const { t, i18n } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authAction, setAuthAction] = useState("");
-
+  const { loggedIn } = useAuth();
+  console.log(loggedIn);
   const attributes = product.attributes;
 
   const name =
@@ -41,7 +43,7 @@ function CartSummary({ product, className }) {
   }
 
   function handleAddToCart() {
-    if (!isLoggedIn()) {
+    if (!loggedIn) {
       openAuthModal("cart");
       return;
     }
@@ -50,7 +52,7 @@ function CartSummary({ product, className }) {
   }
 
   function handleFavorite() {
-    if (!isLoggedIn()) {
+    if (!loggedIn) {
       openAuthModal("favorite");
       return;
     }
