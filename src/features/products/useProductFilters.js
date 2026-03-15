@@ -10,7 +10,9 @@ export function useProductFilters() {
 
     bestSelling: searchParams.get("bestSelling") === "true",
     hasDiscount: searchParams.get("hasDiscount") === "true",
-    discount: Number(searchParams.get("discount") || 0),
+    discount: searchParams.get("discount")
+      ? Number(searchParams.get("discount"))
+      : null,
     minPrice: Number(searchParams.get("minPrice") || 0),
     maxPrice: Number(searchParams.get("maxPrice") || 5000),
 

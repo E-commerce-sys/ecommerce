@@ -106,7 +106,7 @@ function CartSummary({ product, className }) {
               )}
 
               {hasDiscount && discountPercentage > 0 && (
-                <span className="text-xs md:text-sm font-semibold text-[rgb(var(--color-primary-main))]">
+                <span className="text-xs md:text-sm font-semibold rounded p-0.5 text-white bg-[rgb(var(--color-primary-main))]">
                   -{discountPercentage}%
                 </span>
               )}
