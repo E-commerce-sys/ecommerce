@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-function AccountLayout() {
+function CancellationsPage() {
   return <div></div>;
 }
 
-export default AccountLayout;
+export default CancellationsPage;

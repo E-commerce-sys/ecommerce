@@ -19,6 +19,7 @@ import CheckoutPage from "../pages/CheckoutPage.jsx";
 import AccountLayout from "../pages/account/AccountLayout";
 import ProfilePage from "../pages/account/ProfilePage";
 import OrdersPage from "../pages/account/OrdersPage";
+import CancellationsPage from "../pages/account/CancellationsPage.jsx";
 
 import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
 import AdminProductsPage from "../pages/admin/AdminProductsPage.jsx";
@@ -63,6 +64,7 @@ export const router = createBrowserRouter([
             children: [
               { path: "profile", element: <ProfilePage /> },
               { path: "orders", element: <OrdersPage /> },
+              { path: "cancellations", element: <CancellationsPage /> },
             ],
           },
         ],
