@@ -16,7 +16,6 @@ function CartSummary({ product, className }) {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authAction, setAuthAction] = useState("");
   const { loggedIn } = useAuth();
-  console.log(loggedIn);
   const attributes = product.attributes;
 
   const name =

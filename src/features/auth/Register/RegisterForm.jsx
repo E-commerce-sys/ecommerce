@@ -91,19 +91,23 @@ function RegisterForm() {
         form.confirmPassword,
       );
 
-      login(res.data.token);
+      login(res.token);
 
       navigate(from, { replace: true });
     } catch (e) {
-      const apiError = e?.response?.data;
+      const apiErrors = e?.response?.data?.errors;
 
-      const emailError = apiError?.errors?.["data.attributes.email"]?.[0];
+      if (apiErrors?.length) {
+        const emailError = apiErrors.find(
+          (err) => err.source === "data.attributes.email",
+        );
 
-      if (emailError) {
-        setErrors((prev) => ({
-          ...prev,
-          email: ["Email already registered"],
-        }));
+        if (emailError) {
+          setErrors((prev) => ({
+            ...prev,
+            email: ["Email already registered"],
+          }));
+        }
       }
     } finally {
       setLoading(false);
