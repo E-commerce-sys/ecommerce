@@ -11,6 +11,7 @@ export async function filtersAPI(
   isBestSelling = false,
   priceSort = null,
   discount = null,
+  category
 ) {
   const params = { page };
 
@@ -46,6 +47,8 @@ export async function filtersAPI(
   if (sorts.length) params["sort"] = sorts;
 
   if (isBestSelling) params["filter[isBestSelling]"] = true;
+
+  if (category) params["filter[category]"] = category;
 
   const res = await axiosInstance.get("/api/products", { params });
 
