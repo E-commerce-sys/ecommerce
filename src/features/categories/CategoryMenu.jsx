@@ -1,18 +1,24 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import SubCategoryMenu from "./SubCategoryMenu";
-import { subCategoriesAPI } from "./subCategoriesAPI";
 import menu from "../../assets/icons/menu.svg";
 import { useTranslation } from "react-i18next";
+import { useCategories } from "../../context/CategoryContext";
 
-function CategoryMenu({ categories }) {
+function CategoryMenu() {
   const { i18n, t } = useTranslation();
+  const [searchParams] = useSearchParams();
+
+  const { categories, subCategories } = useCategories();
+
+  const selectedSub = Number(searchParams.get("category"));
 
   const [activeCategoryId, setActiveCategoryId] = useState();
-  const [subCategories, setSubCategories] = useState([]);
 
-  // Normalize category names based on language
+  // Normalize category names
   const normalizedCategories = categories.map((cat) => ({
     id: cat.id,
     name:
@@ -24,40 +30,40 @@ function CategoryMenu({ categories }) {
     icon: cat.attributes.icon,
   }));
 
-  // Set default active category
+  // Detect which category owns the selected subcategory
   useEffect(() => {
-    if (normalizedCategories.length > 0) {
-      setActiveCategoryId(normalizedCategories[0].id);
+    if (!selectedSub) {
+      if (normalizedCategories.length > 0) {
+        setActiveCategoryId(normalizedCategories[0].id);
+      }
+      return;
     }
-  }, [categories]);
 
-  // Fetch subcategories when category changes
-  useEffect(() => {
-    async function fetchSubCategories() {
-      if (!activeCategoryId) return;
+    for (const cat of normalizedCategories) {
+      const subs = subCategories[cat.id] || [];
 
-      try {
-        const subs = await subCategoriesAPI(activeCategoryId);
+      const found = subs.find((s) => s.id === selectedSub);
 
-        const normalized = subs.map((sub) => ({
-          id: sub.id,
-          name:
-            i18n.language === "ar"
-              ? sub.attributes.nameAr
-              : i18n.language === "ku"
-                ? sub.attributes.nameKu
-                : sub.attributes.nameEn,
-          icon: sub.attributes.icon,
-        }));
-
-        setSubCategories(normalized);
-      } catch (err) {
-        console.error("Failed to fetch subcategories:", err);
+      if (found) {
+        setActiveCategoryId(cat.id);
+        return;
       }
     }
+  }, [selectedSub, categories]);
 
-    fetchSubCategories();
-  }, [activeCategoryId, i18n.language]);
+  // Get subcategories of active category
+  const activeSubs = subCategories[activeCategoryId] || [];
+
+  const normalizedSubs = activeSubs.map((sub) => ({
+    id: sub.id,
+    name:
+      i18n.language === "ar"
+        ? sub.attributes.nameAr
+        : i18n.language === "ku"
+          ? sub.attributes.nameKu
+          : sub.attributes.nameEn,
+    icon: sub.attributes.icon,
+  }));
 
   return (
     <div className="w-full">
@@ -73,7 +79,7 @@ function CategoryMenu({ categories }) {
             <button
               key={cat.id}
               onClick={() => setActiveCategoryId(cat.id)}
-              className={` text-sm font-medium cursor-pointer ${
+              className={`text-sm font-medium cursor-pointer ${
                 activeCategoryId === cat.id
                   ? "border-b-2 pb-2 border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
                   : "text-[rgb(var(--color-text-main-3))] hover:text-[rgb(var(--color-primary-3))]"
@@ -86,7 +92,7 @@ function CategoryMenu({ categories }) {
       </div>
 
       {/* Subcategories */}
-      <SubCategoryMenu subCategories={subCategories} />
+      <SubCategoryMenu subCategories={normalizedSubs} />
     </div>
   );
 }
