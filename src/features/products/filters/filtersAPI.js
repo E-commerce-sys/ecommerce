@@ -1,4 +1,5 @@
 import axiosInstance from "../../../axios/axiosInstance";
+import i18n from "i18next";
 
 export async function filtersAPI(
   page = 1,
@@ -9,18 +10,30 @@ export async function filtersAPI(
   ratingSort = null,
   isBestSelling = false,
   priceSort = null,
+  discount = null,
 ) {
   const params = { page };
 
   if (search) {
-    params["filter[nameEnContains]"] = search;
+    const map = {
+      en: "nameEnContains",
+      ar: "nameArContains",
+      ku: "nameKuContains",
+    };
+
+    const field = map[i18n.language] || "nameEnContains";
+
+    params[`filter[${field}]`] = search;
+  }
+
+  if (discount !== null) {
+    params["filter[discountPercentage]"] = discount;
   }
 
   if (isDiscounted) params["filter[hasDiscount]"] = true;
 
-  if (minPrice !== null || maxPrice !== null) {
-    params["filter[priceBetween]"] = `${minPrice ?? ""},${maxPrice ?? ""}`;
-  }
+  if (minPrice > 0 || maxPrice)
+    params["filter[priceBetween]"] = `${minPrice},${maxPrice}`;
 
   const sorts = [];
 

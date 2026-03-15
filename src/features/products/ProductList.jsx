@@ -25,6 +25,7 @@ function ProductList({ initialProducts = [] }) {
     ratingSort = null,
     priceSort = null,
     bestSelling = false,
+    discount = null,
   } = filters;
 
   useEffect(() => {
@@ -38,6 +39,7 @@ function ProductList({ initialProducts = [] }) {
         ratingSort,
         bestSelling,
         priceSort,
+        discount,
       );
 
       setProducts(data ?? []);
@@ -56,6 +58,7 @@ function ProductList({ initialProducts = [] }) {
     ratingSort,
     priceSort,
     bestSelling,
+    discount,
   ]);
 
   return (
