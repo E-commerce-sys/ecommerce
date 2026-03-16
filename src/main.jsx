@@ -7,12 +7,15 @@ import "./styles/theme.css";
 import App from "./app/App";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
 import { AuthProvider } from "./context/AuthContext";
+import { CategoryProvider } from "./context/CategoryContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <LanguageProvider>
-        <App />
+        <CategoryProvider>
+          <App />
+        </CategoryProvider>{" "}
       </LanguageProvider>{" "}
     </AuthProvider>
   </StrictMode>,
