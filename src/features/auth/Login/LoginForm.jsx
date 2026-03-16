@@ -1,5 +1,4 @@
 /* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import shopImg from "../../../assets/img/shopImg.svg";
@@ -61,7 +60,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="flex lg:items-center justify-center lg:justify-normal gap-32.5">
+    <div className="mt-17 md:mt-0 flex lg:items-center justify-center lg:justify-normal gap-32.5">
       <img
         src={shopImg}
         alt=""
