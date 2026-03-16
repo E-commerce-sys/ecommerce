@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://exclusive.quest", // <-- change this
+  baseURL: "https://exclusive.quest",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",

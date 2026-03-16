@@ -2,10 +2,10 @@
 /* eslint-disable react/prop-types */
 import { useMemo } from "react";
 
-import playstation from "../../assets/img/playstation.png";
-import speaker from "../../assets/img/echo.png";
-import woman from "../../assets/img/woman.png";
-import perfume from "../../assets/img/perfume.png";
+// import playstation from "../../assets/img/playstation.png";
+// import speaker from "../../assets/img/echo.png";
+// import woman from "../../assets/img/woman.png";
+// import perfume from "../../assets/img/perfume.png";
 import { useTranslation } from "react-i18next";
 
 function NewArrivals({ data }) {
@@ -52,7 +52,7 @@ function NewArrivals({ data }) {
             {products[0] && (
               <div className="relative w-full lg:w-142.5 h-98 lg:h-150 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-4 text-white">
                 <img
-                  src={playstation}
+                  src={products[0].attributes.newArrivalImage}
                   className="absolute right-0 bottom-0 max-h-[90%] object-contain"
                 />
 
@@ -78,7 +78,7 @@ function NewArrivals({ data }) {
               {products[1] && (
                 <div className="relative w-full lg:w-142.5 h-48 lg:h-77 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-center p-8 text-white">
                   <img
-                    src={woman}
+                    src={products[1].attributes.newArrivalImage}
                     className="absolute right-0 bottom-0 max-h-[90%] object-contain"
                   />
 
@@ -103,7 +103,7 @@ function NewArrivals({ data }) {
                 {products[2] && (
                   <div className="relative w-full lg:w-67.5 h-48 lg:h-71 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-6 text-white">
                     <img
-                      src={speaker}
+                      src={products[2].attributes.newArrivalImage}
                       className="absolute max-h-[90%] max-w-[90%] object-contain"
                     />
 
@@ -126,7 +126,7 @@ function NewArrivals({ data }) {
                 {products[3] && (
                   <div className="relative w-full lg:w-67.5 h-48 lg:h-71 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-6 text-white">
                     <img
-                      src={perfume}
+                      src={products[3].attributes.newArrivalImage}
                       className="absolute max-h-[90%] max-w-[90%] object-contain"
                     />
 
