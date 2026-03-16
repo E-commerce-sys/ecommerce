@@ -104,5 +104,14 @@
     "logout": "Logout",
     "logoutConfirm": "Are you sure you want to logout?",
     "cancel": "Cancel"
+  },
+  "verify": {
+    "secure": "Secure your access",
+    "resend": "Resend code",
+    "time": "Resend code in",
+    "invalid": "Invalid verification code",
+    "apiError": "Too many attempts",
+    "enter": "Enter the verification code sent to your email",
+    "expired": "Invalid or expired verification code"
   }
 }

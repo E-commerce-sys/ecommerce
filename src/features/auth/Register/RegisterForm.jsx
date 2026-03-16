@@ -4,21 +4,18 @@ import SideImage from "../../../assets/img/Side-Image.png";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import GoogleIcon from "../../../assets/icons/Icon-Google.svg";
-import { Form, Link, useNavigate, useLocation } from "react-router-dom";
+import { Form, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { registerAPI } from "../../auth/Register/registerAPI";
 import { registerSchema } from "./registerSchema";
 import { useAuth } from "../../../context/AuthContext";
+import axiosInstance from "../../../axios/axiosInstance";
 
 function RegisterForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const location = useLocation();
   const { login } = useAuth();
-
-  const from = location.state?.from?.pathname || "/";
-
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -71,6 +68,20 @@ function RegisterForm() {
 
     setSubmitted(true);
 
+    const verifyingEmail = sessionStorage.getItem("verifyEmail");
+
+    // If user already started verification flow
+    if (verifyingEmail === form.email) {
+      try {
+        await axiosInstance.post("/api/auth/verify");
+
+        navigate("/register/verify");
+        return;
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     const result = registerSchema.safeParse(form);
 
     if (!result.success) {
@@ -90,10 +101,15 @@ function RegisterForm() {
         form.password,
         form.confirmPassword,
       );
+      console.log(res);
+      // save token in localStorage
+      login(res.data.token);
 
-      login(res.token);
+      // store email for UI
+      sessionStorage.setItem("verifyEmail", form.email);
 
-      navigate(from, { replace: true });
+      // open OTP modal
+      navigate("/register/verify");
     } catch (e) {
       const apiErrors = e?.response?.data?.errors;
 
@@ -115,7 +131,7 @@ function RegisterForm() {
   }
 
   return (
-    <div className="flex lg:items-center justify-center lg:justify-normal gap-32.5">
+    <div className="mt-17 md:mt-0 flex lg:items-center justify-center lg:justify-normal gap-32.5">
       <img
         src={SideImage}
         className="hidden lg:block lg:w-[45%] h-auto my-30 shrink-0"
