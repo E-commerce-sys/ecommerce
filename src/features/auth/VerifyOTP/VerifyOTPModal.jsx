@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 function VerifyOTPModal() {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar" || i18n.language === "ku";
-
   const navigate = useNavigate();
 
   const [status, setStatus] = useState("idle");
@@ -22,6 +21,7 @@ function VerifyOTPModal() {
 
   const code = otp.join("");
   const isComplete = code.length === 6;
+  const email = sessionStorage.getItem("verifyEmail");
 
   function handleClose() {
     navigate("/register");
@@ -117,10 +117,15 @@ function VerifyOTPModal() {
   async function handleResend() {
     if (!canResend) return;
 
+    if (!email) {
+      navigate("/register");
+      return;
+    }
+
     try {
       setError("");
 
-      await axiosInstance.post("/api/auth/resend");
+      await axiosInstance.post("/api/auth/resend-otp", { email });
 
       setTimer(60);
       setCanResend(false);
@@ -130,6 +135,7 @@ function VerifyOTPModal() {
       setError(apiError ? t("verify.apiError") : t("verify.expired"));
     }
   }
+
   return (
     <div
       dir={isRTL ? "rtl" : "ltr"}
