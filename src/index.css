@@ -24,3 +24,8 @@
 .animate-shake {
   animation: shake 0.3s;
 }
+
+.ltr-number {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
