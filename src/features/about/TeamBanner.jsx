@@ -3,18 +3,21 @@ import Employees from "./Employees";
 import employee1 from "../../assets/img/employee1.png";
 import employee2 from "../../assets/img/employee2.png";
 import employee3 from "../../assets/img/employee3.png";
+import { useTranslation } from "react-i18next";
 
-const baseTeam = [
-  { img: employee1, name: "Tom Cruise", role: "Founder and Chairman" },
-  { img: employee2, name: "Emma Watson", role: "Managing Director" },
-  { img: employee3, name: "Will Smith", role: "Product Designer" },
-];
 
-const team = [...baseTeam, ...baseTeam, ...baseTeam, ...baseTeam, ...baseTeam];
 
 const ITEMS_PER_PAGE = 3;
 
 export default function TeamBanner() {
+  const { t } = useTranslation();
+const baseTeam = [
+  { img: employee1, name: "Tom Cruise", role: t("about.subtitle5") },
+  { img: employee2, name: "Emma Watson", role: t("about.subtitle6") },
+  { img: employee3, name: "Will Smith", role: t("about.subtitle7") },
+];
+
+const team = [...baseTeam, ...baseTeam, ...baseTeam, ...baseTeam, ...baseTeam];
   const [current, setCurrent] = useState(0);
   const totalSlides = Math.ceil(team.length / ITEMS_PER_PAGE);
   const visible = team.slice(

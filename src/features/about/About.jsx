@@ -22,23 +22,15 @@ function About() {
     <div className="flex flex-col gap-12">
       {/* Breadcrumb */}
       <div className="mt-[100px] mb-[50px] px-4 sm:px-6 lg:px-[125px] ">
-        <Link to='/' className="hover:underline text-[rgb(var(--color-text-main-1))]">Home /</Link> About
+        <Link to='/' className="hover:underline text-[rgb(var(--color-text-main-1))]">{t('contact.home')} /</Link>{t("about.about")}
       </div>
 
       {/* Our Story Section */}
       <div className="flex flex-col lg:flex-row gap-10 items-center px-4 sm:px-6 lg:px-[125px]">
         <div className="flex flex-col gap-10 ">
-            <h1 className="text-[54px] font-semibold">Our Story</h1>
-            <p>Launced in 2015, Exclusive is South Asia's 
-                premier online shopping marketplace with 
-                an active presense in Bangladesh. Supported 
-                by wide range of tailored marketing, data and service solutions, 
-                Exclusive has 10,500 sellers and 300 brands and serves 3 millions 
-                customers across the region. 
-            </p>
-            <p>Exclusive has more than 1 Million products to offer, growing at a very fast.
-                Exclusive offers a diverse assotment in categories ranging  from consumer.
-            </p>
+            <h1 className="text-[54px] font-semibold">{t("about.story")}</h1>
+            <p>{t("about.paragraph1")}</p>
+            <p>{t("about.paragraph2")}</p>
         </div>
         <img
           src="src/assets/img/About-Image.png"
@@ -52,7 +44,7 @@ function About() {
   <ServiceItem
     Icon={StoreIcon}
     title="10.5k"
-    subtitle="Sellers active on our site"
+    subtitle={t("about.subtitle1")}
     className="border border-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-primary-main))] w-full h-[180px] sm:h-[220px] lg:h-[250px] py-[20px] sm:py-[30px] lg:py-[40px] transition-colors duration-300"
     text_hover="group-hover:text-white"
     icon_bg="bg-black group-hover:bg-[rgb(var(--color-grey))]"
@@ -61,7 +53,7 @@ function About() {
   <ServiceItem
     Icon={SaleIcon}
     title="33k"
-    subtitle="Monthly Product Sales"
+    subtitle={t("about.subtitle2")}
     className="border border-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-primary-main))] w-full h-[180px] sm:h-[220px] lg:h-[250px] py-[20px] sm:py-[30px] lg:py-[40px] transition-colors duration-300"
     text_hover="group-hover:text-white"
     icon_bg="bg-black group-hover:bg-[rgb(var(--color-grey))]"
@@ -70,7 +62,7 @@ function About() {
   <ServiceItem
     Icon={ShoppingBag}
     title="45.5k"
-    subtitle="Customers active on our site"
+    subtitle={t("about.subtitle3")}
     className="border border-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-primary-main))] w-full h-[180px] sm:h-[220px] lg:h-[250px] py-[20px] sm:py-[30px] lg:py-[40px] transition-colors duration-300"
     text_hover="group-hover:text-white"
     icon_bg="bg-black group-hover:bg-[rgb(var(--color-grey))]"
@@ -79,7 +71,7 @@ function About() {
   <ServiceItem
     Icon={RevenueIcon}
     title="25k"
-    subtitle="Annual gross sale on our site"
+    subtitle={t("about.subtitle4")}
     className="border border-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-primary-main))] w-full h-[180px] sm:h-[220px] lg:h-[250px] py-[20px] sm:py-[30px] lg:py-[40px] transition-colors duration-300"
     text_hover="group-hover:text-white"
     icon_bg="bg-black group-hover:bg-[rgb(var(--color-grey))]"
