@@ -1,5 +1,5 @@
 function CheckoutPage() {
-  return <div></div>;
+  return <div>hello checkout page</div>;
 }
 
 export default CheckoutPage;
