@@ -125,7 +125,7 @@ function VerifyOTPModal() {
     try {
       setError("");
 
-      await axiosInstance.post("/api/auth/resend-otp", { email });
+      await axiosInstance.post("/api/auth/resend-otp");
 
       setTimer(60);
       setCanResend(false);
@@ -170,7 +170,7 @@ function VerifyOTPModal() {
           {otp.map((digit, index) => (
             <input
               key={index}
-              type="text"
+              type="tel"
               maxLength="1"
               value={digit}
               ref={(el) => (inputsRef.current[index] = el)}

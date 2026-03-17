@@ -113,5 +113,21 @@
     "apiError": "Too many attempts",
     "enter": "Enter the verification code sent to your email",
     "expired": "Invalid or expired verification code"
+  },
+  "contact": {
+    "home": "Home",
+    "contact": "Contact",
+    "call": "Call To Us",
+    "available": "We are available 24/7 a week.",
+    "phone": "Phone: 750 123 4567",
+    "write": "Write To Us",
+    "fill": "Fill out our form and we will contact you within 24 hours.",
+    "name": "Your Name",
+    "email": "Your Email",
+    "phoneNumber": "Your Phone",
+    "message": "Your Message",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent successfully"
   }
 }
