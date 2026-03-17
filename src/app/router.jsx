@@ -15,7 +15,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import CartPage from "../pages/CartPage";
 import WishlistPage from "../pages/WishlistPage";
-import CheckoutPage from "../pages/CheckoutPage.jsx";
+// import CheckoutPage from "../pages/CheckoutPage.jsx";
 import AccountLayout from "../pages/account/AccountLayout";
 import ProfilePage from "../pages/account/ProfilePage";
 import OrdersPage from "../pages/account/OrdersPage";
@@ -50,13 +50,14 @@ export const router = createBrowserRouter([
 
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "register/verify", element: <RegisterPage /> },
 
       {
         element: <ProtectedRoute />,
         children: [
           { path: "cart", element: <CartPage /> },
           { path: "wishlist", element: <WishlistPage /> },
-          { path: "checkout", element: <CheckoutPage /> },
+          // { path: "checkout", element: <CheckoutPage /> },
 
           {
             path: "account",

@@ -6,7 +6,7 @@ import FullStar from "../../assets/icons/filled-star-Icon.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
 // import { loggedIn } from "../../helpers/auth";
 import { useTranslation } from "react-i18next";
-import imgProduct from "../../assets/img/Cart.png";
+// import imgProduct from "../../assets/img/Cart.png";
 import AuthModal from "../auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 
@@ -35,6 +35,7 @@ function CartSummary({ product, className }) {
     ? Number(attributes.priceAfterDiscount)
     : null;
   const colors = attributes.colors || [];
+  const image = attributes.primaryImage;
 
   function openAuthModal(action) {
     setAuthAction(action);
@@ -78,7 +79,7 @@ function CartSummary({ product, className }) {
     <>
       <div className="flex flex-col gap-5 m-5">
         <CartItem
-          img={imgProduct}
+          img={image}
           className={className}
           isNew={isNew}
           onAddToCart={handleAddToCart}
