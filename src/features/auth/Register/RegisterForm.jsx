@@ -1,9 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import SideImage from "../../../assets/img/shopImg.svg";
-import Button from "../../../components/Button";
-import Input from "../../../components/Input";
-import GoogleIcon from "../../../assets/icons/Icon-Google.svg";
 import { Form, Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -11,6 +7,12 @@ import { registerAPI } from "../../auth/Register/registerAPI";
 import { registerSchema } from "./registerSchema";
 import { useAuth } from "../../../context/AuthContext";
 import axiosInstance from "../../../axios/axiosInstance";
+
+import SideImage from "../../../assets/img/shopImg.svg";
+import GoogleIcon from "../../../assets/icons/Google.svg";
+
+import Button from "../../../components/Button";
+import Input from "../../../components/Input";
 
 function RegisterForm() {
   const { t } = useTranslation();

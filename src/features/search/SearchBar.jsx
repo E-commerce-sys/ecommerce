@@ -3,7 +3,8 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import search from "../../assets/icons/search-Icon.svg";
+
+import search from "../../assets/icons/search.svg";
 
 function SearchBar() {
   const { t } = useTranslation();

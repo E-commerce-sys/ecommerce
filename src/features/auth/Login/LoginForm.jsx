@@ -1,13 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
-import Input from "../../../components/Input";
-import Button from "../../../components/Button";
-import shopImg from "../../../assets/img/shopImg.svg";
 import { Form, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { loginAPI } from "./loginAPI";
 import { useState } from "react";
 import { loginSchema } from "./loginSchema";
 import { useAuth } from "../../../context/AuthContext";
+
+import shopImg from "../../../assets/img/shopImg.svg";
+
+import Input from "../../../components/Input";
+import Button from "../../../components/Button";
 
 function LoginForm() {
   const { t } = useTranslation();

@@ -1,15 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import Facebook from "../assets/icons/Icon-Facebook.svg";
-import Instagram from "../assets/icons/Icon-Instagram.svg";
-import Linkedin from "../assets/icons/Icon-Linkedin.svg";
-import Twitter from "../assets/icons/Icon-Twitter.svg";
-import GooglePlay from "../assets/img/Google_Play.svg";
-import AppleStore from "../assets/img/App_Store.svg";
-
-import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../context/AuthContext";
+
+import Facebook from "../assets/icons/Facebook.svg";
+import Instagram from "../assets/icons/Instagram.svg";
+import Linkedin from "../assets/icons/Linkedin.svg";
+import Twitter from "../assets/icons/Twitter.svg";
+import GooglePlay from "../assets/img/Google_Play.svg";
+import AppleStore from "../assets/img/App_Store.svg";
 
 function Footer() {
   const { t } = useTranslation();

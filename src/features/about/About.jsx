@@ -1,24 +1,25 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-
-import TeamBanner from "./TeamBanner";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import ServiceItemSimple from "../../components/ServiceItemSimple";
 
-import deliveryIcon from "../../assets/icons/icon-delivery.svg";
-import supportIcon from "../../assets/icons/Icon-Customer service.svg";
-import secureIcon from "../../assets/icons/Icon-secure.svg";
+import TeamBanner from "./TeamBanner";
+import ServiceItemSimple from "../../components/ServiceItemSimple";
 import ServiceItemCard from "../../components/ServiceItemCard";
-import StoreIcon from "../../assets/icons/Store-Icon.svg";
+
+import deliveryIcon from "../../assets/icons/delivery.svg";
+import supportIcon from "../../assets/icons/CustomerService.svg";
+import secureIcon from "../../assets/icons/secure.svg";
+import StoreIcon from "../../assets/icons/Store.svg";
 import StoreHover from "../../assets/icons/Store-Hover.svg";
-import Shopping from "../../assets/icons/Shopping-Bag-Icon.svg";
+import Shopping from "../../assets/icons/Shopping.svg";
 import ShoppingHover from "../../assets/icons/Shopping-Hover.svg";
-import Dolar from "../../assets/icons/Icon-Sale.svg";
+import Dolar from "../../assets/icons/Sale.svg";
 import DolarHover from "../../assets/icons/Sale-Hover.svg";
-import Moneybag from "../../assets/icons/Icon-Moneybag.svg";
+import Moneybag from "../../assets/icons/Moneybag.svg";
 import MoneybagHover from "../../assets/icons/Moneybag-Hover.svg";
+import About_img from "../../assets/img/About-Image.svg";
 
 function About() {
   const { t } = useTranslation();
@@ -49,7 +50,7 @@ function About() {
           <p>{t("about.paragraph2")}</p>
         </div>
         <img
-          src="src/assets/img/About-Image.png"
+          src={About_img}
           className="w-full max-w-176.25 h-auto lg:h-152.25 object-cover rounded-md"
           alt="About"
         />

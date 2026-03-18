@@ -1,8 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import axiosInstance from "../../../axios/axiosInterceptor";
 import { useTranslation } from "react-i18next";
+
+import axiosInstance from "../../../axios/axiosInterceptor";
 
 function VerifyOTPModal() {
   const { t, i18n } = useTranslation();

@@ -1,12 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+import { useProductContext } from "../ProductContext";
+import { useProductFilters } from "../useProductFilters";
+import { useTranslation } from "react-i18next";
+
 import DiscountFilter from "./DiscountFilter";
 import RatingFilter from "./RatingFilter";
 import PriceFilters from "./PriceFilter";
-import { useProductContext } from "../ProductContext";
-import { useProductFilters } from "../useProductFilters";
-import Arrow from "../../../assets/icons/icons-arrow-left.svg";
-import { useTranslation } from "react-i18next";
+
+import Arrow from "../../../assets/icons/arrow-left.svg";
 
 export default function Filters() {
   const { filters, updateFilters } = useProductFilters();
