@@ -17,7 +17,6 @@ function CartSummary({ product, className }) {
   const [authAction, setAuthAction] = useState("");
   const { loggedIn } = useAuth();
   const attributes = product.attributes;
-
   const name =
     i18n.language === "ar"
       ? attributes.nameAr
@@ -28,11 +27,11 @@ function CartSummary({ product, className }) {
   const rating = Math.round(parseFloat(attributes.averageRating));
   const ratingCount = attributes.ratingCount;
   const isNew = attributes.isNew;
-  const price = Number(attributes.price);
+  const price = Number(attributes.effectivePrice);
   const hasDiscount = attributes.hasDiscount;
   const discountPercentage = attributes.discountPercentage;
-  const newPrice = attributes.priceAfterDiscount
-    ? Number(attributes.priceAfterDiscount)
+  const newPrice = attributes.originalPrice
+    ? Number(attributes.originalPrice)
     : null;
   const colors = attributes.colors || [];
   const image = attributes.primaryImage;
@@ -95,15 +94,12 @@ function CartSummary({ product, className }) {
           <div className="flex gap-2 flex-col">
             <div className="flex gap-2 items-center flex-wrap">
               <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
-                $
-                {hasDiscount && newPrice
-                  ? newPrice.toFixed(2)
-                  : price.toFixed(2)}
+                ${price.toFixed(2)}
               </span>
 
               {hasDiscount && newPrice && (
                 <span className="text-[rgb(var(--color-text-main-1))] text-sm md:text-[16px] font-medium line-through">
-                  ${price.toFixed(2)}
+                  ${hasDiscount && newPrice ? newPrice.toFixed(2) : ""}
                 </span>
               )}
 

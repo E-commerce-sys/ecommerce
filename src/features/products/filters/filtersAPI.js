@@ -5,13 +5,13 @@ export async function filtersAPI(
   page = 1,
   search = "",
   isDiscounted = false,
-  minPrice = 0,
-  maxPrice = 5000,
+  minPrice,
+  maxPrice,
   ratingSort = null,
   isBestSelling = false,
   priceSort = null,
   discount = null,
-  category
+  category,
 ) {
   const params = { page };
 

@@ -14,7 +14,7 @@ export function useProductFilters() {
       ? Number(searchParams.get("discount"))
       : null,
     minPrice: Number(searchParams.get("minPrice") || 0),
-    maxPrice: Number(searchParams.get("maxPrice") || 5000),
+    maxPrice: Number(searchParams.get("maxPrice")),
 
     category: searchParams.get("category") || "",
     subcategory: searchParams.get("subcategory") || "",
