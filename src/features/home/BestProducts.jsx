@@ -1,9 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import CartItemSummary from "../cart/CartSummary";
-import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+
+import CartItemSummary from "../cart/CartSummary";
+import Button from "../../components/Button";
 
 function BestProducts({ data }) {
   // shuffle randomly and take 3

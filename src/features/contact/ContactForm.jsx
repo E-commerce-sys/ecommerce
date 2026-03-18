@@ -1,9 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import { Form } from "react-router-dom";
-import Button from "../../components/Button";
-import { sendContactMessage } from "./contactAPI";
 import { useTranslation } from "react-i18next";
+import { sendContactMessage } from "./contactAPI";
+
+import Button from "../../components/Button";
 
 function ContactForm() {
   const { t } = useTranslation();

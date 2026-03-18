@@ -1,11 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import Button from "../../components/Button";
-// import iphone from "../../assets/img/iphone.svg";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../i18n/i18n";
+
+import Button from "../../components/Button";
 
 function BannerSlider({ banners }) {
   const [active, setActive] = useState(0);

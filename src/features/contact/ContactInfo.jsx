@@ -1,7 +1,8 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useTranslation } from "react-i18next";
+
 import phone from "../../assets/icons/phone.svg";
 import email from "../../assets/icons/email.svg";
-import { useTranslation } from "react-i18next";
 
 function ContactInfo() {
   const { t } = useTranslation();

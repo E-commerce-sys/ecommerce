@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
 
-import heart from "../assets/icons/heart-Icon.svg";
-import profile from "../assets/icons/profile-icon.svg";
-import basket from "../assets/icons/basket-icon.svg";
+import heart from "../assets/icons/heart.svg";
+import profile from "../assets/icons/profile.svg";
+import basket from "../assets/icons/basket.svg";
 import menu from "../assets/icons/menu.svg";
 import logoutIcon from "../assets/icons/logout.svg";
 import mallbag from "../assets/icons/mallbag.svg";

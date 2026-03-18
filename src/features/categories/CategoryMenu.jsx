@@ -3,10 +3,12 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import SubCategoryMenu from "./SubCategoryMenu";
-import menu from "../../assets/icons/menu.svg";
 import { useTranslation } from "react-i18next";
 import { useCategories } from "../../context/CategoryContext";
+
+import SubCategoryMenu from "./SubCategoryMenu";
+
+import menu from "../../assets/icons/menu.svg";
 
 function CategoryMenu() {
   const { i18n, t } = useTranslation();

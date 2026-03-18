@@ -1,8 +1,9 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
+
+import Button from "../../components/Button";
 
 function AuthModal({ isOpen, onClose, title, message }) {
   const navigate = useNavigate();

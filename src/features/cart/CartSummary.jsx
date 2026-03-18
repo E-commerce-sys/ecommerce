@@ -1,14 +1,14 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import CartItem from "./CartItem";
-import FullStar from "../../assets/icons/filled-star-Icon.svg";
-import EmptyStar from "../../assets/icons/empty-star.svg";
-// import { loggedIn } from "../../helpers/auth";
-import { useTranslation } from "react-i18next";
-// import imgProduct from "../../assets/img/Cart.png";
-import AuthModal from "../auth/AuthModal";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
+
+import CartItem from "./CartItem";
+import AuthModal from "../auth/AuthModal";
+
+import FullStar from "../../assets/icons/filled-star.svg";
+import EmptyStar from "../../assets/icons/empty-star.svg";
 
 function CartSummary({ product, className }) {
   const { t, i18n } = useTranslation();
