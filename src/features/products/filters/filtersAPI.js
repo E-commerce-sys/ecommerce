@@ -50,6 +50,8 @@ export async function filtersAPI(
 
   if (category) params["filter[category]"] = category;
 
+  if (sorts.length) params["sort"] = sorts.join(",");
+
   const res = await axiosInstance.get("/api/products", { params });
 
   return {
