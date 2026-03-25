@@ -10,7 +10,7 @@ import AuthModal from "../auth/AuthModal";
 import FullStar from "../../assets/icons/filled-star.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
 
-function CartSummary({ product, className }) {
+function CartSummary({ product, className, icon }) {
   const { t, i18n } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -84,6 +84,7 @@ function CartSummary({ product, className }) {
           onAddToCart={handleAddToCart}
           onFavorite={handleFavorite}
           isFavorite={isFavorite}
+          icon={icon}
         />
 
         <div className="flex flex-col md:gap-2">

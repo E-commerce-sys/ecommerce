@@ -8,6 +8,7 @@ import App from "./app/App";
 import { LanguageProvider } from "./context/LanguageContext.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import { CategoryProvider } from "./context/CategoryContext";
+import "./axios/axiosInterceptor.js"
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
