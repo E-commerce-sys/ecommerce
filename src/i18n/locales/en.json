@@ -11,7 +11,7 @@
 
   "navbar": {
     "search": "Search for products",
-    "basket": "My basket",
+    "basket": "My cart",
     "favourite": "My favourites",
     "login": "Log in",
     "account": "My account"
@@ -142,5 +142,20 @@
     "subtitle5": "Founder and Chairman",
     "subtitle6": "Managing Director",
     "subtitle7": "Product Designer"
+  },
+  "cart": {
+    "cart": "Cart",
+    "yourCart": "Your cart",
+    "product": "Product",
+    "price": "Price",
+    "quantity": "Quantity",
+    "subtotal": "Subtotal",
+    "continue": "Continue Shopping",
+    "cartTotal": "Cart Total",
+    "sub": "Subtotal:",
+    "shipping": "Shipping:",
+    "total": "Total:",
+    "procees": " Procees to checkout",
+    "free": "Free"
   }
 }
