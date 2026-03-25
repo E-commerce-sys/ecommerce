@@ -1,7 +1,7 @@
 import axiosInstance from "../../axios/axiosInstance";
 
-export async function productsAPI(page = 1) {
-  const res = await axiosInstance.get("/api/products", { params: { page } });
+export async function productsAPI( id = null) {
+  const res = await axiosInstance.get("/api/products/1");
   return res.data.data;
 }
 

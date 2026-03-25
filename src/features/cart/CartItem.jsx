@@ -12,6 +12,7 @@ function CartItem({
   onAddToCart,
   onFavorite,
   isFavorite,
+  icon = isFavorite ? filledHeart : heart
 }) {
   const { t } = useTranslation();
 
@@ -39,7 +40,7 @@ function CartItem({
         onClick={onFavorite}
       >
         <img
-          src={isFavorite ? filledHeart : heart}
+          src={icon}
           alt="favorite"
           className="w-full h-full"
         />

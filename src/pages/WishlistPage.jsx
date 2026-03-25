@@ -1,12 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import WishlistItem from "../features/wishlist/WishlistItem";
+import Wishlist from "../features/wishlist/Wishlist";
+
 function WishlistPage() {
-  return (
-    <div>
-      <WishlistItem />
-    </div>
-  );
+  return <div>
+    <Wishlist/>
+  </div>;
 }
 
 export default WishlistPage;
