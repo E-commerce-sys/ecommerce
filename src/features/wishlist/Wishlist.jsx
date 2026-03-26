@@ -17,7 +17,7 @@ function Wishlist() {
         </span>
 
         <span className="text-[rgb(var(--color-text-main))] ml-1">
-          Wishlist
+          {t("wishlist.wishlist")}
         </span>
       </div>
     <WishlistSection/>

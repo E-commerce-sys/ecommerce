@@ -29,11 +29,13 @@
 // export default JustForYou;
 
 import { useEffect, useState } from "react";
-import Button from "../../components/Button";
-import CartSummary from "../cart/CartSummary"; // adjust path as needed
+import { useTranslation } from "react-i18next";
+import CartSummary from "../cart/CartSummary";
 import { productsAPI } from "../products/productAPI";
 
+
 function JustForYou() {
+  const {t}=useTranslation()
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,9 +56,8 @@ function JustForYou() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <span className="w-3 h-6 md:w-4 md:h-7 lg:w-5 lg:h-8 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
-          <span className="text-[20px] font-semibold">Just For You</span>
+          <span className="text-[20px] font-semibold">{t("wishlist.justForYou")}</span>
         </div>
-        <Button variant="outline">See All</Button>
       </div>
 
       {/* Products */}

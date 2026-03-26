@@ -48,12 +48,15 @@
 // export default WishlistItems
 
 import CartSummary from "../cart/CartSummary";
-import {getWishlist} from "./wishlistAPI";
+import {getWishlist,deleteWishlistItem} from "./wishlistAPI";
 import { useState, useEffect } from "react";
 
-function WishlistItems({ icon }) {
+const ITEMS_PER_PAGE = 8; 
+
+function WishlistItems() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function fetchWishlist() {
@@ -70,59 +73,71 @@ function WishlistItems({ icon }) {
     fetchWishlist();
   }, []);
 
+  const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+  const paginatedProducts = products.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   if (loading) return <div>Loading...</div>;
   if (products.length === 0) return <div>No products found</div>;
 
   return (
-    <div className="flex gap-4 flex-wrap">
-      {products.map((item) => {
-  const p = item.attributes[0];
+  <div className="flex flex-col gap-8 w-full min-h-0">
 
-  // const product = {
-  //   id: p.id,
-  //   attributes: {
-  //     nameEn: p.name_en,
-  //     nameAr: p.name_ar,
-  //     nameKu: p.name_ku,
-  //     averageRating: p.average_rating,
-  //     ratingCount: p.rating_count,
-  //     isNew: p.is_new,
-  //     price: Number(p.effective_price),
-  //     newPrice: Number(p.effective_price) ? Number(p.effective_price) : null,
-  //     hasDiscount: p.has_discount,
-  //     discountPercentage: p.discount_percentage,
-  //     colors: p.colors,
-  //     // primaryImage: p.primary_image,
-  //   }
-  // };
-  const product = {
-  id: p.id,
-  attributes: {
-    nameEn: p.name_en,
-    nameAr: p.name_ar,
-    nameKu: p.name_ku,
-    averageRating: p.average_rating,
-    ratingCount: p.rating_count,
-    isNew: p.is_new,
-    effectivePrice: Number(p.effective_price ?? p.price),
-    originalPrice: p.has_discount ? Number(p.price) : null,
-    hasDiscount: p.has_discount,
-    discountPercentage: p.discount_percentage,
-    colors: p.colors,
-  }
-};
-  return (
-    <div key={item.id} className="flex justify-center">
-      <CartSummary
-        icon={icon}
-        product={product}
-        className="w-full lg:w-67.5 lg:h-67.5 aspect-square"
-      />
+    {/* Products */}
+    <div className="flex flex-wrap w-full min-h-0">
+      {paginatedProducts.map((item) => {
+        const p = item.included.product;
+
+        const product = {
+          id: p.id,
+          attributes: {
+            nameEn: p.attributes.nameEn,
+            nameAr: p.attributes.nameAr,
+            nameKu: p.attributes.nameKu,
+            averageRating: p.attributes.averageRating,
+            ratingCount: p.attributes.ratingCount,
+            isNew: p.attributes.isNew,
+            effectivePrice: Number(p.attributes.effectivePrice),
+            originalPrice: Number(p.attributes.originalPrice),
+            hasDiscount: p.attributes.hasDiscount,
+            discountPercentage: p.attributes.discountPercentage,
+            primaryImage: p.attributes.primaryImage,
+            isInWishList: true,
+          },
+        };
+
+        return (
+          <div key={item.id} style={{ width: "25%" }} className="shrink-0 grow-0 overflow-hidden">
+            <CartSummary key={product.id} product={product} wishlistItemId={item.id} />
+          </div>
+        );
+      })}
     </div>
-  );
-})}
+
+    {/* Pagination — always render for debugging */}
+    <div className="flex items-center justify-center gap-2">
+      {Array.from({ length: totalPages }).map((_, i) => (
+        <button
+          key={i}
+          onClick={() => {
+            setCurrentPage(i + 1);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+          className={`w-8 h-8 rounded text-sm font-medium transition-colors ${
+            currentPage === i + 1
+              ? "bg-[rgb(var(--color-primary-main))] text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}
+        >
+          {i + 1}
+        </button>
+      ))}
     </div>
-  );
+
+  </div>
+);
 }
 
 export default WishlistItems;

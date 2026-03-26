@@ -157,5 +157,10 @@
     "total": "Total:",
     "procees": " Procees to checkout",
     "free": "Free"
+  },
+  "wishlist":{
+    "wishlist":"Wishlist",
+    "moveToCart":"Move all to cart",
+    "justForYou":"Just for you"
   }
 }

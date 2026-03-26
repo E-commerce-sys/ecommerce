@@ -1,8 +1,8 @@
 import axiosInstance from "../../axios/axiosInstance";
 
 export async function getWishlist() {
-  const res = await axiosInstance("/api/wish-list-items?include=product");
-  return res.data.data.included.items;
+  const res = await axiosInstance("/api/wish-list-items?include=product.images");
+  return res.data.data;
 }
 
 export async function postWishlist(id){
@@ -17,5 +17,10 @@ export async function postWishlist(id){
       }
     }
   })
+  return res.data
+}
+
+export async function deleteWishlistItem(id) {
+  const res = await axiosInstance.delete(`/api/wish-list-items/${id}`)
   return res.data
 }
