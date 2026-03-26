@@ -78,7 +78,7 @@ async function handleFavorite() {
 
   try {
     if (isFavorite) {
-      await deleteWishlistItem(wishlistItemId); // ✅ delete using wishlist item id
+      await deleteWishlistItem(product.id); 
     } else {
       await postWishlist(product.id); // add using product id
     }
