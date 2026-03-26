@@ -1,9 +1,9 @@
 import axiosInstance from "../../axios/axiosInstance";
 
-// export async function getWishlist() {
-//   const res = await axiosInstance("/api/wish-list?include=items");
-//   return res.data.data.included.items;
-// }
+export async function getWishlist() {
+  const res = await axiosInstance("/api/wish-list-items?include=product");
+  return res.data.data.included.items;
+}
 
 export async function postWishlist(id){
   const res = await axiosInstance.post("/api/wish-list-items",{
@@ -11,7 +11,7 @@ export async function postWishlist(id){
       relationships:{
         product:{
           data:{
-            id: id
+            id: Number(id)
           }
         }
       }

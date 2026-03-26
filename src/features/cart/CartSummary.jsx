@@ -10,6 +10,8 @@ import AuthModal from "../auth/AuthModal";
 import FullStar from "../../assets/icons/filled-star.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
 
+import { postWishlist } from "../wishlist/wishlistAPI";
+
 function CartSummary({ product, className, icon }) {
   const { t, i18n } = useTranslation();
   const [isFavorite, setIsFavorite] = useState(false);
@@ -50,14 +52,25 @@ function CartSummary({ product, className, icon }) {
     console.log("Add to cart:", product.id);
   }
 
-  function handleFavorite() {
-    if (!loggedIn) {
-      openAuthModal("favorite");
-      return;
-    }
-
-    setIsFavorite((prev) => !prev);
+  async function handleFavorite() {
+  if (!loggedIn) {
+    openAuthModal("favorite");
+    return;
   }
+
+  try {
+    const res = await postWishlist(product.id);
+    console.log(res);
+    setIsFavorite((prev) => !prev);
+  } catch (error) {
+    console.error("Failed to update wishlist:", error.response?.data || error.message);
+  }
+}
+
+  // async function handleOnFavorite(id){
+  //   const res = await postWishlist(id)
+  //   console.log(res)
+  // }
 
   const stars = [];
   for (let i = 1; i <= 5; i++) {
