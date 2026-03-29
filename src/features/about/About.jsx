@@ -10,7 +10,7 @@ import ServiceItemCard from "../../components/ServiceItemCard";
 
 import deliveryIcon from "../../assets/icons/delivery.svg";
 import supportIcon from "../../assets/icons/CustomerService.svg";
-import secureIcon from "../../assets/icons/secure.svg";
+import secureIcon from "../../assets/icons/Secure.svg";
 import StoreIcon from "../../assets/icons/Store.svg";
 import StoreHover from "../../assets/icons/Store-Hover.svg";
 import Shopping from "../../assets/icons/Shopping.svg";

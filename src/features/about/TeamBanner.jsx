@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 
 import Employees from "./Employees";
 
-import employee1 from "../../assets/img/employee1.svg";
-import employee2 from "../../assets/img/employee2.svg";
-import employee3 from "../../assets/img/employee3.svg";
+import employee1 from "../../assets/img/Employee1.svg";
+import employee2 from "../../assets/img/Employee2.svg";
+import employee3 from "../../assets/img/Employee3.svg";
 
 const ITEMS_PER_PAGE = 3;
 
