@@ -5,14 +5,25 @@ on:
     branches:
       - develop
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # ensures all actions run on Node 24
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js 24
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # 3️⃣ Setup SSH to server
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -20,16 +31,22 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
+      # 4️⃣ Deploy to EC2
       - name: Deploy to EC2
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          set -e  # exit immediately if a command fails
 
           echo "🚀 Starting Frontend Deployment"
 
           cd /var/www/ecommerce
 
-          echo "📥 Pulling latest code"
-          git pull origin main
+          echo "📥 Pulling latest code from develop"
+          git fetch origin develop
+          git reset --hard origin/develop  # ensures exact match to GitHub branch
+
+          echo "🧹 Cleaning old build"
+          rm -rf dist
 
           echo "📦 Installing dependencies"
           npm install
