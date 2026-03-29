@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import JustForYou from "./JustForYou";
 import WishlistSection from "./WishlistSection";
 import { useTranslation } from "react-i18next";
-import getWishlist from "./wishlistAPI";
 
 function Wishlist() {
     // async function getItems(){
@@ -18,7 +17,7 @@ function Wishlist() {
         </span>
 
         <span className="text-[rgb(var(--color-text-main))] ml-1">
-          Wishlist
+          {t("wishlist.wishlist")}
         </span>
       </div>
     <WishlistSection/>
