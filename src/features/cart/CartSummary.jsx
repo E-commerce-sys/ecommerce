@@ -10,13 +10,15 @@ import AuthModal from "../auth/AuthModal";
 import FullStar from "../../assets/icons/filled-star.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
 
-function CartSummary({ product, className, icon }) {
+import { postWishlist,deleteWishlistItem } from "../wishlist/wishlistAPI";
+
+function CartSummary({ product, className, icon,wishlistItemId }) {
   const { t, i18n } = useTranslation();
-  const [isFavorite, setIsFavorite] = useState(false);
+   const attributes = product.attributes;
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authAction, setAuthAction] = useState("");
   const { loggedIn } = useAuth();
-  const attributes = product.attributes;
+ const [isFavorite,setIsFavorite] = useState(attributes.isInWishList);
   const name =
     i18n.language === "ar"
       ? attributes.nameAr
@@ -50,14 +52,45 @@ function CartSummary({ product, className, icon }) {
     console.log("Add to cart:", product.id);
   }
 
-  function handleFavorite() {
-    if (!loggedIn) {
-      openAuthModal("favorite");
-      return;
-    }
+//   async function handleFavorite() {
+//   if (!loggedIn) {
+//     openAuthModal("favorite");
+//     return;
+//   }
 
-    setIsFavorite((prev) => !prev);
+//   try {
+//     const res = await postWishlist(product.id);
+//     console.log(res);
+//     setIsFavorite((prev) => !prev);
+//     window.scrollTo({ top: 0, behavior: "smooth" });
+    
+    
+//   } catch (error) {
+//     console.error("Failed to update wishlist:", error.response?.data || error.message);
+//   }window.location.reload();
+// }
+
+async function handleFavorite() {
+  if (!loggedIn) {
+    openAuthModal("favorite");
+    return;
   }
+
+  try {
+    if (isFavorite) {
+      await deleteWishlistItem(product.id); 
+    } else {
+      await postWishlist(product.id); // add using product id
+    }
+    setIsFavorite((prev) => !prev);
+  } catch (error) {
+    console.error("Failed to update wishlist:", error.response?.data || error.message);
+  }
+}
+  // async function handleOnFavorite(id){
+  //   const res = await postWishlist(id)
+  //   console.log(res)
+  // }
 
   const stars = [];
   for (let i = 1; i <= 5; i++) {
