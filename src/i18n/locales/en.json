@@ -158,9 +158,29 @@
     "procees": "Procees to checkout",
     "free": "Free"
   },
-  "wishlist":{
-    "wishlist":"Wishlist",
-    "moveToCart":"Move all to cart",
-    "justForYou":"Just for you"
+  "checkout": {
+    "checkout": "Checkout",
+    "billing": "Billing Details",
+    "info": "Personal Info",
+    "firstName": "First Name *",
+    "lastName": "Last Name *",
+    "email": "Email Address *",
+    "phone": "Phone Number *",
+    "company": "Company Name",
+    "address": "Address",
+    "city": "Town/City *",
+    "street": "Street Address *",
+    "apartment": "Apartment (optional)",
+    "save": "Save this information for faster check-out next time",
+    "order": "Place Order",
+
+    "payment": "Payment: Cash on delivery",
+    "apply": "Apply Coupon",
+    "coupon": "Coupon Code"
+  },
+  "wishlist": {
+    "wishlist": "Wishlist",
+    "moveToCart": "Move all to cart",
+    "justForYou": "Just for you"
   }
 }
