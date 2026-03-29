@@ -1,8 +1,7 @@
 import axiosInstance from "../../axios/axiosInstance";
 
-export async function getWishlist() {
-  const res = await axiosInstance("/api/wish-list-items?include=product.images");
-  console.log(res)
+export async function getWishlist(page) {
+  const res = await axiosInstance(`/api/wish-list-items?include=product.images&page=${page}`);
   return res.data.data;
 }
 
