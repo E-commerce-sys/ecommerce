@@ -14,9 +14,9 @@ export function CartProvider({ children }) {
   const shipping = subtotal > 140 ? 0 : 20;
   const total = subtotal + shipping;
 
-  // 👉 update quantity
+  //  update quantity
   function updateQuantity(id, value) {
-    // allow empty input
+    // allow empty input (user typing)
     if (value === "") {
       setCartItems((prev) =>
         prev.map((item) => (item.id === id ? { ...item, quantity: "" } : item)),
@@ -26,10 +26,42 @@ export function CartProvider({ children }) {
 
     const quantity = Number(value);
 
-    if (quantity < 1) return;
+    // ignore invalid numbers
+    if (isNaN(quantity) || quantity < 1) return;
 
     setCartItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, quantity } : item)),
+    );
+  }
+
+  function updateColor(itemId, colorId) {
+    setCartItems((prev) =>
+      prev.map((item) => {
+        if (item.id !== itemId) return item;
+
+        const selectedColor = item.colors.find((c) => c.id === colorId);
+
+        if (!selectedColor) return item;
+
+        // ✅ find first available size
+        const availableSize = selectedColor.sizes.find(
+          (size) => size.stock > 0,
+        );
+
+        return {
+          ...item,
+          selectedColorId: colorId,
+          selectedSizeId: availableSize ? availableSize.id : null,
+        };
+      }),
+    );
+  }
+
+  function updateSize(itemId, sizeId) {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, selectedSizeId: sizeId } : item,
+      ),
     );
   }
 
@@ -52,6 +84,8 @@ export function CartProvider({ children }) {
         total,
         setCartItems,
         updateQuantity,
+        updateColor,
+        updateSize,
         removeItem,
         setCart,
       }}
