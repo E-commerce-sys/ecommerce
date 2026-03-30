@@ -29,18 +29,18 @@ function CartTotal() {
             <p>{shipping === 0 ? `${t("cart.free")}` : `$${shipping}`}</p>
           </div>
           <div className="flex justify-between w-full border-b border-[rgb(var(--color-text-main-2))] py-4">
-            <p> {t("cart.total")}</p>
+            <p>{t("cart.total")}</p>
             <p>${total}</p>{" "}
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-1 justify-end">
         {hasInvalidQuantity && (
-          <p className="text-red-500 text-sm">Please enter valid quantities</p>
+          <p className="text-red-500 text-sm">{t("cart.valid")}</p>
         )}
         <Button
           disabled={hasInvalidQuantity}
-          className="w-full md:w-[230px] "
+          className="w-full md:w-57.5"
           onClick={() =>
             navigate("/checkout", {
               state: { cartItems },

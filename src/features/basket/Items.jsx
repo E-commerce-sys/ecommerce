@@ -258,7 +258,9 @@ function Items() {
 
               {/* SUBTOTAL */}
               <div className="flex justify-between">
-                <span>Subtotal: ${item.price * item.quantity}</span>
+                <span>
+                  {t("cart.subtotal")}: ${item.price * item.quantity}
+                </span>
               </div>
             </div>
           );

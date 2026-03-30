@@ -158,7 +158,8 @@
     "shipping": "Shipping:",
     "total": "Total:",
     "procees": "Procees to checkout",
-    "free": "Free"
+    "free": "Free",
+    "valid": "Please enter valid quantities"
   },
   "checkout": {
     "checkout": "Checkout",
