@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
-
+import { Link } from "react-router-dom";
 import heart from "../../assets/icons/heart.svg";
 import filledHeart from "../../assets/icons/heart-filled.svg";
 
@@ -12,7 +12,8 @@ function CartItem({
   onAddToCart,
   onFavorite,
   isFavorite,
-  icon = isFavorite ? filledHeart : heart
+  icon = isFavorite ? filledHeart : heart,
+  id
 }) {
   const { t } = useTranslation();
 
@@ -27,12 +28,13 @@ function CartItem({
           {t("new")}
         </span>
       )}
-
+      
       <img
         src={img}
         alt="product"
         className="w-full h-full p-2 md:p-5 object-contain transition-transform duration-300 group-hover:scale-105"
       />
+
 
       <button
         type="button"
@@ -46,6 +48,7 @@ function CartItem({
         />
       </button>
 
+      <Link to={`/products/${id}`} target="_blank">
       <button
         type="button"
         onClick={onAddToCart}
@@ -60,8 +63,9 @@ function CartItem({
           cursor-pointer
         "
       >
+        
         {t("add")}
-      </button>
+      </button></Link>
     </div>
   );
 }

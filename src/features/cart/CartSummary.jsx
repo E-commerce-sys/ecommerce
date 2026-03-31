@@ -10,11 +10,14 @@ import AuthModal from "../auth/AuthModal";
 import FullStar from "../../assets/icons/filled-star.svg";
 import EmptyStar from "../../assets/icons/empty-star.svg";
 
-import { postWishlist, deleteWishlistItem } from "../wishlist/wishlistAPI";
+import { postWishlist,deleteWishlistItem } from "../wishlist/wishlistAPI";
+import { Link,useLocation } from "react-router-dom";
 
-function CartSummary({ product, className, icon, wishlistItemId }) {
+function CartSummary({ product, className, icon,wishlistItemId }) {
+  const location = useLocation();
   const { t, i18n } = useTranslation();
-  const attributes = product.attributes;
+   const attributes = product.attributes;
+   const id= product.id
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authAction, setAuthAction] = useState("");
   const { loggedIn } = useAuth();
@@ -120,13 +123,14 @@ function CartSummary({ product, className, icon, wishlistItemId }) {
           onFavorite={handleFavorite}
           isFavorite={isFavorite}
           icon={icon}
+          id={product.id}
         />
-
+        
         <div className="flex flex-col md:gap-2">
           <p className="text-sm md:text-[16px] text-[rgb(var(--color-text-main))] font-medium">
-            {name}
+          <Link to={`/products/${product.id}`} state={{ from: location.pathname }} target="_blank">  {name} </Link>
           </p>
-
+        
           <div className="flex gap-2 flex-col">
             <div className="flex gap-2 items-center flex-wrap">
               <span className="text-[rgb(var(--color-primary-main))] text-sm md:text-[16px] font-medium">
