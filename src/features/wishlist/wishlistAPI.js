@@ -44,3 +44,8 @@ export async function getPagination(page = 1) {
   const res = await axiosInstance(`/api/wish-list-items?page=${page}`);
   return res.data.meta;
 }
+
+export async function getItemAmount(){
+  const res = await axiosInstance("/api/wish-list-items?include=product.images")
+  return res.data.meta.total
+}
