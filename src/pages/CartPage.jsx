@@ -28,17 +28,71 @@ function CartPage() {
     setCart([
       {
         id: 1,
+        productId: 12,
         img: monitor,
         name: "LCD Monitor",
         price: 65,
         quantity: 1,
+
+        selectedColorId: 1,
+        selectedSizeId: 2,
+
+        colors: [
+          {
+            id: 1,
+            name: "Red",
+            totalStock: 0,
+            sizes: [
+              { id: 1, name: "Small", stock: 10 },
+              { id: 2, name: "Medium", stock: 20 },
+              { id: 3, name: "Large", stock: 30 },
+            ],
+          },
+          {
+            id: 2,
+            name: "Blue",
+            totalStock: 40,
+            sizes: [
+              { id: 4, name: "Small", stock: 0 },
+              { id: 5, name: "Medium", stock: 10 },
+              { id: 6, name: "Large", stock: 20 },
+            ],
+          },
+        ],
       },
       {
         id: 2,
+        productId: 10,
         img: gamePad,
-        name: "H1 Gamepad",
+        name: "Game Pad",
         price: 30,
         quantity: 2,
+
+        selectedColorId: 1,
+        selectedSizeId: 2,
+
+        colors: [
+          {
+            id: 1,
+            name: "Orange",
+            totalStock: 60,
+            sizes: [
+              { id: 1, name: "Small", stock: 10 },
+              { id: 2, name: "Medium", stock: 20 },
+              { id: 3, name: "Large", stock: 30 },
+            ],
+          },
+          {
+            id: 2,
+            name: "Black",
+            totalStock: 40,
+            sizes: [
+              { id: 4, name: "Small", stock: 10 },
+              { id: 5, name: "Medium", stock: 10 },
+              { id: 6, name: "Large", stock: 20 },
+            ],
+          },
+        ],
       },
     ]);
   }, []);

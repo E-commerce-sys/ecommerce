@@ -148,6 +148,8 @@
     "yourCart": "Your cart",
     "product": "Product",
     "price": "Price",
+    "color": "Color",
+    "size": "Size",
     "quantity": "Quantity",
     "subtotal": "Subtotal",
     "continue": "Continue Shopping",
@@ -156,7 +158,8 @@
     "shipping": "Shipping:",
     "total": "Total:",
     "procees": "Procees to checkout",
-    "free": "Free"
+    "free": "Free",
+    "valid": "Please enter valid quantities"
   },
   "checkout": {
     "checkout": "Checkout",

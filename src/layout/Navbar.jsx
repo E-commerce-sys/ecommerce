@@ -13,7 +13,7 @@ import menu from "../assets/icons/menu.svg";
 import logoutIcon from "../assets/icons/logout.svg";
 import mallbag from "../assets/icons/mallbag.svg";
 import cancel from "../assets/icons/cancel.svg";
-
+import logo from "../assets/icons/logo.svg";
 import SearchBar from "../features/search/SearchBar";
 import LanguageList from "../features/langauge/LanguageList";
 import Button from "../components/Button";
@@ -51,9 +51,12 @@ function Navbar() {
       <div className="flex w-full text-lg justify-around items-center text-[rgb(var(--color-text-main))]">
         {/* Logo */}
         <NavLink to="/">
-          <p className="font-bold text-lg md:text-xl lg:text-2xl cursor-pointer ">
-            Exclusive
-          </p>
+          <div className="flex gap-2 items-center">
+            <img src={logo} alt="" className="w-6 h-8 md:w-7 md:h-9" />
+            <p className="font-bold text-lg md:text-xl lg:text-2xl cursor-pointer ">
+              Exclusive
+            </p>
+          </div>
         </NavLink>
 
         {/* Search (always visible) */}
