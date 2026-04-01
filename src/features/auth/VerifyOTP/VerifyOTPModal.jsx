@@ -101,7 +101,7 @@ function VerifyOTPModal() {
       }, 700);
     } catch (err) {
       const apiError = err?.response?.data?.errors?.[0]?.message;
-      console.log(apiError);
+      console.error(apiError);
 
       setError(apiError ? t("verify.apiError") : t("verify.invalid"));
       setStatus("error");

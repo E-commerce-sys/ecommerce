@@ -23,7 +23,7 @@ function LoginForm() {
   const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const { login, saveUser } = useAuth();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -48,12 +48,12 @@ function LoginForm() {
     try {
       setLoading(true);
       const res = await loginAPI(email, password);
-
       login(res.data.token);
+      saveUser(res.data.user);
 
       navigate(from, { replace: true });
     } catch (error) {
-      console.log("Login error:", error?.response?.data);
+      console.error("Login error:", error?.response?.data);
 
       setFormError("Invalid email or password");
     } finally {

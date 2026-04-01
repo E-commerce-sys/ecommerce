@@ -14,19 +14,20 @@ import ContactPage from "../pages/ContactPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import CartPage from "../pages/CartPage";
-import CheckoutPage from "../pages/CheckoutPage.jsx";
+import CheckoutPage from "../pages/CheckoutPage";
 import WishlistPage from "../pages/WishlistPage";
-// import CheckoutPage from "../pages/CheckoutPage.jsx";
 import AccountLayout from "../pages/account/AccountLayout";
 import ProfilePage from "../pages/account/ProfilePage";
-import OrdersPage from "../pages/account/OrdersPage";
-import CancellationsPage from "../pages/account/CancellationsPage.jsx";
+import AddressPage from "../pages/account/AddressPage";
+import ProgressPage from "../pages/account/ProgressPage";
+import ArrivedPage from "../pages/account/ArrivedPage";
+import CanceledPage from "../pages/account/CanceledPage";
 
-import AdminDashboard from "../pages/admin/AdminDashboard.jsx";
-import AdminProductsPage from "../pages/admin/AdminProductsPage.jsx";
-import AdminCategoriesPage from "../pages/admin/AdminCategoriesPage.jsx";
-import AdminOrdersPage from "../pages/admin/AdminOrdersPage.jsx";
-import AdminAdsPage from "../pages/admin/AdminAdsPage.jsx";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminProductsPage from "../pages/admin/AdminProductsPage";
+import AdminCategoriesPage from "../pages/admin/AdminCategoriesPage";
+import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
+import AdminAdsPage from "../pages/admin/AdminAdsPage";
 
 import NotFoundPage from "../pages/NotFoundPage";
 import { homeLoader } from "../features/home/homeLoader.js";
@@ -65,9 +66,11 @@ export const router = createBrowserRouter([
             path: "account",
             element: <AccountLayout />,
             children: [
-              { path: "profile", element: <ProfilePage /> },
-              { path: "orders", element: <OrdersPage /> },
-              { path: "cancellations", element: <CancellationsPage /> },
+              { index: true, path: "profile", element: <ProfilePage /> },
+              { path: "address", element: <AddressPage /> },
+              { path: "progress", element: <ProgressPage /> },
+              { path: "arrived", element: <ArrivedPage /> },
+              { path: "canceled", element: <CanceledPage /> },
             ],
           },
         ],

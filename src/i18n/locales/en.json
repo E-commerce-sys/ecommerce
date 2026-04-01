@@ -185,5 +185,8 @@
     "wishlist": "Wishlist",
     "moveToCart": "Move all to cart",
     "justForYou": "Just for you"
+  },
+  "myAccount": {
+    "account": "My Account"
   }
 }
