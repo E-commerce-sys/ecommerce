@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { productAPI } from "../products/productAPI";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
