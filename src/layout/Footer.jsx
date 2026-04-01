@@ -81,19 +81,19 @@ function Footer() {
         <div className=" flex flex-col gap-4 ">
           <h3 className="font-semibold text-lg ">{t("footer.shop")}</h3>
           <p>
-            <a className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
+            <Link to="/Privacy&Policy" className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.privacy")}
-            </a>
+            </Link>
           </p>
           <p>
-            <a className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
+            <Link to="/TOS" className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.terms")}
-            </a>
+            </Link>
           </p>
           <p>
-            <a className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
+            <Link to="/FAQ" className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.faq")}
-            </a>
+            </Link>
           </p>
           <p>
             <Link

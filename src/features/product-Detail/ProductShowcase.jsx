@@ -18,6 +18,7 @@ import {
 import deliveryIcon from "../../assets/icons/delivery.svg";
 import returnIcon from "../../assets/icons/return.svg";
 import AuthModal from "../auth/AuthModal";
+import { Link } from "react-router-dom";
 
 function ProductShowcase() {
   const { loggedIn } = useAuth();
@@ -75,7 +76,6 @@ function ProductShowcase() {
         : product.attributes.nameEn;
   const rating = Math.round(parseFloat(product.attributes.averageRating));
   const ratingCount = product.attributes.ratingCount;
-  const effectivePrice = product.attributes.effectivePrice;
   const description =
     i18n.language === "ar"
       ? product.attributes.descriptionAr
@@ -83,6 +83,13 @@ function ProductShowcase() {
         ? product.attributes.descriptionKu
         : product.attributes.descriptionEn;
   const productSizes = product.included?.productSizes ?? [];
+  const basePrice = Number(product.attributes.effectivePrice);
+
+  const extraPrice = selectedSize
+    ? Number(productSizes.find((s) => s.id === selectedSize)?.attributes.extraPrice ?? 0)
+    : 0;
+
+  const totalPrice = (basePrice + extraPrice).toFixed(2);
   const productColors = product.included?.productColors ?? [];
 
   const stars = [];
@@ -140,14 +147,14 @@ function ProductShowcase() {
       <div className="my-[60px] md:my-[100px] lg:my-[150px] px-4 md:px-8 lg:mx-[75px] lg:w-9/10">
         {/* Breadcrumb */}
         <div className="mb-8 md:mb-[100px]">
-          <span className="text-[rgb(var(--color-text-main-2))]">
+          <Link to={from} className="text-[rgb(var(--color-text-main-2))]">
             {from === "/"
               ? "Home"
               : from === "/products"
                 ? "Products"
                 : "Wishlist"}{" "}
             /{" "}
-          </span>
+          </Link>
           <span>{name}</span>
         </div>
 
@@ -206,7 +213,7 @@ function ProductShowcase() {
               <span
                 className={`text-[20px] md:text-[24px] font-semibold ${product.attributes.hasDiscount ? "text-[rgb(var(--color-primary-main))]" : ""}`}
               >
-                ${effectivePrice}
+                ${totalPrice}
               </span>
               {product.attributes.hasDiscount && (
                 <span className="text-[20px] md:text-[24px] font-medium line-through text-[rgb(var(--color-text-main-1))]">
@@ -250,7 +257,7 @@ function ProductShowcase() {
                       key={s.id}
                       onClick={() => {
                         setSelectedSize(s.id);
-                        setSelectedColor(null);
+                        setSelectedSize(s.id)
                       }}
                       className={`aspect-square w-8 h-8 ${
                         selectedSize === s.id

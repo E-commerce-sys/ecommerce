@@ -36,6 +36,9 @@ import { productsLoader } from "../features/products/productsLoader.js";
 // Route Guards
 import ProtectedRoute from "../routes/ProtectedRoute";
 import AdminRoute from "../routes/AdminRoute";
+import TOSPage from "../pages/TOSPage.jsx";
+import FAQPage from "../pages/FAQPage.jsx";
+import PrivacyPage from "../pages/PrivacyPage.jsx";
 
 export const router = createBrowserRouter([
   {
@@ -53,6 +56,9 @@ export const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "register/verify", element: <RegisterPage /> },
+      { path: "TOS", element: <TOSPage /> },
+      { path: "FAQ", element: <FAQPage /> },
+      { path: "Privacy&Policy", element: <PrivacyPage /> },
 
       {
         element: <ProtectedRoute />,
