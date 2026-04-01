@@ -14,10 +14,6 @@ function NotFoundPage() {
 
       <main className="grow flex items-center justify-center mt-17 px-6 pt-10">
         <div className="flex flex-col items-center text-center max-w-xl">
-          <h1 className="text-7xl md:text-8xl font-bold text-[rgb(var(--color-text-main))]">
-            404
-          </h1>
-
           <h2 className="text-xl md:text-2xl font-semibold mt-4 text-[rgb(var(--color-text-main))]">
             {t("notFound.title")}
           </h2>

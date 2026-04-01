@@ -12,7 +12,8 @@ export function AuthProvider({ children }) {
     return !!localStorage.getItem("token");
   });
 
-  const saveUser = (userData) => {
+  const saveUserName = (first, last) => {
+    const userData = { ...user, first, last };
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
   };
@@ -58,7 +59,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, user, saveUser, login, logout }}>
+    <AuthContext.Provider
+      value={{ loggedIn, user, saveUserName, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

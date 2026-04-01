@@ -12,11 +12,9 @@ import basket from "../assets/icons/basket.svg";
 import menu from "../assets/icons/menu.svg";
 import logoutIcon from "../assets/icons/logout.svg";
 import mallbag from "../assets/icons/mallbag.svg";
-import cancel from "../assets/icons/cancel.svg";
 import logo from "../assets/icons/logo.svg";
 import SearchBar from "../features/search/SearchBar";
 import LanguageList from "../features/langauge/LanguageList";
-import Button from "../components/Button";
 
 function Navbar() {
   const { t } = useTranslation();
@@ -27,7 +25,7 @@ function Navbar() {
   const languages = ["en", "ar", "ku"];
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef(null);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -125,16 +123,9 @@ function Navbar() {
                     <img src={mallbag} alt="" />
                     <span>{t("account.orders")}</span>
                   </NavLink>
-                  <NavLink
-                    to="/account/cancellations"
-                    className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4"
-                    onClick={() => setAccountOpen(false)}
-                  >
-                    <img src={cancel} alt="" />
-                    <span>{t("account.cancellations")}</span>
-                  </NavLink>
+
                   <button
-                    onClick={() => setShowLogoutConfirm(true)}
+                    onClick={() => logout()}
                     className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4 cursor-pointer"
                   >
                     <img src={logoutIcon} alt="" />
@@ -242,35 +233,6 @@ function Navbar() {
                 {lang.toUpperCase()}
               </button>
             ))}
-          </div>
-        </div>
-      )}
-      {showLogoutConfirm && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-2000">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-[320px] flex flex-col gap-5">
-            <p className="text-center text-lg font-semibold">
-              {t("account.logoutConfirm")}
-            </p>
-
-            <div className="flex justify-between gap-3">
-              <button
-                onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 border border-[rgb(var(--color-border))] rounded-md py-2 hover:bg-gray-100 cursor-pointer"
-              >
-                {t("account.cancel")}
-              </button>
-
-              <Button
-                onClick={() => {
-                  logout();
-                  setShowLogoutConfirm(false);
-                  setAccountOpen(false);
-                }}
-                className="flex-1 bg-[rgb(var(--color-primary-main))] text-white rounded-md py-2 hover:bg-[rgb(var(--color-primary-5))]"
-              >
-                {t("account.logout")}
-              </Button>
-            </div>
           </div>
         </div>
       )}

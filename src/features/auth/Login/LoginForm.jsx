@@ -23,7 +23,7 @@ function LoginForm() {
   const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, saveUser } = useAuth();
+  const { login, saveUserName } = useAuth();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -49,7 +49,7 @@ function LoginForm() {
       setLoading(true);
       const res = await loginAPI(email, password);
       login(res.data.token);
-      saveUser(res.data.user);
+      saveUserName(res.data.user.first_name, res.data.user.last_name);
 
       navigate(from, { replace: true });
     } catch (error) {

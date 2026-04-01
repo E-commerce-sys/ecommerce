@@ -17,11 +17,11 @@ import CartPage from "../pages/CartPage";
 import CheckoutPage from "../pages/CheckoutPage";
 import WishlistPage from "../pages/WishlistPage";
 import AccountLayout from "../pages/account/AccountLayout";
-import ProfilePage from "../pages/account/ProfilePage";
-import AddressPage from "../pages/account/AddressPage";
-import ProgressPage from "../pages/account/ProgressPage";
-import ArrivedPage from "../pages/account/ArrivedPage";
-import CanceledPage from "../pages/account/CanceledPage";
+import ProfilePage from "../features/account/ProfilePage.jsx";
+import AddressPage from "../features/account/AddressPage.jsx";
+import ProgressPage from "../features/account/ProgressPage.jsx";
+import ArrivedPage from "../features/account/ArrivedPage.jsx";
+import CanceledPage from "../features/account/CanceledPage.jsx";
 
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminProductsPage from "../pages/admin/AdminProductsPage";

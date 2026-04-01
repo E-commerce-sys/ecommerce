@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 function AccountLayout() {
   const { t } = useTranslation();
   const { user } = useAuth();
+
   function capitalize(word) {
     if (!word) return "";
     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
@@ -28,7 +29,7 @@ function AccountLayout() {
           <p>
             Welcome!{" "}
             <span className="text-[rgb(var(--color-primary-main))]">
-              {capitalize(user?.first_name)} {capitalize(user?.last_name)}
+              {capitalize(user?.first)} {capitalize(user?.last)}
             </span>
           </p>
         </div>

@@ -13,7 +13,7 @@ function CartItem({
   onFavorite,
   isFavorite,
   icon = isFavorite ? filledHeart : heart,
-  id
+  id,
 }) {
   const { t } = useTranslation();
 
@@ -28,31 +28,26 @@ function CartItem({
           {t("new")}
         </span>
       )}
-      
+
       <img
         src={img}
         alt="product"
         className="w-full h-full p-2 md:p-5 object-contain transition-transform duration-300 group-hover:scale-105"
       />
 
-
       <button
         type="button"
         className="absolute top-1 right-1 md:top-3 md:right-3 w-5 h-5 md:w-8.5 md:h-8.5 bg-white p-1 rounded-full shadow-md cursor-pointer"
         onClick={onFavorite}
       >
-        <img
-          src={icon}
-          alt="favorite"
-          className="w-full h-full"
-        />
+        <img src={icon} alt="favorite" className="w-full h-full" />
       </button>
 
       <Link to={`/products/${id}`} target="_blank">
-      <button
-        type="button"
-        onClick={onAddToCart}
-        className="
+        <button
+          type="button"
+          onClick={onAddToCart}
+          className="
           absolute bottom-0 left-0 w-full
           bg-[rgb(var(--color-bg-dark))] text-white
           py-1 md:py-2 lg:py-4 text-[10px] md:text-sm font-medium
@@ -62,10 +57,10 @@ function CartItem({
           transition-all duration-300
           cursor-pointer
         "
-      >
-        
-        {t("add")}
-      </button></Link>
+        >
+          {t("detail")}
+        </button>
+      </Link>
     </div>
   );
 }
