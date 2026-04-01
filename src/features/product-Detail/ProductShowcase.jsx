@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { productAPI } from "../products/productAPI";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -87,7 +87,10 @@ function ProductShowcase() {
   const basePrice = Number(product.attributes.effectivePrice);
 
   const extraPrice = selectedSize
-    ? Number(productSizes.find((s) => s.id === selectedSize)?.attributes.extraPrice ?? 0)
+    ? Number(
+        productSizes.find((s) => s.id === selectedSize)?.attributes
+          .extraPrice ?? 0,
+      )
     : 0;
 
   const totalPrice = (basePrice + extraPrice).toFixed(2);
@@ -268,7 +271,7 @@ function ProductShowcase() {
                       key={s.id}
                       onClick={() => {
                         setSelectedSize(s.id);
-                        setSelectedSize(s.id)
+                        setSelectedSize(s.id);
                       }}
                       className={`aspect-square w-8 h-8 ${
                         selectedSize === s.id
@@ -333,7 +336,9 @@ function ProductShowcase() {
                 />
               </button>
             </div>
-            <p className={`text-sm ${errorMessage ? 'text-red-600' : 'text-green-600'}`}>
+            <p
+              className={`text-sm ${errorMessage ? "text-red-600" : "text-green-600"}`}
+            >
               {errorMessage ? errorMessage : successMessage}
             </p>
             {/* Delivery Info */}
