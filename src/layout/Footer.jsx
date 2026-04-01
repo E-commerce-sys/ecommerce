@@ -112,32 +112,44 @@ function Footer() {
           <div className="flex gap-2 mb-4">
             <div className="bg-white p-1 rounded w-16 h-16" />
             <div className="flex flex-col gap-2">
+              <Link to="https://play.google.com/store/apps/details?id=pl.dotsystems.fastlink&pcampaignid=web_share" target="_blank">
               <img src={GooglePlay} className="h-7" />
+              </Link>
+              <Link to="https://apps.apple.com/us/app/fastlink-4g-lte/id1215675378" target="_blank">
               <img src={AppleStore} className="h-7" />
+              </Link>
             </div>
           </div>
 
           <div className=" flex flex-row gap-4 ">
+            <Link to="https://www.facebook.com/Fastlink4G/" target="_blank">
             <img
               src={Facebook}
               size={18}
               className="hover:text-white cursor-pointer transition-colors"
             />
+            </Link>
+            <Link to="https://www.instagram.com/fastlink_official/" target="_blank">
             <img
               src={Twitter}
               size={18}
               className="hover:text-white cursor-pointer transition-colors"
             />
+            </Link>
+            <Link to="https://www.instagram.com/fastlink_official/" target="_blank">
             <img
               src={Instagram}
               size={18}
               className="hover:text-white cursor-pointer transition-colors"
             />
+            </Link>
+            <Link to="https://www.linkedin.com/company/fastlink4g/posts/" target="_blank">
             <img
               src={Linkedin}
               size={18}
               className="hover:text-white cursor-pointer transition-colors"
             />
+            </Link>
           </div>
         </div>
       </div>
