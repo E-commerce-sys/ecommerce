@@ -204,14 +204,14 @@ function Items() {
 
               {/* COLOR */}
               {item.colors.length > 0 && (
-                <div className="flex gap-4 w-full items-center">
+                <div className="flex gap-4 w-full justify-between  items-center">
                   <p>Color:</p>
                   <select
                     value={item.selectedColorId || ""}
                     onChange={(e) => {
                       updateColor(item.id, Number(e.target.value));
                     }}
-                    className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
+                    className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-[80%] md:w-full"
                   >
                     {item.colors.map((color) => (
                       <option key={color.id} value={color.id}>
@@ -224,14 +224,14 @@ function Items() {
 
               {/* SIZE */}
               {item.sizes.length > 0 && (
-                <div className="flex gap-4 w-full items-center">
+                <div className="flex gap-4 w-full justify-between  items-center">
                   <p>Size:</p>
                   <select
                     value={item.selectedSizeId || ""}
                     onChange={(e) => {
                       updateSize(item.id, Number(e.target.value));
                     }}
-                    className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
+                    className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-[80%] md:w-full"
                   >
                     {item.sizes.map((size) => (
                       <option key={size.id} value={size.id}>
@@ -243,7 +243,7 @@ function Items() {
               )}
 
               {/* QUANTITY */}
-              <div className="flex gap-4 w-full items-center">
+              <div className="flex gap-4 w-full justify-between items-center">
                 <p>Quantity:</p>
                 <input
                   type="number"
@@ -257,7 +257,7 @@ function Items() {
                       updateQuantity(item.id, 1);
                     }
                   }}
-                  className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
+                  className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-[80%] md:w-full"
                 />
               </div>
 
