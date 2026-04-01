@@ -2,11 +2,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 import { createContext, useContext, useState } from "react";
 import { getCartItems } from "../features/basket/api/getCartItems";
+import { updateCart } from "../features/basket/api/updateCart";
+import { removeCart } from "../features/basket/api/removeCart";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const subtotal = Number(
     cartItems
@@ -26,6 +30,9 @@ export function CartProvider({ children }) {
       );
       return;
     }
+
+    setHasChanges(true);
+    setIsSaved(false);
 
     const quantity = Number(value);
     if (isNaN(quantity) || quantity < 1) return;
@@ -47,6 +54,8 @@ export function CartProvider({ children }) {
           : item,
       ),
     );
+    setHasChanges(true);
+    setIsSaved(false);
   }
 
   // ✅ size
@@ -56,11 +65,43 @@ export function CartProvider({ children }) {
         item.id === itemId ? { ...item, selectedSizeId: sizeId } : item,
       ),
     );
+    setHasChanges(true);
+    setIsSaved(false);
   }
 
   // ✅ delete
-  function removeItem(id) {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  async function removeItem(productId) {
+    try {
+      setCartItems((prev) =>
+        prev.filter((item) => item.productId !== productId),
+      );
+
+      await removeCart(productId);
+      console.log("deleted");
+      setHasChanges(false);
+    } catch (err) {
+      console.error("Failed to remove item", err);
+    }
+  }
+
+  async function saveCart() {
+    try {
+      await Promise.all(
+        cartItems.map((item) =>
+          updateCart(item.productId, {
+            quantity: item.quantity,
+            colorId: item.selectedColorId,
+            sizeId: item.selectedSizeId,
+          }),
+        ),
+      );
+
+      setHasChanges(false);
+      setIsSaved(true);
+      console.log(cartItems);
+    } catch (err) {
+      console.error("Failed to save cart", err);
+    }
   }
 
   // ✅ FETCH + TRANSFORM API
@@ -128,6 +169,9 @@ export function CartProvider({ children }) {
         subtotal,
         shipping,
         total,
+        hasChanges,
+        isSaved,
+        saveCart,
         updateQuantity,
         updateColor,
         updateSize,

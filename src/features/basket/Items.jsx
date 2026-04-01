@@ -9,9 +9,20 @@ import arrow from "../../assets/icons/arrow-left.svg";
 
 import { useCart } from "../../context/CartContext";
 
+import check from "../../assets/icons/check.svg";
+import cross from "../../assets/icons/xmark.svg";
+
 function Items() {
-  const { cartItems, updateQuantity, updateColor, updateSize, removeItem } =
-    useCart();
+  const {
+    cartItems,
+    updateQuantity,
+    updateColor,
+    updateSize,
+    removeItem,
+    hasChanges,
+    isSaved,
+    saveCart,
+  } = useCart();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -91,9 +102,9 @@ function Items() {
                     {item.colors.length > 0 ? (
                       <select
                         value={item.selectedColorId || ""}
-                        onChange={(e) =>
-                          updateColor(item.id, Number(e.target.value))
-                        }
+                        onChange={(e) => {
+                          updateColor(item.id, Number(e.target.value));
+                        }}
                         className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11  outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] px-2 cursor-pointer"
                       >
                         {item.colors.map((color) => (
@@ -112,9 +123,9 @@ function Items() {
                     {item.sizes.length > 0 ? (
                       <select
                         value={item.selectedSizeId || ""}
-                        onChange={(e) =>
-                          updateSize(item.id, Number(e.target.value))
-                        }
+                        onChange={(e) => {
+                          updateSize(item.id, Number(e.target.value));
+                        }}
                         className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11  outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] px-2 cursor-pointer"
                       >
                         {item.sizes.map((size) => (
@@ -134,7 +145,9 @@ function Items() {
                       type="number"
                       min="1"
                       value={item.quantity}
-                      onChange={(e) => updateQuantity(item.id, e.target.value)}
+                      onChange={(e) => {
+                        updateQuantity(item.id, e.target.value);
+                      }}
                       onBlur={() => {
                         if (item.quantity === "" || item.quantity < 1) {
                           updateQuantity(item.id, 1);
@@ -153,7 +166,7 @@ function Items() {
                         className="cursor-pointer"
                         src={cancel}
                         alt=""
-                        onClick={() => handleDelete(item.id)}
+                        onClick={() => handleDelete(item.productId)}
                       />
                     </div>
                   </td>
@@ -175,7 +188,7 @@ function Items() {
               <img
                 src={cancel}
                 className="absolute top-3 right-3 cursor-pointer w-5 h-5"
-                onClick={() => handleDelete(item.id)}
+                onClick={() => handleDelete(item.productId)}
               />
 
               <div className="flex flex-col items-center gap-2">
@@ -195,9 +208,9 @@ function Items() {
                   <p>Color:</p>
                   <select
                     value={item.selectedColorId || ""}
-                    onChange={(e) =>
-                      updateColor(item.id, Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      updateColor(item.id, Number(e.target.value));
+                    }}
                     className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
                   >
                     {item.colors.map((color) => (
@@ -215,9 +228,9 @@ function Items() {
                   <p>Size:</p>
                   <select
                     value={item.selectedSizeId || ""}
-                    onChange={(e) =>
-                      updateSize(item.id, Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      updateSize(item.id, Number(e.target.value));
+                    }}
                     className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
                   >
                     {item.sizes.map((size) => (
@@ -236,7 +249,9 @@ function Items() {
                   type="number"
                   min="1"
                   value={item.quantity}
-                  onChange={(e) => updateQuantity(item.id, e.target.value)}
+                  onChange={(e) => {
+                    updateQuantity(item.id, e.target.value);
+                  }}
                   onBlur={() => {
                     if (item.quantity === "" || item.quantity < 1) {
                       updateQuantity(item.id, 1);
@@ -257,16 +272,44 @@ function Items() {
       </div>
 
       {/* CONTINUE */}
-      <button
-        onClick={() => navigate("/products")}
-        className="flex gap-2 mx-4 md:mx-10 lg:mx-40 py-2 px-2 md:py-4 md:px-5 rounded border-2 border-[rgb(var(--color-border))] w-fit items-center cursor-pointer"
-      >
-        <img
-          src={arrow}
-          className={`w-5 h-5 md:w-7 md:h-7 ${isRight ? "rotate-180" : ""}`}
-        />
-        <p>{t("cart.continue")}</p>
-      </button>
+      <div className="flex justify-between">
+        <button
+          onClick={() => navigate("/products")}
+          className="flex gap-2 mx-4 md:mx-10 lg:mx-40 py-2 px-2 md:py-4 md:px-5 rounded border-2 border-[rgb(var(--color-border))] w-fit items-center cursor-pointer text-sm md:text-base"
+        >
+          <img
+            src={arrow}
+            className={`w-5 h-5 md:w-7 md:h-7 ${isRight ? "rotate-180" : ""}`}
+          />
+          <p>{t("cart.continue")}</p>
+        </button>
+        <button
+          onClick={saveCart}
+          className={`mx-4 md:mx-10 lg:mx-40 py-2 px-2 md:py-4 md:px-6 w-fit flex items-center gap-2 border-2 rounded transition-all duration-300 font-medium text-sm md:text-base ${
+            hasChanges
+              ? "border-red-500 text-red-500"
+              : isSaved
+                ? "border-green-500 text-green-500"
+                : "border-[rgb(var(--color-border))] text-[rgb(var(--color-text-main))]"
+          }`}
+        >
+          {hasChanges ? (
+            <div className="flex gap-1 justify-center items-center">
+              <img src={cross} alt="Cross" className="w-5 h-5" />
+              <p>{t("cart.save")}</p>
+            </div>
+          ) : isSaved ? (
+            <div className="flex gap-1 justify-center items-center">
+              <img src={check} alt="Check" className="w-5 h-5" />
+              <p>{t("cart.saved") || "Saved"}</p>
+            </div>
+          ) : (
+            <>
+              <p>{t("cart.save")}</p>
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }
