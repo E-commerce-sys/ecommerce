@@ -19,6 +19,7 @@ function ProductShowcase() {
   const { loggedIn } = useAuth();
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -26,56 +27,6 @@ function ProductShowcase() {
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const from = location.state?.from || "/";
-
-
-  //Mock data for colors and sizes
-  const variant = {
-  sizes: [
-    {
-      size: "XS",
-      colors: [
-        { name: "Black", hex: "#000000", stock: 5 },
-        { name: "White", hex: "#F5F5F5", stock: 8 },
-      ],
-    },
-    {
-      size: "S",
-      colors: [
-        { name: "Black", hex: "#000000", stock: 10 },
-        { name: "Red", hex: "#EF4444", stock: 6 },
-        { name: "Blue", hex: "#3B82F6", stock: 7 },
-      ],
-    },
-    {
-      size: "M",
-      colors: [
-        { name: "Black", hex: "#000000", stock: 12 },
-        { name: "Blue", hex: "#3B82F6", stock: 9 },
-        { name: "Green", hex: "#10B981", stock: 4 },
-      ],
-    },
-    {
-      size: "L",
-      colors: [
-        { name: "Black", hex: "#000000", stock: 6 },
-        { name: "White", hex: "#F5F5F5", stock: 5 },
-      ],
-    },
-    {
-      size: "XL",
-      colors: [
-        { name: "Black", hex: "#000000", stock: 3 },
-        { name: "Gray", hex: "#6B7280", stock: 4 },
-      ],
-    },
-  ],
-};
-const [selectedSize, setSelectedSize] = useState(variant.sizes[0].size);
-const availableColors = variant.sizes
-  .find((s) => s.size === selectedSize)
-  ?.colors.filter((c) => c.stock > 0) ?? [];
-
-
 
 
 
@@ -112,14 +63,16 @@ const availableColors = variant.sizes
       : i18n.language === "ku"
         ? product.attributes.nameKu
         : product.attributes.nameEn;;
-    const rating = Math.round(parseFloat(product.attributes.averageRating));
-    const ratingCount = product.attributes.ratingCount;
+  const rating = Math.round(parseFloat(product.attributes.averageRating));
+  const ratingCount = product.attributes.ratingCount;
   const effectivePrice = product.attributes.effectivePrice;
   const description = i18n.language === "ar"
       ? product.attributes.descriptionAr
       : i18n.language === "ku"
         ? product.attributes.descriptionKu
-        : product.attributes.descriptionEn;;
+        : product.attributes.descriptionEn;
+  const productSizes = product.included?.productSizes ?? [];
+  const productColors = product.included?.productColors ?? [];
 
 const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -161,7 +114,7 @@ function handleAddToCart() {
   
 
   return (
-  <div className="my-[60px] md:my-[100px] lg:my-[150px] px-4 md:px-8 lg:mx-[135px]">
+  <div className="my-[60px] md:my-[100px] lg:my-[150px] px-4 md:px-8 lg:mx-[75px] lg:w-9/10">
     
     {/* Breadcrumb */}
     <div className="mb-8 md:mb-[100px]">
@@ -174,17 +127,29 @@ function handleAddToCart() {
     <div className="flex flex-col lg:flex-row gap-8">
 
       {/* Thumbnail Images - hidden on mobile */}
-      <div className="hidden lg:flex flex-col gap-5">
+      {/* <div className="hidden lg:flex flex-col gap-5">
         <img src={image} className="aspect-square w-[170px] h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
         <img src={image} className="aspect-square w-[170px] h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
         <img src={image} className="aspect-square w-[170px] h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
         <img src={image} className="aspect-square w-[170px] h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
-      </div>
+      </div> */}
 
       {/* Main Image */}
-      <div className="w-full lg:w-auto">
+      {/* <div className="w-full lg:w-auto">
         <img src={image} className="w-full lg:w-[500px] h-[300px] md:h-[450px] lg:h-[600px] bg-[rgb(var(--color-grey))] px-[27px] py-[40px] lg:py-[154px] object-contain" />
+      </div> */}
+      <div className="flex flex-col-reverse lg:flex-row gap-8">
+
+      <div className="flex flex-row flex-wrap gap-4 lg:flex-col lg:flex-nowrap">
+        <img src={image} className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
+        <img src={image} className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
+        <img src={image} className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
+        <img src={image} className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain" />
       </div>
+
+ <div className="w-full lg:w-auto">
+        <img src={image} className="w-full lg:w-[500px] h-[300px] md:h-[450px] lg:h-[600px] bg-[rgb(var(--color-grey))] px-[27px] py-[40px] lg:py-[154px] object-contain" />
+      </div> </div>
 
       {/* Product Info */}
       <div className="flex flex-col w-full lg:max-w-100 gap-y-2.5">
@@ -218,49 +183,53 @@ function handleAddToCart() {
         <hr className="my-5" />
 
         {/* Colors */}
-        <div className="flex items-center">
-          <span className="text-[18px] md:text-[20px]">Colors :</span>
-          <div className="flex gap-3 ml-5 flex-wrap">
-            {availableColors.map((color) => (
-              <div
-                key={color.name}
-                onClick={() => setSelectedColor(color.name)}
-                className={`w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all hover:shadow-md
-                  ${selectedColor === color.name ? "ring-[1px] ring-gray-900 ring-offset-[1px]" : ""}`}
-              >
-                <span
-                  className="w-6 h-6 rounded-full"
-                  style={{ backgroundColor: color.hex }}
-                />
-              </div>
-            ))}
-          </div>
+{productColors.length > 0 && (
+  <div className="flex items-center">
+    <span className="text-[18px] md:text-[20px]">Colors :</span>
+    <div className="flex gap-3 ml-5 flex-wrap">
+      {productColors.map((color) => (
+        <div
+          key={color.id}
+          onClick={() => setSelectedColor(color.id)}
+          className={`w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all hover:shadow-md
+            ${selectedColor === color.id ? "ring-[1px] ring-gray-900 ring-offset-[1px]" : ""}`}
+        >
+          <span
+            className="w-6 h-6 rounded-full"
+            style={{ backgroundColor: color.attributes.hexCode }}
+          />
         </div>
+      ))}
+    </div>
+  </div>
+)}
 
         {/* Sizes */}
-        <div className="flex items-center flex-wrap gap-y-2">
-          <span className="text-[18px] md:text-[20px]">Size :</span>
-          <div className="flex gap-4 ml-6 flex-wrap">
-            {variant.sizes.map((s) => (
-              <Button
-                key={s.size}
-                onClick={() => {
-                  setSelectedSize(s.size);
-                  setSelectedColor(null);
-                }}
-                className={`aspect-square w-8 h-8 ${
-                  selectedSize === s.size
-                    ? "bg-[rgb(var(--color-primary-main))] text-white hover:bg-[rgb(var(--color-primary-main))]"
-                    : "hover:bg-[rgb(var(--color-primary-3))] hover:text-white"
-                }`}
-                variant="outline"
-                size=""
-              >
-                {s.size}
-              </Button>
-            ))}
-          </div>
-        </div>
+{productSizes.length > 0 && (
+  <div className="flex items-center flex-wrap gap-y-2">
+    <span className="text-[18px] md:text-[20px]">Size :</span>
+    <div className="flex gap-4 ml-6 flex-wrap">
+      {productSizes.map((s) => (
+        <Button
+          key={s.id}
+          onClick={() => {
+            setSelectedSize(s.id);
+            setSelectedColor(null);
+          }}
+          className={`aspect-square w-8 h-8 ${
+            selectedSize === s.id
+              ? "bg-[rgb(var(--color-primary-main))] text-white hover:bg-[rgb(var(--color-primary-main))]"
+              : "hover:bg-[rgb(var(--color-primary-3))] hover:text-white"
+          }`}
+          variant="outline"
+          size=""
+        >
+          {s.attributes.sizeLabel}
+        </Button>
+      ))}
+    </div>
+  </div>
+)}
 
         {/* Quantity + Add to Cart + Wishlist */}
         <div className="flex flex-wrap gap-2.5 items-center">
@@ -288,7 +257,10 @@ function handleAddToCart() {
           <Button
             className="h-11 w-full sm:w-[186px] text-[16px]"
             size=""
-            disabled={!selectedColor || !selectedSize}
+            disabled={
+  (productColors.length > 0 && !selectedColor) ||
+  (productSizes.length > 0 && !selectedSize)
+}
             onClick={handleAddToCart}
           >
             Add to cart

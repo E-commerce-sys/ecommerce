@@ -6,7 +6,7 @@ export async function productsAPI( id = null) {
 }
 
 export async function productAPI( id) {
-  const res = await axiosInstance.get(`/api/products/${id}`);
+  const res = await axiosInstance.get(`/api/products/${id}?include=productSizes,productColors`);
   return res.data.data;
 }
 

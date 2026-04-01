@@ -1,19 +1,24 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CartSummary from "../cart/CartSummary";
-import { getSimilarProducts,getWishlist } from "../wishlist/wishlistAPI";
+import { getSimilarProducts,categoryAPI } from "./relateditemsAPI";
+import { useParams } from "react-router-dom";
+import { productAPI } from "../products/productAPI";
+
 
 
 function RelatedItems() {
+  const { productId } = useParams();
   const {t}=useTranslation()
+  const [product, setProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
   async function fetchSimilar() {
     try {
-      const wishlistData = await getWishlist();
-      const similar = await getSimilarProducts(wishlistData);
+      const categoryId = await categoryAPI(productId);
+      const similar = await getSimilarProducts(categoryId);
       setProducts(similar.slice(0, 4));
     } catch (error) {
       console.error(error);
@@ -22,10 +27,9 @@ function RelatedItems() {
     }
   }
   fetchSimilar();
-}, []);
-
+}, [productId]);
   return (
-  <section className="w-full max-w-7xl mx-auto px-4 flex flex-col gap-10 mb-20">
+  <section className="w-9/10 max-w-7xl lg:mx-[75px] px-4 flex flex-col gap-10 mb-20 items-start ">
 
     {/* Header */}
     <div className="flex items-center justify-between">
