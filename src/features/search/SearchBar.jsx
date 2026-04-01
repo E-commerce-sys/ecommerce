@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import search from "../../assets/icons/search.svg";
 
@@ -11,14 +11,31 @@ function SearchBar() {
   const navigate = useNavigate();
 
   const [value, setValue] = useState("");
+  const [debouncedValue, setDebouncedValue] = useState("");
+
+  // ✅ debounce logic
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, 500); // <-- change delay here
+
+    return () => clearTimeout(timer);
+  }, [value]);
+
+  // ✅ navigation AFTER debounce
+  useEffect(() => {
+    const val = debouncedValue.trim();
+
+    if (val === "") {
+      // 🔥 RESET URL when cleared
+      navigate("/products");
+    } else {
+      navigate(`/products?search=${encodeURIComponent(val)}`);
+    }
+  }, [debouncedValue, navigate]);
 
   function handleChange(e) {
-    const val = e.target.value;
-    setValue(val);
-
-    if (val.trim() === "") return;
-
-    navigate(`/products?search=${encodeURIComponent(val)}`);
+    setValue(e.target.value);
   }
 
   return (
