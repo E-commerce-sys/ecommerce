@@ -157,9 +157,12 @@
     "sub": "Subtotal:",
     "shipping": "Shipping:",
     "total": "Total:",
-    "procees": "Procees to checkout",
+    "process": "Process to checkout",
     "free": "Free",
-    "valid": "Please enter valid quantities"
+    "valid": "Please enter valid quantities",
+    "save": "Save changes",
+    "saved": "Changes saved",
+    "please": "Please save your changes first"
   },
   "checkout": {
     "checkout": "Checkout",
