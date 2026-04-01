@@ -1,22 +1,25 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
 import { createContext, useContext, useState } from "react";
+import { getCartItems } from "../features/basket/api/getCartItems";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
+
+  const subtotal = Number(
+    cartItems
+      .reduce((sum, item) => sum + item.price * item.quantity, 0)
+      .toFixed(2),
   );
 
   const shipping = subtotal > 140 ? 0 : 20;
-  const total = subtotal + shipping;
+  const total = Number((subtotal + shipping).toFixed(2));
+  const [loading, setLoading] = useState(false);
 
-  //  update quantity
+  // ✅ quantity
   function updateQuantity(id, value) {
-    // allow empty input (user typing)
     if (value === "") {
       setCartItems((prev) =>
         prev.map((item) => (item.id === id ? { ...item, quantity: "" } : item)),
@@ -25,8 +28,6 @@ export function CartProvider({ children }) {
     }
 
     const quantity = Number(value);
-
-    // ignore invalid numbers
     if (isNaN(quantity) || quantity < 1) return;
 
     setCartItems((prev) =>
@@ -34,60 +35,104 @@ export function CartProvider({ children }) {
     );
   }
 
+  // ✅ color (no sizes inside color anymore)
   function updateColor(itemId, colorId) {
     setCartItems((prev) =>
-      prev.map((item) => {
-        if (item.id !== itemId) return item;
-
-        const selectedColor = item.colors.find((c) => c.id === colorId);
-
-        if (!selectedColor) return item;
-
-        // ✅ find first available size
-        const availableSize = selectedColor.sizes.find(
-          (size) => size.stock > 0,
-        );
-
-        return {
-          ...item,
-          selectedColorId: colorId,
-          selectedSizeId: availableSize ? availableSize.id : null,
-        };
-      }),
+      prev.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              selectedColorId: colorId,
+            }
+          : item,
+      ),
     );
   }
 
+  // ✅ size
   function updateSize(itemId, sizeId) {
-    setCart((prev) =>
+    setCartItems((prev) =>
       prev.map((item) =>
         item.id === itemId ? { ...item, selectedSizeId: sizeId } : item,
       ),
     );
   }
 
-  // 👉 delete item
+  // ✅ delete
   function removeItem(id) {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   }
 
-  // 👉 set from API later
-  function setCart(data) {
-    setCartItems(data);
+  // ✅ FETCH + TRANSFORM API
+  async function fetchCart() {
+    try {
+      setLoading(true);
+
+      const res = await getCartItems();
+      const cartItemsRaw = res.data.included.cartItems;
+
+      const mapped = cartItemsRaw.map((item) => {
+        const product = item.included.product;
+
+        const productColors = product.included.productColors || [];
+        const productSizes = product.included.productSizes || [];
+
+        const colors = productColors.map((c) => ({
+          id: Number(c.id),
+          name: c.attributes.name,
+        }));
+
+        const sizes = productSizes.map((s) => ({
+          id: Number(s.id),
+          name: s.attributes.name,
+        }));
+
+        return {
+          id: Number(item.id),
+          productId: Number(product.id),
+          img: product.attributes.primaryImage,
+
+          nameEn: product.attributes.nameEn,
+          nameAr: product.attributes.nameAr,
+          nameKu: product.attributes.nameKu,
+
+          price: Number(item.attributes.unitPrice),
+          quantity: item.attributes.quantity,
+
+          selectedColorId:
+            item.relationships.productColor.data?.id ||
+            (colors.length > 0 ? colors[0].id : null),
+
+          selectedSizeId:
+            item.relationships.productSize.data?.id ||
+            (sizes.length > 0 ? sizes[0].id : null),
+
+          colors,
+          sizes,
+        };
+      });
+
+      setCartItems(mapped);
+    } catch (err) {
+      console.error("Failed to fetch cart", err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <CartContext.Provider
       value={{
         cartItems,
+        loading,
         subtotal,
         shipping,
         total,
-        setCartItems,
         updateQuantity,
         updateColor,
         updateSize,
         removeItem,
-        setCart,
+        fetchCart,
       }}
     >
       {children}
@@ -95,7 +140,6 @@ export function CartProvider({ children }) {
   );
 }
 
-// 👉 custom hook (clean usage)
 export function useCart() {
   return useContext(CartContext);
 }

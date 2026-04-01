@@ -60,14 +60,6 @@ function Items() {
 
           <tbody>
             {cartItems.map((item) => {
-              const selectedColor = item.colors.find(
-                (c) => c.id === item.selectedColorId,
-              );
-
-              const selectedSize = selectedColor?.sizes.find(
-                (s) => s.id === item.selectedSizeId,
-              );
-
               return (
                 <tr
                   key={item.id}
@@ -81,7 +73,13 @@ function Items() {
                         alt=""
                         className="w-10 h-10 md:w-12 md:h-12 object-contain"
                       />
-                      <p className="text-sm md:text-base">{item.name}</p>
+                      <p className="text-sm md:text-base">
+                        {i18n.language === "ar"
+                          ? item.nameAr
+                          : i18n.language === "ku"
+                            ? item.nameKu
+                            : item.nameEn}
+                      </p>
                     </div>
                   </td>
 
@@ -90,46 +88,44 @@ function Items() {
 
                   {/* COLOR */}
                   <td className="py-6 px-3 md:px-6 md:py-8.5">
-                    <select
-                      value={item.selectedColorId}
-                      onChange={(e) =>
-                        updateColor(item.id, Number(e.target.value))
-                      }
-                      className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11  outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] px-2 cursor-pointer"
-                    >
-                      {item.colors.map((color) => (
-                        <option
-                          key={color.id}
-                          value={color.id}
-                          disabled={color.totalStock === 0}
-                          className="disabled:text-[rgb(var(--color-text-main))]/40"
-                        >
-                          {color.name}{" "}
-                        </option>
-                      ))}
-                    </select>
+                    {item.colors.length > 0 ? (
+                      <select
+                        value={item.selectedColorId || ""}
+                        onChange={(e) =>
+                          updateColor(item.id, Number(e.target.value))
+                        }
+                        className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11  outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] px-2 cursor-pointer"
+                      >
+                        {item.colors.map((color) => (
+                          <option key={color.id} value={color.id}>
+                            {color.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span>-</span>
+                    )}
                   </td>
 
                   {/* SIZE */}
                   <td className="py-6 px-3 md:px-6 md:py-8.5">
-                    <select
-                      value={item.selectedSizeId}
-                      onChange={(e) =>
-                        updateSize(item.id, Number(e.target.value))
-                      }
-                      className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11  outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] px-2 cursor-pointer"
-                    >
-                      {selectedColor?.sizes.map((size) => (
-                        <option
-                          key={size.id}
-                          value={size.id}
-                          disabled={size.stock === 0}
-                          className="disabled:text-[rgb(var(--color-text-main))]/40"
-                        >
-                          {size.name}
-                        </option>
-                      ))}
-                    </select>
+                    {item.sizes.length > 0 ? (
+                      <select
+                        value={item.selectedSizeId || ""}
+                        onChange={(e) =>
+                          updateSize(item.id, Number(e.target.value))
+                        }
+                        className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11  outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] px-2 cursor-pointer"
+                      >
+                        {item.sizes.map((size) => (
+                          <option key={size.id} value={size.id}>
+                            {size.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span>-</span>
+                    )}
                   </td>
 
                   {/* QUANTITY */}
@@ -137,12 +133,11 @@ function Items() {
                     <input
                       type="number"
                       min="1"
-                      max={selectedSize?.stock || 1}
                       value={item.quantity}
                       onChange={(e) => updateQuantity(item.id, e.target.value)}
                       onBlur={() => {
                         if (item.quantity === "" || item.quantity < 1) {
-                          updateQuantity(item.id, 1); // reset to 1
+                          updateQuantity(item.id, 1);
                         }
                       }}
                       className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 w-18 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))]"
@@ -152,7 +147,7 @@ function Items() {
                   {/* SUBTOTAL */}
                   <td className="py-6 px-3 md:px-6 md:py-8.5">
                     <div className="flex justify-between items-center">
-                      <p>${item.price * item.quantity}</p>
+                      <p>${Number((item.price * item.quantity).toFixed(2))}</p>
 
                       <img
                         className="cursor-pointer"
@@ -172,71 +167,67 @@ function Items() {
       {/* MOBILE */}
       <div className="flex flex-col gap-4 sm:hidden px-4 py-4">
         {cartItems.map((item) => {
-          const selectedColor = item.colors.find(
-            (c) => c.id === item.selectedColorId,
-          );
-
-          const selectedSize = selectedColor?.sizes.find(
-            (s) => s.id === item.selectedSizeId,
-          );
-
           return (
             <div
               key={item.id}
               className="relative border border-[rgb(var(--color-border))] shadow rounded-lg p-4 flex flex-col gap-4"
             >
-              {/*DELETE BUTTON */}
               <img
                 src={cancel}
                 className="absolute top-3 right-3 cursor-pointer w-5 h-5"
                 onClick={() => handleDelete(item.id)}
               />
 
-              {/* ✅ PRODUCT CENTERED */}
               <div className="flex flex-col items-center gap-2">
                 <img src={item.img} className="w-16 h-16 object-contain" />
-                <p className="text-sm text-center">{item.name}</p>
+                <p className="text-sm text-center">
+                  {i18n.language === "ar"
+                    ? item.nameAr
+                    : i18n.language === "ku"
+                      ? item.nameKu
+                      : item.nameEn}
+                </p>
               </div>
 
               {/* COLOR */}
-              <div className="flex gap-4 w-full items-center">
-                <p>Color:</p>
-                <select
-                  value={item.selectedColorId}
-                  onChange={(e) => updateColor(item.id, Number(e.target.value))}
-                  className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
-                >
-                  {item.colors.map((color) => (
-                    <option
-                      key={color.id}
-                      value={color.id}
-                      disabled={color.totalStock === 0}
-                    >
-                      {color.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {item.colors.length > 0 && (
+                <div className="flex gap-4 w-full items-center">
+                  <p>Color:</p>
+                  <select
+                    value={item.selectedColorId || ""}
+                    onChange={(e) =>
+                      updateColor(item.id, Number(e.target.value))
+                    }
+                    className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
+                  >
+                    {item.colors.map((color) => (
+                      <option key={color.id} value={color.id}>
+                        {color.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* SIZE */}
-              <div className="flex gap-4 w-full items-center">
-                <p>Size:</p>
-                <select
-                  value={item.selectedSizeId}
-                  onChange={(e) => updateSize(item.id, Number(e.target.value))}
-                  className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
-                >
-                  {selectedColor?.sizes.map((size) => (
-                    <option
-                      key={size.id}
-                      value={size.id}
-                      disabled={size.stock === 0}
-                    >
-                      {size.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              {item.sizes.length > 0 && (
+                <div className="flex gap-4 w-full items-center">
+                  <p>Size:</p>
+                  <select
+                    value={item.selectedSizeId || ""}
+                    onChange={(e) =>
+                      updateSize(item.id, Number(e.target.value))
+                    }
+                    className="border border-[rgb(var(--color-text-main))]/40 rounded text-center h-11 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))] w-full"
+                  >
+                    {item.sizes.map((size) => (
+                      <option key={size.id} value={size.id}>
+                        {size.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               {/* QUANTITY */}
               <div className="flex gap-4 w-full items-center">
@@ -244,7 +235,6 @@ function Items() {
                 <input
                   type="number"
                   min="1"
-                  max={selectedSize?.stock || 1}
                   value={item.quantity}
                   onChange={(e) => updateQuantity(item.id, e.target.value)}
                   onBlur={() => {
@@ -256,7 +246,6 @@ function Items() {
                 />
               </div>
 
-              {/* SUBTOTAL */}
               <div className="flex justify-between">
                 <span>
                   {t("cart.subtotal")}: ${item.price * item.quantity}

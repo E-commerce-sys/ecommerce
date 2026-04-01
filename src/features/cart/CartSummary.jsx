@@ -45,30 +45,6 @@ function CartSummary({ product, className, icon }) {
     setShowAuthModal(true);
   }
 
-  function handleAddToCart() {
-    if (!loggedIn) {
-      openAuthModal("cart");
-      return;
-    }
-  }
-
-  //   async function handleFavorite() {
-  //   if (!loggedIn) {
-  //     openAuthModal("favorite");
-  //     return;
-  //   }
-
-  //   try {
-  //     const res = await postWishlist(product.id);
-  //     console.log(res);
-  //     setIsFavorite((prev) => !prev);
-  //     window.scrollTo({ top: 0, behavior: "smooth" });
-
-  //   } catch (error) {
-  //     console.error("Failed to update wishlist:", error.response?.data || error.message);
-  //   }window.location.reload();
-  // }
-
   async function handleFavorite() {
     if (!loggedIn) {
       openAuthModal("favorite");
@@ -89,10 +65,6 @@ function CartSummary({ product, className, icon }) {
       );
     }
   }
-  // async function handleOnFavorite(id){
-  //   const res = await postWishlist(id)
-  //   console.log(res)
-  // }
 
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -116,7 +88,6 @@ function CartSummary({ product, className, icon }) {
           img={image}
           className={className}
           isNew={isNew}
-          onAddToCart={handleAddToCart}
           onFavorite={handleFavorite}
           isFavorite={isFavorite}
           icon={icon}
