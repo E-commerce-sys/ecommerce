@@ -18,6 +18,7 @@ import {
 import deliveryIcon from "../../assets/icons/delivery.svg";
 import returnIcon from "../../assets/icons/return.svg";
 import AuthModal from "../auth/AuthModal";
+import { addToCart } from "../basket/api/addToCart";
 
 function ProductShowcase() {
   const { loggedIn } = useAuth();
@@ -32,7 +33,8 @@ function ProductShowcase() {
   const location = useLocation();
   const [authAction, setAuthAction] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const from = location.state?.from || "/";
 
   function openAuthModal(action) {
@@ -114,19 +116,29 @@ function ProductShowcase() {
     }
   }
 
-  function handleAddToCart() {
+  async function handleAddToCart() {
     if (!loggedIn) {
       openAuthModal("cart");
       return;
     }
-    console.log("Adding to cart:", {
-      productId,
-      selectedSize,
-      selectedColor,
-      quantity,
-    });
-  }
+    try {
+      const res = await addToCart(
+        productId,
+        selectedSize,
+        selectedColor,
+        quantity,
+      );
+      setSuccessMessage(res.message || "Product added to cart successfully!");
+      console.log("Add to cart response:", res);
+    } catch (error) {
+      const apiError =
+        error.response?.data?.errors?.[0]?.message || "Failed to add to cart";
 
+      setErrorMessage(apiError);
+
+      console.error("Failed to add to cart:", error.response?.data);
+    }
+  }
   const modalTitle =
     authAction === "favorite" ? t("products.save") : t("products.ready");
 
@@ -315,7 +327,9 @@ function ProductShowcase() {
                 />
               </button>
             </div>
-
+            <p className={`text-sm ${errorMessage ? 'text-red-600' : 'text-green-600'}`}>
+              {errorMessage ? errorMessage : successMessage}
+            </p>
             {/* Delivery Info */}
             <div className="border border-gray-300 rounded w-full mt-8 lg:mt-12.5">
               <div className="flex items-center gap-4 p-4 border-b border-gray-300">
