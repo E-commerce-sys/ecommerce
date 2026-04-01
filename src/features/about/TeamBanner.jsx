@@ -11,7 +11,6 @@ import employee2 from "../../assets/img/employee2.svg";
 import employee3 from "../../assets/img/employee3.svg";
 
 const ITEMS_PER_PAGE = 3;
-
 export default function TeamBanner() {
   const { t } = useTranslation();
   const baseTeam = [

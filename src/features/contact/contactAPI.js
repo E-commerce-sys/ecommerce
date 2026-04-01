@@ -18,7 +18,7 @@ export async function sendContactMessage(form) {
 
     return response.data.data;
   } catch (error) {
-    console.log(error.response?.data);
+    console.error(error.response?.data);
 
     // handle JSON:API errors
     const apiError = error?.response?.data;
