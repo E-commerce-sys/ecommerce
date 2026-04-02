@@ -115,16 +115,35 @@ function RegisterForm() {
       const apiErrors = e?.response?.data?.errors;
 
       if (apiErrors?.length) {
-        const emailError = apiErrors.find(
-          (err) => err.source === "data.attributes.email",
-        );
+        const nextErrors = {};
 
-        if (emailError) {
-          setErrors((prev) => ({
-            ...prev,
-            email: ["Email already registered"],
-          }));
-        }
+        apiErrors.forEach((err) => {
+          const source = err?.source ? String(err.source) : "";
+          const message = err?.message ? String(err.message) : "";
+          if (!message) return;
+
+          // Backend uses JSON:API-ish sources like:
+          // - data.attributes.firstName
+          // - data.attributes.lastName
+          // - data.attributes.email
+          // - data.attributes.password
+          // - data.attributes.confirmPassword (sometimes) or mismatched password confirmation
+          const lowerMsg = message.toLowerCase();
+
+          let key = null;
+          if (source.includes("firstName")) key = "firstName";
+          else if (source.includes("lastName")) key = "lastName";
+          else if (source.includes("email")) key = "email";
+          else if (source.includes("password")) {
+            // Some backends send "confirmation" mismatch but still mark the source as password.
+            key = lowerMsg.includes("confirmation") ? "confirmPassword" : "password";
+          } else if (source.includes("confirmPassword")) key = "confirmPassword";
+
+          if (!key) return;
+          nextErrors[key] = [...(nextErrors[key] || []), message];
+        });
+
+        setErrors(nextErrors);
       }
     } finally {
       setLoading(false);
