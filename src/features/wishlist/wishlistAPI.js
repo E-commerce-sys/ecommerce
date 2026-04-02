@@ -1,4 +1,4 @@
-import axiosInstance from "../../axios/axiosInstance";
+import axiosInstance from "../../axios/axiosInterceptor";
 
 export async function getWishlist(page) {
   const res = await axiosInstance(

@@ -46,9 +46,9 @@ function Navbar() {
   return (
     <div className="fixed top-0 left-0 w-full py-3 border-b border-b-[rgb(var(--color-border))] bg-white z-1000">
       {" "}
-      <div className="flex w-full text-lg justify-around items-center text-[rgb(var(--color-text-main))]">
+      <div className="flex w-full min-w-0 max-w-full items-center justify-between gap-2 px-2 text-lg text-[rgb(var(--color-text-main))] md:gap-3 md:px-4">
         {/* Logo */}
-        <NavLink to="/">
+        <NavLink to="/" className="shrink-0">
           <div className="flex gap-2 items-center">
             <img src={logo} alt="" className="w-6 h-8 md:w-7 md:h-9" />
             <p className="font-bold text-lg md:text-xl lg:text-2xl cursor-pointer ">
@@ -57,13 +57,13 @@ function Navbar() {
           </div>
         </NavLink>
 
-        {/* Search (always visible) */}
-        <div>
+        {/* Search */}
+        <div className="min-w-0 max-w-full flex-1 px-1 md:px-2">
           <SearchBar />
         </div>
 
         {/* Desktop Right Side */}
-        <div className="hidden lg:flex justify-between items-center gap-5">
+        <div className="hidden shrink-0 items-center justify-end gap-3 lg:flex lg:gap-5">
           <LanguageList />
 
           <NavLink

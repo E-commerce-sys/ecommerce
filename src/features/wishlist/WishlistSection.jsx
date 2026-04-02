@@ -16,7 +16,7 @@ useEffect(() => {
   fetchCount();
 }, []);
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 flex flex-col gap-10">
+    <section className="mx-auto flex w-full min-w-0 max-w-[1240px] flex-col gap-10 px-5 md:px-10">
       
       {/* Header */}
       <div className="flex items-center justify-between">

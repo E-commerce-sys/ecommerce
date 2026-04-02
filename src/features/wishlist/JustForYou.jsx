@@ -55,7 +55,7 @@ function JustForYou() {
 }, []);
 
   return (
-  <section className="w-full max-w-7xl mx-auto px-4 flex flex-col gap-10">
+  <section className="mx-auto flex w-full min-w-0 max-w-[1240px] flex-col gap-10 px-5 md:px-10">
 
     {/* Header */}
     <div className="flex items-center justify-between">
@@ -65,11 +65,11 @@ function JustForYou() {
       </div>
     </div>
 
-    {/* Products */}
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+    {/* Products — same grid/card sizing as home */}
+    <div className="grid w-full min-w-0 max-w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-3 xl:grid-cols-4">
       {loading
         ? Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-64 bg-gray-100 animate-pulse rounded-lg" />
+            <div key={i} className="aspect-square min-h-48 animate-pulse rounded-lg bg-gray-100" />
           ))
         : products.map((p) => {
             const product = {
@@ -89,7 +89,15 @@ function JustForYou() {
                 isInWishList: p.attributes.isInWishList ?? false,
               },
             };
-            return <CartSummary key={product.id} product={product} />;
+            return (
+              <div key={product.id} className="min-w-0">
+                <CartSummary
+                  product={product}
+                  wrapperClassName="flex w-full min-w-0 flex-col gap-3 m-0"
+                  className="aspect-square w-full min-w-0"
+                />
+              </div>
+            );
           })}
     </div>
 

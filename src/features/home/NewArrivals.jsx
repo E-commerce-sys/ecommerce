@@ -19,10 +19,10 @@ function NewArrivals({ data }) {
         : "descriptionEn";
 
   return (
-    <section className="flex justify-center py-12">
-      <div className="flex flex-col gap-2 md:gap-8">
+    <section className="flex justify-center py-12 w-full min-w-0 overflow-x-hidden">
+      <div className="flex w-full min-w-0 max-w-[1240px] flex-col gap-2 md:gap-8 px-5 md:px-10">
         {/* Header */}
-        <div className="flex justify-between mx-5 md:mx-10 items-center">
+        <div className="flex justify-between items-center">
           <div className="flex flex-col gap-2 md:gap-5">
             <div className="flex items-center gap-2 md:gap-4">
               <span className="w-3 h-6 md:w-4 md:h-7 lg:w-5 lg:h-8 bg-[rgb(var(--color-primary-main))] rounded-sm"></span>
@@ -37,12 +37,12 @@ function NewArrivals({ data }) {
           </div>
         </div>
 
-        {/* data */}
-        <div className="flex justify-center px-5 md:px-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[600px_600px] gap-2 justify-center">
+        {/* data: two columns only from xl (1280px); lg is single column to avoid 600+600px overflow */}
+        <div className="flex w-full min-w-0 justify-center">
+          <div className="grid w-full min-w-0 max-w-full grid-cols-1 gap-2 xl:grid-cols-2 xl:max-w-[1224px]">
             {/* PLAYSTATION */}
             {data[0] && (
-              <div className="relative w-full lg:w-142.5 h-98 lg:h-150 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-4 text-white">
+              <div className="relative h-98 w-full min-w-0 overflow-hidden rounded-md bg-[rgb(var(--color-bg-dark))] p-4 text-white flex items-end xl:h-150 xl:w-full xl:max-w-[570px]">
                 <img
                   src={data[0].attributes.newArrivalImage}
                   className="absolute right-0 bottom-0 max-h-[90%] object-contain"
@@ -65,10 +65,10 @@ function NewArrivals({ data }) {
             )}
 
             {/* RIGHT SIDE */}
-            <div className="grid grid-rows-[auto_auto] gap-2">
+            <div className="grid min-w-0 w-full grid-rows-[auto_auto] gap-2 xl:max-w-[570px]">
               {/* WOMEN */}
               {data[1] && (
-                <div className="relative w-full lg:w-142.5 h-48 lg:h-77 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-center p-8 text-white">
+                <div className="relative h-48 w-full min-w-0 overflow-hidden rounded-md bg-[rgb(var(--color-bg-dark))] p-8 text-white flex items-center xl:h-77">
                   <img
                     src={data[1].attributes.newArrivalImage}
                     className="absolute right-0 bottom-0 max-h-[90%] object-contain"
@@ -91,9 +91,9 @@ function NewArrivals({ data }) {
               )}
 
               {/* SPEAKER + PERFUME */}
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid min-w-0 w-full grid-cols-2 gap-2">
                 {data[2] && (
-                  <div className="relative w-full lg:w-67.5 h-48 lg:h-71 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-6 text-white">
+                  <div className="relative h-48 w-full min-w-0 overflow-hidden rounded-md bg-[rgb(var(--color-bg-dark))] p-6 text-white flex items-end xl:h-71">
                     <img
                       src={data[2].attributes.newArrivalImage}
                       className="absolute max-h-[90%] max-w-[90%] object-contain"
@@ -116,7 +116,7 @@ function NewArrivals({ data }) {
                 )}
 
                 {data[3] && (
-                  <div className="relative w-full lg:w-67.5 h-48 lg:h-71 bg-[rgb(var(--color-bg-dark))] rounded-md overflow-hidden flex items-end p-6 text-white">
+                  <div className="relative h-48 w-full min-w-0 overflow-hidden rounded-md bg-[rgb(var(--color-bg-dark))] p-6 text-white flex items-end xl:h-71">
                     <img
                       src={data[3].attributes.newArrivalImage}
                       className="absolute max-h-[90%] max-w-[90%] object-contain"

@@ -12,7 +12,7 @@ import secureIcon from "../../assets/icons/secure.svg";
 function Services() {
   const { t } = useTranslation();
   return (
-    <div className="grid grid-cols-3 gap-6 lg:gap-10 py-20 px-6 lg:px-20 w-full">
+    <div className="grid w-full min-w-0 max-w-full grid-cols-3 gap-4 px-4 py-20 sm:gap-6 lg:gap-10 lg:px-20">
       <ServiceItemSimple
         Icon={deliveryIcon}
         title={t("services.freeDeliveryTitle")}

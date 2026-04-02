@@ -13,7 +13,7 @@ import EmptyStar from "../../assets/icons/empty-star.svg";
 import { postWishlist, deleteWishlistItem } from "../wishlist/wishlistAPI";
 import { Link, useLocation } from "react-router-dom";
 
-function CartSummary({ product, className, icon }) {
+function CartSummary({ product, className, icon, wrapperClassName }) {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const attributes = product.attributes;
@@ -83,7 +83,11 @@ function CartSummary({ product, className, icon }) {
 
   return (
     <>
-      <div className="flex flex-col gap-5 m-5">
+      <div
+        className={
+          wrapperClassName ?? "flex flex-col gap-5 m-5"
+        }
+      >
         <CartItem
           img={image}
           className={className}

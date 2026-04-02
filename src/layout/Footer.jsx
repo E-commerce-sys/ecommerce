@@ -16,8 +16,8 @@ function Footer() {
   const { loggedIn } = useAuth();
 
   return (
-    <footer className="bg-[rgb(var(--color-bg-dark))] text-white py-10 w-full flex items-center justify-center">
-      <div className="lg:gap-30 md:gap-20 mx-2 flex flex-wrap justify-center gap-10 w-full">
+    <footer className="flex w-full min-w-0 max-w-full items-center justify-center overflow-x-hidden bg-[rgb(var(--color-bg-dark))] py-10 text-white">
+      <div className="mx-2 flex w-full min-w-0 max-w-full flex-wrap justify-center gap-10 md:gap-20 lg:gap-30">
         <div className=" flex flex-col gap-4 ">
           <h3 className="font-bold text-lg ">Exclusive</h3>
           <p className="font-semibold text-[rgb(var(--color-text-main-1))]">

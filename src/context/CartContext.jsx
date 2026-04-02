@@ -77,7 +77,6 @@ export function CartProvider({ children }) {
       );
 
       await removeCart(productId);
-      console.log("deleted");
       setHasChanges(false);
     } catch (err) {
       console.error("Failed to remove item", err);
@@ -98,7 +97,6 @@ export function CartProvider({ children }) {
 
       setHasChanges(false);
       setIsSaved(true);
-      console.log(cartItems);
     } catch (err) {
       console.error("Failed to save cart", err);
     }

@@ -65,11 +65,11 @@ function ProductList({ initialProducts = [] }) {
   ]);
 
   return (
-    <section className="flex justify-center py-12 flex-wrap">
-      <div className="flex flex-col gap-2 md:gap-8 w-full">
-        <div className="flex flex-wrap gap-4 md:gap-8 justify-start w-full px-4">
+    <section className="flex w-full min-w-0 flex-wrap justify-center overflow-x-hidden py-12">
+      <div className="flex w-full min-w-0 flex-col gap-2 md:gap-8">
+        <div className="grid w-full min-w-0 max-w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-3 xl:grid-cols-4">
           {products.length === 0 ? (
-            <div className="w-full flex flex-col items-center justify-center py-20 text-center">
+            <div className="col-span-full flex w-full flex-col items-center justify-center py-20 text-center">
               <p className="text-xl font-semibold text-[rgb(var(--color-text-main))]">
                 {t("products.noProduct")}
               </p>
@@ -80,20 +80,18 @@ function ProductList({ initialProducts = [] }) {
             </div>
           ) : (
             products.map((product) => (
-              <div
-                key={product.id}
-                className="w-[calc(50%-0.5rem)] md:w-[calc(33.33%-1.5rem)] lg:w-[calc(33.33%-2rem)]"
-              >
+              <div key={product.id} className="min-w-0">
                 <CartItemSummary
                   product={product}
-                  className="w-full aspect-square"
+                  wrapperClassName="flex w-full min-w-0 flex-col gap-3 m-0"
+                  className="aspect-square w-full min-w-0"
                 />
               </div>
             ))
           )}
         </div>
 
-        <div className="flex flex-col items-center gap-4 px-4">
+        <div className="flex flex-col items-center gap-4">
           <Pagination />
         </div>
       </div>

@@ -1,45 +1,81 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 import search from "../../assets/icons/search.svg";
+
+function readProductsSearchQuery(pathname, search) {
+  if (pathname !== "/products") return "";
+  return new URLSearchParams(search).get("search") || "";
+}
 
 function SearchBar() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [value, setValue] = useState("");
-  const [debouncedValue, setDebouncedValue] = useState("");
+  const urlSearch = useMemo(
+    () => readProductsSearchQuery(location.pathname, location.search),
+    [location.pathname, location.search],
+  );
 
-  // ✅ debounce logic
+  const [value, setValue] = useState(urlSearch);
+  const [debouncedValue, setDebouncedValue] = useState(urlSearch);
+
+  // On /products: mirror ?search= in the input. Elsewhere: empty bar (avoid hijacking other routes).
+  useEffect(() => {
+    if (location.pathname !== "/products") {
+      setValue("");
+      setDebouncedValue("");
+      return;
+    }
+    const q = readProductsSearchQuery(location.pathname, location.search);
+    setValue(q);
+    setDebouncedValue(q);
+  }, [location.pathname, location.search]);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedValue(value);
-    }, 500); // <-- change delay here
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [value]);
 
-  // ✅ navigation AFTER debounce
+  const skipFirstNavigation = useRef(true);
+
   useEffect(() => {
     const val = debouncedValue.trim();
+    const onProducts = location.pathname === "/products";
+    const hasSearchParam = Boolean(
+      readProductsSearchQuery(location.pathname, location.search),
+    );
+
+    if (skipFirstNavigation.current) {
+      skipFirstNavigation.current = false;
+      if (val === "") return;
+      navigate(`/products?search=${encodeURIComponent(val)}`, { replace: true });
+      return;
+    }
 
     if (val === "") {
-      // 🔥 RESET URL when cleared
-      navigate("/products");
-    } else {
-      navigate(`/products?search=${encodeURIComponent(val)}`);
+      if (onProducts && hasSearchParam) {
+        navigate("/products", { replace: true });
+      }
+      return;
     }
-  }, [debouncedValue, navigate]);
+
+    navigate(`/products?search=${encodeURIComponent(val)}`, { replace: true });
+  }, [debouncedValue, navigate, location.pathname, location.search]);
 
   function handleChange(e) {
     setValue(e.target.value);
   }
 
   return (
-    <div className="relative">
+    <div className="relative mx-auto w-full max-w-[520px] min-w-0">
       <img
         src={search}
         alt="search"
@@ -52,9 +88,9 @@ function SearchBar() {
         onChange={handleChange}
         placeholder={t("navbar.search")}
         className="
-          lg:w-130
-          md:w-100
-          w-50
+          w-full
+          min-w-0
+          max-w-full
           pl-10
           pr-4
           py-2

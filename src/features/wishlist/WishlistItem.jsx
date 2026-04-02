@@ -100,8 +100,8 @@ function WishlistItems({ icon }) {
   return (
     <div className="flex flex-col gap-8 w-full min-h-0">
 
-      {/* Products */}
-      <div className="flex flex-wrap w-full min-h-0">
+      {/* Products — same grid/card sizing as home */}
+      <div className="grid w-full min-w-0 max-w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-3 xl:grid-cols-4">
         {products.map((item) => {
           const p = item.included.product;
 
@@ -124,11 +124,13 @@ function WishlistItems({ icon }) {
           };
 
           return (
-            <div key={item.id} style={{ width: "25%" }} className="shrink-0 grow-0 overflow-hidden">
+            <div key={item.id} className="min-w-0">
               <CartSummary
                 product={product}
                 icon={icon}
                 wishlistItemId={item.id}
+                wrapperClassName="flex w-full min-w-0 flex-col gap-3 m-0"
+                className="aspect-square w-full min-w-0"
               />
             </div>
           );

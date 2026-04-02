@@ -27,7 +27,7 @@ function RelatedItems() {
     fetchSimilar();
   }, [productId]);
   return (
-    <section className="w-9/10 max-w-7xl lg:mx-18.75 px-4 flex flex-col gap-10 mb-20 items-start ">
+    <section className="mx-auto mb-20 flex w-full min-w-0 max-w-[1240px] flex-col items-start gap-10 px-5 md:px-10">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -38,13 +38,13 @@ function RelatedItems() {
         </div>
       </div>
 
-      {/* Products */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {/* Products — same grid/card sizing as home BestProducts / FeaturedProducts */}
+      <div className="grid w-full min-w-0 max-w-full grid-cols-2 gap-4 md:grid-cols-3 md:gap-3 xl:grid-cols-4">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="h-64 bg-gray-100 animate-pulse rounded-lg"
+                className="aspect-square min-h-48 animate-pulse rounded-lg bg-gray-100"
               />
             ))
           : products.map((p) => {
@@ -65,7 +65,15 @@ function RelatedItems() {
                   isInWishList: p.attributes.isInWishList ?? false,
                 },
               };
-              return <CartSummary key={product.id} product={product} />;
+              return (
+                <div key={product.id} className="min-w-0">
+                  <CartSummary
+                    product={product}
+                    wrapperClassName="flex w-full min-w-0 flex-col gap-3 m-0"
+                    className="aspect-square w-full min-w-0"
+                  />
+                </div>
+              );
             })}
       </div>
     </section>

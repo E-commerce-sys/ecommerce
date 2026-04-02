@@ -58,6 +58,15 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
+  useEffect(() => {
+    const onUnauthorized = () => {
+      setLoggedIn(false);
+      setUser(null);
+    };
+    window.addEventListener("auth:unauthorized", onUnauthorized);
+    return () => window.removeEventListener("auth:unauthorized", onUnauthorized);
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{ loggedIn, user, saveUserName, login, logout }}

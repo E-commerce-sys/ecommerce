@@ -205,7 +205,7 @@ function Items() {
               {/* COLOR */}
               {item.colors.length > 0 && (
                 <div className="flex gap-4 w-full justify-between  items-center">
-                  <p>Color:</p>
+                  <p className="w-[20%]">Color:</p>
                   <select
                     value={item.selectedColorId || ""}
                     onChange={(e) => {
@@ -225,7 +225,7 @@ function Items() {
               {/* SIZE */}
               {item.sizes.length > 0 && (
                 <div className="flex gap-4 w-full justify-between  items-center">
-                  <p>Size:</p>
+                  <p className="w-[20%]">Size:</p>
                   <select
                     value={item.selectedSizeId || ""}
                     onChange={(e) => {
@@ -244,7 +244,7 @@ function Items() {
 
               {/* QUANTITY */}
               <div className="flex gap-4 w-full justify-between items-center">
-                <p>Quantity:</p>
+                <p className="w-[20%]">Quantity:</p>
                 <input
                   type="number"
                   min="1"
@@ -285,22 +285,14 @@ function Items() {
         </button>
         <button
           onClick={saveCart}
-          className={`mx-4 md:mx-10 lg:mx-40 py-2 px-2 md:py-4 md:px-6 w-fit flex items-center gap-2 border-2 rounded transition-all duration-300 font-medium text-sm md:text-base ${
-            hasChanges
-              ? "border-red-500 text-red-500"
-              : isSaved
-                ? "border-green-500 text-green-500"
-                : "border-[rgb(var(--color-border))] text-[rgb(var(--color-text-main))]"
-          }`}
+          className={`mx-4 md:mx-10 lg:mx-40 py-2 px-2 md:py-4 md:px-6 w-fit flex items-center gap-2 border-2 rounded transition-all duration-300 text-sm md:text-base border-[rgb(var(--color-border))] text-[rgb(var(--color-text-main))] cursor-pointer`}
         >
           {hasChanges ? (
             <div className="flex gap-1 justify-center items-center">
-              <img src={cross} alt="Cross" className="w-5 h-5" />
               <p>{t("cart.save")}</p>
             </div>
           ) : isSaved ? (
             <div className="flex gap-1 justify-center items-center">
-              <img src={check} alt="Check" className="w-5 h-5" />
               <p>{t("cart.saved") || "Saved"}</p>
             </div>
           ) : (

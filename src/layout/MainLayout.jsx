@@ -13,7 +13,7 @@ function MainLayout() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       {/* Page content */}
-      <main className="flex-1">
+      <main className="min-w-0 flex-1 overflow-x-hidden">
         {isLoading ? (
           <div className="flex justify-center items-center py-40">
             <Spinner />

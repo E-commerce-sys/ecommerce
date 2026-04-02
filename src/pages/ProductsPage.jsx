@@ -13,7 +13,7 @@ function ProductsPage() {
   return (
     <ProductProvider initialTotalPages={totalPages}>
       <CategoryMenu categories={categories} />
-      <div className="w-full px-4 md:px-8 py-8 ">
+      <div className="mx-auto w-full min-w-0 max-w-[1240px] px-5 py-8 md:px-10">
         <Filters />
         <ProductList initialProducts={products} />
       </div>

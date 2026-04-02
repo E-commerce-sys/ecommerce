@@ -49,7 +49,7 @@ function BannerSlider({ banners }) {
           {banners.map((banner) => (
             <div
               key={banner.id}
-              className="w-full shrink-0 h-80 bg-[rgb(var(--color-bg-dark))] text-white flex items-center justify-between px-30"
+              className="flex h-80 w-full shrink-0 items-center justify-between bg-[rgb(var(--color-bg-dark))] px-6 text-white md:px-12 lg:px-20 xl:px-30"
             >
               {/* TEXT */}
               <div className="flex flex-col gap-4 max-w-100">

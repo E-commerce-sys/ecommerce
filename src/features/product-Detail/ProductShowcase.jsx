@@ -133,6 +133,10 @@ function ProductShowcase() {
       }
       setIsWishlisted((prev) => !prev);
     } catch (error) {
+      if (error.response?.status === 401) {
+        openAuthModal("favorite");
+        return;
+      }
       console.error(
         "Failed to update wishlist:",
         error.response?.data || error.message,
@@ -155,6 +159,11 @@ function ProductShowcase() {
       setSuccessMessage(res.message || "Product added to cart successfully!");
       console.log("Add to cart response:", res);
     } catch (error) {
+      if (error.response?.status === 401) {
+        setErrorMessage(t("products.sessionExpired"));
+        openAuthModal("cart");
+        return;
+      }
       const apiError =
         error.response?.data?.errors?.[0]?.message || "Failed to add to cart";
 
