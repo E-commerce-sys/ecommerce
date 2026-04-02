@@ -184,6 +184,17 @@
     "moveToCart": "نقل الكل إلى السلة",
     "justForYou": "خصيصاً لك"
   },
+  "myAccount": {
+    "account": "حسابي",
+    "editProfile": "تعديل الملف الشخصي",
+    "edit": "تعديل",
+    "email": "البريد الإلكتروني",
+    "passwordChanges": "تغيير كلمة المرور",
+    "saveChanges": "حفظ التغييرات",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور الجديدة"
+  },
   "errors": {
     "generic": {
       "title": "حدث خطأ ما",

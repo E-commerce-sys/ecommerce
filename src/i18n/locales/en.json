@@ -190,6 +190,15 @@
     "justForYou": "Just for you"
   },
   "myAccount": {
+    "account": "My Account",
+    "editProfile":"Edit Your Profile",
+    "edit":"Edit",
+    "email":"Email",
+    "passwordChanges":"Password Changes",
+    "saveChanges":"Save Changes",
+    "currentPassword":"Current Password",
+    "newPassword":"New Password",
+    "confirmPassword":"Confirm New Password"
     "account": "My Account"
   },
   "errors": {

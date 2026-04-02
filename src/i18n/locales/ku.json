@@ -186,6 +186,17 @@
     "moveToCart": "هەموویان بگوازەوە بۆ سەبەتە",
     "justForYou": "تەنها بۆ تۆ"
   },
+  "myAccount": {
+    "account": "ئەکاونتەکەم",
+    "editProfile": "پرۆفایلەکەم دەستکاری بکە",
+    "edit": "دەستکاری",
+    "email": "ئیمەیل",
+    "passwordChanges": "گۆڕینی وشەی نهێنی",
+    "saveChanges": "گۆڕانکاریەکان پاشەکەوت بکە",
+    "currentPassword": "وشەی نهێنی ئێستا",
+    "newPassword": "وشەی نهێنی نوێ",
+    "confirmPassword": "پشتڕاستکردنەوەی وشەی نهێنی نوێ"
+  },
   "errors": {
     "generic": {
       "title": "هەڵەیەک ڕوویدا",
