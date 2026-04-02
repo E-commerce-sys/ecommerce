@@ -42,6 +42,21 @@ function ProductShowcase() {
     setShowAuthModal(true);
   }
 
+  // When the user navigates to a different product (productId changes),
+  // reset UI state from the previous product and restore scroll position.
+  useEffect(() => {
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setSelectedColor(null);
+    setSelectedSize(null);
+    setQuantity(1);
+    setShowAuthModal(false);
+    setAuthAction("");
+
+    // Ensure the new product content is visible.
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [productId]);
+
   //Fetching Product
   useEffect(() => {
     async function fetchProduct() {
@@ -337,9 +352,9 @@ function ProductShowcase() {
               </button>
             </div>
             <p
-              className={`text-sm ${errorMessage ? "text-red-600" : "text-green-600"}`}
+              className={`text-sm ${successMessage ? "text-green-600" : "text-red-600"}`}
             >
-              {errorMessage ? errorMessage : successMessage}
+              {successMessage ? successMessage : errorMessage}
             </p>
             {/* Delivery Info */}
             <div className="border border-gray-300 rounded w-full mt-8 lg:mt-12.5">
