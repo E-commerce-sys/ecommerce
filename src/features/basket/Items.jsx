@@ -192,7 +192,7 @@ function Items() {
               />
 
               <div className="flex flex-col items-center gap-2">
-                <img src={item.img} className="w-16 h-16 object-contain" />
+                <img src={item.img} className="w-26 h-26 object-contain" />
                 <p className="text-sm text-center">
                   {i18n.language === "ar"
                     ? item.nameAr
@@ -263,7 +263,7 @@ function Items() {
 
               <div className="flex justify-between">
                 <span>
-                  {t("cart.subtotal")}: $$
+                  {t("cart.subtotal")}: $
                   {Number((item.price * item.quantity).toFixed(2))}
                 </span>
               </div>
