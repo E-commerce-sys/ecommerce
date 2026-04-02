@@ -199,6 +199,7 @@
     "currentPassword":"Current Password",
     "newPassword":"New Password",
     "confirmPassword":"Confirm New Password"
+    "account": "My Account"
   },
   "errors": {
     "generic": {
