@@ -191,5 +191,19 @@
   },
   "myAccount": {
     "account": "My Account"
+  },
+  "errors": {
+    "generic": {
+      "title": "Something went wrong",
+      "message": "We couldn't load this page. Please try again.",
+      "back": "Go back",
+      "retry": "Try again"
+    },
+    "network": {
+      "title": "We can't connect right now",
+      "message": "Your internet connection seems unstable. Check your connection and try again.",
+      "back": "Go back",
+      "retry": "Try again"
+    }
   }
 }

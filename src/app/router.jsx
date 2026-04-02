@@ -39,11 +39,13 @@ import AdminRoute from "../routes/AdminRoute";
 import TOSPage from "../pages/TOSPage.jsx";
 import FAQPage from "../pages/FAQPage.jsx";
 import PrivacyPage from "../pages/PrivacyPage.jsx";
+import RouteErrorUI from "./RouteErrorUI";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <RouteErrorUI />,
     children: [
       { index: true, element: <HomePage />, loader: homeLoader },
 
@@ -91,6 +93,7 @@ export const router = createBrowserRouter([
         <AdminLayout />
       </AdminRoute>
     ),
+    errorElement: <RouteErrorUI showLayout={true} />,
     children: [
       { index: true, element: <AdminDashboard /> },
       { path: "products", element: <AdminProductsPage /> },
