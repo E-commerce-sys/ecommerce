@@ -99,7 +99,6 @@ function CartSummary({ product, className, icon }) {
             <Link
               to={`/products/${product.id}`}
               state={{ from: location.pathname }}
-              target="_blank"
             >
               {" "}
               {name}{" "}
