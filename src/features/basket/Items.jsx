@@ -263,7 +263,8 @@ function Items() {
 
               <div className="flex justify-between">
                 <span>
-                  {t("cart.subtotal")}: ${item.price * item.quantity}
+                  {t("cart.subtotal")}: $$
+                  {Number((item.price * item.quantity).toFixed(2))}
                 </span>
               </div>
             </div>
