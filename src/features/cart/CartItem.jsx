@@ -43,7 +43,7 @@ function CartItem({
         <img src={icon} alt="favorite" className="w-full h-full" />
       </button>
 
-      <Link to={`/products/${id}`} >
+      <Link to={`/products/${id}`}>
         <button
           type="button"
           onClick={onAddToCart}

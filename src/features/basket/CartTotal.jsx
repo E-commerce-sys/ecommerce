@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useCart } from "../../context/CartContext";
 
 function CartTotal() {
-  const { cartItems, subtotal, shipping, total } = useCart();
+  const { cartItems, subtotal, shipping, total, hasChanges } = useCart();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -43,20 +43,22 @@ function CartTotal() {
       </div>
 
       <div className="flex flex-col gap-1 justify-end">
-        {hasInvalidQuantity && (
+        {hasInvalidQuantity ? (
           <p className="text-red-500 text-sm">{t("cart.valid")}</p>
-        )}
+        ) : hasChanges ? (
+          <p className="text-red-500 text-sm">{t("cart.please")}</p>
+        ) : null}
 
         <Button
-          disabled={hasInvalidQuantity || isCartEmpty} // ✅ FIXED
-          className="w-full md:w-57.5"
+          disabled={hasInvalidQuantity || isCartEmpty || hasChanges}
+          className="w-full md:w-57.5 text-sm md:text-base"
           onClick={() =>
             navigate("/checkout", {
               state: { cartItems },
             })
           }
         >
-          {t("cart.procees")}
+          {t("cart.process")}
         </Button>
       </div>
     </div>

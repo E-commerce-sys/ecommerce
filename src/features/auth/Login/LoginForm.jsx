@@ -55,7 +55,13 @@ function LoginForm() {
     } catch (error) {
       console.error("Login error:", error?.response?.data);
 
-      setFormError("Invalid email or password");
+      const apiErrors = error?.response?.data?.errors;
+      const apiMessage =
+        apiErrors?.[0]?.message ||
+        error?.response?.data?.message ||
+        error?.message;
+
+      setFormError(apiMessage || "Invalid email or password");
     } finally {
       setLoading(false);
     }

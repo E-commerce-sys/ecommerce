@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { productAPI } from "../products/productAPI";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -41,6 +41,21 @@ function ProductShowcase() {
     setAuthAction(action);
     setShowAuthModal(true);
   }
+
+  // When the user navigates to a different product (productId changes),
+  // reset UI state from the previous product and restore scroll position.
+  useEffect(() => {
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setSelectedColor(null);
+    setSelectedSize(null);
+    setQuantity(1);
+    setShowAuthModal(false);
+    setAuthAction("");
+
+    // Ensure the new product content is visible.
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [productId]);
 
   //Fetching Product
   useEffect(() => {
@@ -87,7 +102,10 @@ function ProductShowcase() {
   const basePrice = Number(product.attributes.effectivePrice);
 
   const extraPrice = selectedSize
-    ? Number(productSizes.find((s) => s.id === selectedSize)?.attributes.extraPrice ?? 0)
+    ? Number(
+        productSizes.find((s) => s.id === selectedSize)?.attributes
+          .extraPrice ?? 0,
+      )
     : 0;
 
   const totalPrice = (basePrice + extraPrice).toFixed(2);
@@ -155,9 +173,9 @@ function ProductShowcase() {
 
   return (
     <>
-      <div className="my-[60px] md:my-[100px] lg:my-[150px] px-4 md:px-8 lg:mx-[75px] lg:w-9/10">
+      <div className="md:my-25 lg:my-37.5 px-4 md:px-8 lg:mx-18.75 lg:w-9/10">
         {/* Breadcrumb */}
-        <div className="mb-8 md:mb-[100px]">
+        <div className="mb-8 md:mb-25">
           <Link to={from} className="text-[rgb(var(--color-text-main-2))]">
             {from === "/"
               ? "Home"
@@ -174,25 +192,25 @@ function ProductShowcase() {
             <div className="flex flex-row flex-wrap gap-4 lg:flex-col lg:flex-nowrap">
               <img
                 src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain"
+                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
               />
               <img
                 src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain"
+                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
               />
               <img
                 src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain"
+                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
               />
               <img
                 src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-[164px] md:h-[120px] lg:w-[170px] lg:h-[135px] bg-[rgb(var(--color-grey))] px-[24px] py-[12px] object-contain"
+                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
               />
             </div>
             <div className="w-full lg:w-auto">
               <img
                 src={image}
-                className="w-full lg:w-[500px] h-[300px] md:h-[450px] lg:h-[600px] bg-[rgb(var(--color-grey))] px-[27px] py-[40px] lg:py-[154px] object-contain"
+                className="w-full lg:w-125 h-75 md:h-112.5 lg:h-150 bg-[rgb(var(--color-grey))] px-6.75 py-10 lg:py-38.5 object-contain"
               />
             </div>{" "}
           </div>
@@ -233,7 +251,7 @@ function ProductShowcase() {
               )}
             </div>
 
-            <p className="text-[14px] pt-[20px]">{description}</p>
+            <p className="text-[14px] pt-5">{description}</p>
             <hr className="my-5" />
 
             {/* Colors */}
@@ -246,7 +264,7 @@ function ProductShowcase() {
                       key={color.id}
                       onClick={() => setSelectedColor(color.id)}
                       className={`w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all hover:shadow-md
-            ${selectedColor === color.id ? "ring-[1px] ring-gray-900 ring-offset-[1px]" : ""}`}
+            ${selectedColor === color.id ? "ring-[1px] ring-gray-900 ring-offset-1" : ""}`}
                     >
                       <span
                         className="w-6 h-6 rounded-full"
@@ -268,7 +286,7 @@ function ProductShowcase() {
                       key={s.id}
                       onClick={() => {
                         setSelectedSize(s.id);
-                        setSelectedSize(s.id)
+                        setSelectedSize(s.id);
                       }}
                       className={`aspect-square w-8 h-8 ${
                         selectedSize === s.id
@@ -287,7 +305,7 @@ function ProductShowcase() {
 
             {/* Quantity + Add to Cart + Wishlist */}
             <div className="flex flex-wrap gap-2.5 items-center">
-              <div className="flex items-center border border-gray-300 rounded w-fit h-[44px] overflow-hidden">
+              <div className="flex items-center border border-gray-300 rounded w-fit h-11 overflow-hidden">
                 <button
                   onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
                   className="w-[40px] h-full flex items-center justify-center border-r border-gray-300 hover:bg-[rgb(var(--color-primary-main))] hover:text-white active:bg-[rgb(var(--color-primary-main))] active:text-white text-[24px]"
@@ -311,7 +329,7 @@ function ProductShowcase() {
               </div>
 
               <Button
-                className="h-11 w-full sm:w-[186px] text-[16px]"
+                className="h-11 w-full sm:w-46.5 text-[16px]"
                 size=""
                 disabled={
                   (productColors.length > 0 && !selectedColor) ||
@@ -333,8 +351,10 @@ function ProductShowcase() {
                 />
               </button>
             </div>
-            <p className={`text-sm ${errorMessage ? 'text-red-600' : 'text-green-600'}`}>
-              {errorMessage ? errorMessage : successMessage}
+            <p
+              className={`text-sm ${successMessage ? "text-green-600" : "text-red-600"}`}
+            >
+              {successMessage ? successMessage : errorMessage}
             </p>
             {/* Delivery Info */}
             <div className="border border-gray-300 rounded w-full mt-8 lg:mt-12.5">

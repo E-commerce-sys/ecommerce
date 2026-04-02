@@ -157,9 +157,12 @@
     "sub": "Subtotal:",
     "shipping": "Shipping:",
     "total": "Total:",
-    "procees": "Procees to checkout",
+    "process": "Process to checkout",
     "free": "Free",
-    "valid": "Please enter valid quantities"
+    "valid": "Please enter valid quantities",
+    "save": "Save changes",
+    "saved": "Changes saved",
+    "please": "Please save your changes first"
   },
   "checkout": {
     "checkout": "Checkout",
@@ -192,6 +195,23 @@
     "edit":"Edit",
     "email":"Email",
     "passwordChanges":"Password Changes",
-    "saveChanges":"Save Changes"
+    "saveChanges":"Save Changes",
+    "currentPassword":"Current Password",
+    "newPassword":"New Password",
+    "confirmPassword":"Confirm New Password"
+  },
+  "errors": {
+    "generic": {
+      "title": "Something went wrong",
+      "message": "We couldn't load this page. Please try again.",
+      "back": "Go back",
+      "retry": "Try again"
+    },
+    "network": {
+      "title": "We can't connect right now",
+      "message": "Your internet connection seems unstable. Check your connection and try again.",
+      "back": "Go back",
+      "retry": "Try again"
+    }
   }
 }

@@ -49,14 +49,14 @@ function ProfilePage() {
     <div className="flex flex-col gap-10 w-full min-[1154px]:w-225  px-4 md:px-10 py-[30px] mb-[150px] shadow rounded">
       <div className="flex justify-between items-center w-full">
         <h1 className="text-[20px] font-semibold text-[rgb(var(--color-primary-main))]">
-          Edit Your Profile
+          {t("myAccount.editProfile")}
         </h1>
         {!isEditing && (
           <button
             onClick={handleEdit}
             className="rounded-sm font-medium transition-all duration-200 flex items-center justify-center border border-gray-300 px-6 py-2 text-sm hover:bg-gray-50 cursor-pointer"
           >
-            Edit
+            {t("myAccount.edit")}
           </button>
         )}
       </div>
@@ -90,7 +90,7 @@ function ProfilePage() {
 
         {/* Email */}
         <div>
-          <label>Email</label>
+          <label>{t("myAccount.email")}</label>
           <Input
             type="email"
             name="email"
@@ -103,11 +103,11 @@ function ProfilePage() {
 
         {/* Password */}
           <div className="flex flex-col gap-2">
-            <label>Password Changes</label>
+            <label>{t("myAccount.passwordChanges")}</label>
             <Input
               type="password"
               name="currentPassword"
-              placeholder="Current Password"
+              placeholder={t("myAccount.currentPassword")}
               value={formData.currentPassword}
               onChange={handleChange}
               disabled={!isEditing}
@@ -116,7 +116,7 @@ function ProfilePage() {
             <Input
               type="password"
               name="newPassword"
-              placeholder="New Password"
+              placeholder={t("myAccount.newPassword")}
               value={formData.newPassword}
               onChange={handleChange}
               disabled={!isEditing}
@@ -125,7 +125,7 @@ function ProfilePage() {
             <Input
               type="password"
               name="confirmPassword"
-              placeholder="Confirm New Password"
+              placeholder={t("myAccount.confirmPassword")}
               value={formData.confirmPassword}
               onChange={handleChange}
               disabled={!isEditing}
@@ -142,7 +142,7 @@ function ProfilePage() {
             >
               {t("account.cancel")}
             </button>
-            <Button className="w-full sm:w-auto" type="submit">Save Changes</Button>
+            <Button className="w-full sm:w-auto p-5" type="submit">{t("myAccount.saveChanges")}</Button>
           </div>
         )}
       </form>
