@@ -14,6 +14,8 @@ function ProfilePage() {
     email: "john.doe@gmail.com",
   };
 
+  // useEffect()            for API integration
+
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     first_name: userData.first_name,

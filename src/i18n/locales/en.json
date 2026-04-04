@@ -89,7 +89,6 @@
     "ready": "Ready to add this item?",
     "saveToFav": "Please log in or create an account first to save products to your favorites.",
     "saveToCart": "Please log in or create an account first to add products to your cart.",
-    "sessionExpired": "Your session has expired. Please sign in again to continue.",
     "min": "Min",
     "max": "Max"
   },
@@ -192,14 +191,26 @@
   },
   "myAccount": {
     "account": "My Account",
-    "editProfile": "Edit Your Profile",
-    "edit": "Edit",
-    "email": "Email",
-    "passwordChanges": "Password Changes",
-    "saveChanges": "Save Changes",
-    "currentPassword": "Current Password",
-    "newPassword": "New Password",
-    "confirmPassword": "Confirm New Password"
+    "editProfile":"Edit Your Profile",
+    "edit":"Edit",
+    "email":"Email",
+    "passwordChanges":"Password Changes",
+    "saveChanges":"Save Changes",
+    "currentPassword":"Current Password",
+    "newPassword":"New Password",
+    "confirmPassword":"Confirm New Password"
+  },
+  "addressPage": {
+    "editAddress": "Edit Your Address",
+    "currentAddress": "Current Address",
+    "newAddress": "New Address",
+    "addressName": "Address Name",
+    "houseNumber": "House Number",
+    "streetName": "Street Name",
+    "city": "City",
+    "state": "State",
+    "country": "Country",
+    "zipCode": "Zip Code"
   },
   "errors": {
     "generic": {
