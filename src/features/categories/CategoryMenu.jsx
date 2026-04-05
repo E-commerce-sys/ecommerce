@@ -66,7 +66,6 @@ function CategoryMenu() {
           : sub.attributes.nameEn,
     icon: sub.attributes.icon,
   }));
-
   return (
     <div className="w-full">
       {/* Parent categories */}

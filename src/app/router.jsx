@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { lazy, Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";
 import AdminLayout from "../layout/AdminLayout";
@@ -83,7 +83,8 @@ export const router = createBrowserRouter([
             path: "account",
             element: <AccountLayout />,
             children: [
-              { index: true, path: "profile", element: <ProfilePage /> },
+              { index: true, element: <Navigate to="profile" replace /> },
+              { path: "profile", element: <ProfilePage /> },
               { path: "address", element: <AddressPage /> },
               { path: "progress", element: <ProgressPage /> },
               { path: "arrived", element: <ArrivedPage /> },
