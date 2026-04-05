@@ -1,8 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react";
-import { categoriesAPI } from "../features/categories/categoriesAPI";
-import { subCategoriesAPI } from "../features/categories/subCategoriesAPI";
+import { loadCategoryTree } from "../features/categories/loadCategoryTree";
 
 const CategoryContext = createContext();
 
@@ -12,23 +11,27 @@ export function CategoryProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadCategories() {
-      const cats = await categoriesAPI();
-      setCategories(cats);
+    let cancelled = false;
 
-      const subsMap = {};
-
-      for (const cat of cats) {
-        const subs = await subCategoriesAPI(cat.id);
-        subsMap[cat.id] = subs;
+    async function load() {
+      try {
+        const { categories: cats, subCategories: subs } =
+          await loadCategoryTree();
+        if (!cancelled) {
+          setCategories(cats);
+          setSubCategories(subs);
+        }
+      } catch (e) {
+        console.error("Failed to load categories", e);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-
-      setSubCategories(subsMap);
-
-      setLoading(false);
     }
 
-    loadCategories();
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
