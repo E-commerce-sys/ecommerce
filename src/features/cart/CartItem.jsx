@@ -9,7 +9,6 @@ function CartItem({
   img,
   className = "",
   isNew,
-  onAddToCart,
   onFavorite,
   isFavorite,
   icon = isFavorite ? filledHeart : heart,
@@ -28,12 +27,13 @@ function CartItem({
           {t("new")}
         </span>
       )}
-
-      <img
-        src={img}
-        alt="product"
-        className="w-full h-full p-2 md:p-5 object-contain transition-transform duration-300 group-hover:scale-105"
-      />
+      <Link to={`/products/${id}`}>
+        <img
+          src={img}
+          alt="product"
+          className="w-full h-full p-2 md:p-5 object-contain transition-transform duration-300 group-hover:scale-105"
+        />
+      </Link>
 
       <button
         type="button"
@@ -42,11 +42,9 @@ function CartItem({
       >
         <img src={icon} alt="favorite" className="w-full h-full" />
       </button>
-
       <Link to={`/products/${id}`}>
         <button
           type="button"
-          onClick={onAddToCart}
           className="
           absolute bottom-0 left-0 w-full
           bg-[rgb(var(--color-bg-dark))] text-white
