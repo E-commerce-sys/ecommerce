@@ -7,7 +7,14 @@ import { useTranslation } from "react-i18next";
 import { useCart } from "../../context/CartContext";
 
 function CartTotal() {
-  const { cartItems, subtotal, shipping, total, hasChanges } = useCart();
+  const {
+    cartItems,
+    subtotal,
+    shipping,
+    total,
+    flushPendingCartSync,
+    getLatestCartItems,
+  } = useCart();
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -45,18 +52,26 @@ function CartTotal() {
       <div className="flex flex-col gap-1 justify-end">
         {hasInvalidQuantity ? (
           <p className="text-red-500 text-sm">{t("cart.valid")}</p>
-        ) : hasChanges ? (
-          <p className="text-red-500 text-sm">{t("cart.please")}</p>
         ) : null}
 
         <Button
-          disabled={hasInvalidQuantity || isCartEmpty || hasChanges}
+          disabled={hasInvalidQuantity || isCartEmpty}
           className="w-full md:w-57.5 text-sm md:text-base"
-          onClick={() =>
-            navigate("/checkout", {
-              state: { cartItems },
-            })
-          }
+          onClick={async () => {
+            const active = document.activeElement;
+            if (active instanceof HTMLInputElement && active.type === "number") {
+              active.blur();
+              await new Promise((r) => setTimeout(r, 0));
+            }
+            try {
+              await flushPendingCartSync();
+              navigate("/checkout", {
+                state: { cartItems: getLatestCartItems() },
+              });
+            } catch (err) {
+              console.error("Could not sync cart before checkout", err);
+            }
+          }}
         >
           {t("cart.process")}
         </Button>

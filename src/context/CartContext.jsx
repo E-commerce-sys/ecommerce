@@ -1,7 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/react-in-jsx-scope */
-import { createContext, useContext, useState } from "react";
-import { getCartItems } from "../features/basket/api/getCartItems";
+import {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import {
+  getCartItems,
+  mapCartItemsFromResponse,
+} from "../features/basket/api/getCartItems";
 import { updateCart } from "../features/basket/api/updateCart";
 import { removeCart } from "../features/basket/api/removeCart";
 
@@ -9,8 +19,6 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
 
   const subtotal = Number(
     cartItems
@@ -22,8 +30,34 @@ export function CartProvider({ children }) {
   const total = Number((subtotal + shipping).toFixed(2));
   const [loading, setLoading] = useState(false);
 
-  // ✅ quantity
-  function updateQuantity(id, value) {
+  const cartItemsRef = useRef(cartItems);
+  cartItemsRef.current = cartItems;
+
+  const persistCartItemQuantity = useCallback(async (cartItemId, quantity) => {
+    const q = Number(quantity);
+    if (isNaN(q) || q < 1) return;
+    try {
+      await updateCart(cartItemId, { quantity: q });
+    } catch (err) {
+      console.error("Failed to update cart quantity", err);
+    }
+  }, []);
+
+  const getLatestCartItems = useCallback(() => cartItemsRef.current, []);
+
+  const flushPendingCartSync = useCallback(async () => {
+    const items = cartItemsRef.current;
+    const valid = items.filter(
+      (i) => i.quantity !== "" && Number(i.quantity) >= 1,
+    );
+    if (valid.length === 0) return;
+
+    await Promise.all(
+      valid.map((i) => updateCart(i.id, { quantity: Number(i.quantity) })),
+    );
+  }, []);
+
+  const updateQuantity = useCallback((id, value) => {
     if (value === "") {
       setCartItems((prev) =>
         prev.map((item) => (item.id === id ? { ...item, quantity: "" } : item)),
@@ -31,125 +65,30 @@ export function CartProvider({ children }) {
       return;
     }
 
-    setHasChanges(true);
-    setIsSaved(false);
-
     const quantity = Number(value);
     if (isNaN(quantity) || quantity < 1) return;
 
     setCartItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, quantity } : item)),
     );
-  }
+  }, []);
 
-  // ✅ color (no sizes inside color anymore)
-  function updateColor(itemId, colorId) {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId
-          ? {
-              ...item,
-              selectedColorId: colorId,
-            }
-          : item,
-      ),
-    );
-    setHasChanges(true);
-    setIsSaved(false);
-  }
-
-  // ✅ size
-  function updateSize(itemId, sizeId) {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId ? { ...item, selectedSizeId: sizeId } : item,
-      ),
-    );
-    setHasChanges(true);
-    setIsSaved(false);
-  }
-
-  // ✅ delete
-  async function removeItem(productId) {
+  const removeItem = useCallback(async (cartItemId) => {
     try {
-      setCartItems((prev) =>
-        prev.filter((item) => item.productId !== productId),
-      );
+      setCartItems((prev) => prev.filter((item) => item.id !== cartItemId));
 
-      await removeCart(productId);
-      setHasChanges(false);
+      await removeCart(cartItemId);
     } catch (err) {
       console.error("Failed to remove item", err);
     }
-  }
+  }, []);
 
-  async function saveCart() {
-    try {
-      await Promise.all(
-        cartItems.map((item) =>
-          updateCart(item.productId, {
-            quantity: item.quantity,
-            colorId: item.selectedColorId,
-            sizeId: item.selectedSizeId,
-          }),
-        ),
-      );
-
-      setHasChanges(false);
-      setIsSaved(true);
-    } catch (err) {
-      console.error("Failed to save cart", err);
-    }
-  }
-
-  // ✅ FETCH + TRANSFORM API
-  async function fetchCart() {
+  const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
 
       const res = await getCartItems();
-      const cartItemsRaw = res.data.included.cartItems;
-
-      const mapped = cartItemsRaw.map((item) => {
-        const product = item.included.product;
-
-        const productColors = product.included.productColors || [];
-        const productSizes = product.included.productSizes || [];
-
-        const colors = productColors.map((c) => ({
-          id: Number(c.id),
-          name: c.attributes.name,
-        }));
-
-        const sizes = productSizes.map((s) => ({
-          id: Number(s.id),
-          name: s.attributes.name,
-        }));
-
-        return {
-          id: Number(item.id),
-          productId: Number(product.id),
-          img: product.attributes.primaryImage,
-
-          nameEn: product.attributes.nameEn,
-          nameAr: product.attributes.nameAr,
-          nameKu: product.attributes.nameKu,
-
-          price: Number(item.attributes.unitPrice),
-          quantity: item.attributes.quantity,
-
-          selectedColorId:
-            item.relationships.productColor.data?.id ||
-            (colors.length > 0 ? colors[0].id : null),
-
-          selectedSizeId:
-            item.relationships.productSize.data?.id ||
-            (sizes.length > 0 ? sizes[0].id : null),
-
-          colors,
-          sizes,
-        };
-      });
+      const mapped = mapCartItemsFromResponse(res);
 
       setCartItems(mapped);
     } catch (err) {
@@ -157,29 +96,38 @@ export function CartProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
-  return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        loading,
-        subtotal,
-        shipping,
-        total,
-        hasChanges,
-        isSaved,
-        saveCart,
-        updateQuantity,
-        updateColor,
-        updateSize,
-        removeItem,
-        fetchCart,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
+  const value = useMemo(
+    () => ({
+      cartItems,
+      loading,
+      subtotal,
+      shipping,
+      total,
+      updateQuantity,
+      removeItem,
+      fetchCart,
+      flushPendingCartSync,
+      persistCartItemQuantity,
+      getLatestCartItems,
+    }),
+    [
+      cartItems,
+      loading,
+      subtotal,
+      shipping,
+      total,
+      updateQuantity,
+      removeItem,
+      fetchCart,
+      flushPendingCartSync,
+      persistCartItemQuantity,
+      getLatestCartItems,
+    ],
   );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {
