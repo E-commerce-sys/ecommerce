@@ -36,41 +36,14 @@ function uniqueSizesFromVariants(variants) {
   return [...map.values()];
 }
 
-function findMatchingVariant(
-  variants,
-  selectedColorId,
-  selectedSizeId,
-  hasColor,
-  hasSize,
-) {
+/** Variant for price + add-to-cart; unset color/size act as wildcard (first match). */
+function pickVariant(variants, colorId, sizeId) {
   if (!variants?.length) return null;
-  if (!hasColor && !hasSize) {
-    return variants[0] ?? null;
-  }
-  if (hasColor && hasSize) {
-    if (selectedColorId == null || selectedSizeId == null) return null;
-    return (
-      variants.find(
-        (v) =>
-          Number(v.colorId) === Number(selectedColorId) &&
-          Number(v.sizeId) === Number(selectedSizeId),
-      ) ?? null
-    );
-  }
-  if (hasColor && !hasSize) {
-    if (selectedColorId == null) return null;
-    return (
-      variants.find((v) => Number(v.colorId) === Number(selectedColorId)) ??
-      null
-    );
-  }
-  if (!hasColor && hasSize) {
-    if (selectedSizeId == null) return null;
-    return (
-      variants.find((v) => Number(v.sizeId) === Number(selectedSizeId)) ?? null
-    );
-  }
-  return null;
+  return variants.find(
+    (v) =>
+      (colorId == null || Number(v.colorId) === Number(colorId)) &&
+      (sizeId == null || Number(v.sizeId) === Number(sizeId)),
+  );
 }
 
 function ProductShowcase() {
@@ -152,22 +125,14 @@ function ProductShowcase() {
         ? product.attributes.descriptionKu
         : product.attributes.descriptionEn;
   const variants = product.variants ?? [];
-  const hasColor = !!product.attributes.hasColor;
-  const hasSize = !!product.attributes.hasSize;
   const productColors = uniqueColorsFromVariants(variants);
   const productSizes = uniqueSizesFromVariants(variants);
 
-  const selectedVariant = findMatchingVariant(
-    variants,
-    selectedColor,
-    selectedSize,
-    hasColor,
-    hasSize,
-  );
+  const activeVariant = pickVariant(variants, selectedColor, selectedSize);
 
   const basePrice = Number(product.attributes.effectivePrice);
-  const extraPrice = selectedVariant?.size
-    ? Number(selectedVariant.size.attributes?.extraPrice ?? 0)
+  const extraPrice = activeVariant?.size
+    ? Number(activeVariant.size.attributes?.extraPrice ?? 0)
     : 0;
   const totalPrice = (basePrice + extraPrice).toFixed(2);
 
@@ -210,12 +175,12 @@ function ProductShowcase() {
       return;
     }
     try {
-      if (!selectedVariant) {
-        setErrorMessage(t("products.variantRequired"));
+      if (!activeVariant) {
+        setErrorMessage("Failed to add to cart");
         return;
       }
 
-      const res = await addToCart(selectedVariant.id, quantity);
+      const res = await addToCart(activeVariant.id, quantity);
       setSuccessMessage(res.message || "Product added to cart successfully!");
     } catch (error) {
       if (error.response?.status === 401) {
@@ -404,12 +369,7 @@ function ProductShowcase() {
               <Button
                 className="h-11 w-full sm:w-46.5 text-[16px]"
                 size=""
-                disabled={
-                  variants.length === 0 ||
-                  !selectedVariant ||
-                  (productColors.length > 0 && selectedColor == null) ||
-                  (productSizes.length > 0 && selectedSize == null)
-                }
+                disabled={variants.length === 0}
                 onClick={handleAddToCart}
               >
                 Add to cart
