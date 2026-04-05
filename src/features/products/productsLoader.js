@@ -1,5 +1,5 @@
 import axiosInstance from "../../axios/axiosInstance";
-import { categoriesAPI } from "../categories/categoriesAPI";
+import { loadCategoryTree } from "../categories/loadCategoryTree";
 
 export async function productsLoader({ request }) {
   const url = new URL(request.url);
@@ -13,8 +13,8 @@ export async function productsLoader({ request }) {
     params["filter[nameEnContains]"] = search;
   }
 
-  const [categories, productsRes] = await Promise.all([
-    categoriesAPI(),
+  const [{ categories }, productsRes] = await Promise.all([
+    loadCategoryTree(),
     axiosInstance.get("/api/products", { params }),
   ]);
 

@@ -1,12 +1,15 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";
 import AdminLayout from "../layout/AdminLayout";
 
-// Pages
-import HomePage from "../pages/HomePage";
+import Spinner from "../components/Spinner";
+
+// Pages (home is code-split — loads only when visiting `/`)
+const HomePage = lazy(() => import("../pages/HomePage"));
 import ProductsPage from "../pages/ProductsPage";
 import ProductDetailPage from "../pages/ProductDetailPage";
 import AboutPage from "../pages/AboutPage";
@@ -30,7 +33,6 @@ import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
 import AdminAdsPage from "../pages/admin/AdminAdsPage";
 
 import NotFoundPage from "../pages/NotFoundPage";
-import { homeLoader } from "../features/home/homeLoader.js";
 import { productsLoader } from "../features/products/productsLoader.js";
 
 // Route Guards
@@ -47,7 +49,14 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <RouteErrorUI />,
     children: [
-      { index: true, element: <HomePage />, loader: homeLoader },
+      {
+        index: true,
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <HomePage />
+          </Suspense>
+        ),
+      },
 
       { path: "products", element: <ProductsPage />, loader: productsLoader },
       { path: "products/:productId", element: <ProductDetailPage /> },
