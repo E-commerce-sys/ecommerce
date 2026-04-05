@@ -128,7 +128,16 @@ function ProductShowcase() {
   const productColors = uniqueColorsFromVariants(variants);
   const productSizes = uniqueSizesFromVariants(variants);
 
-  const activeVariant = pickVariant(variants, selectedColor, selectedSize);
+  const needsColorChoice = productColors.length > 0;
+  const needsSizeChoice = productSizes.length > 0;
+  const selectionReady =
+    (!needsColorChoice || selectedColor != null) &&
+    (!needsSizeChoice || selectedSize != null);
+
+  const activeVariant =
+    variants.length > 0 && selectionReady
+      ? pickVariant(variants, selectedColor, selectedSize)
+      : null;
 
   const basePrice = Number(product.attributes.effectivePrice);
   const extraPrice = activeVariant?.size
@@ -369,7 +378,7 @@ function ProductShowcase() {
               <Button
                 className="h-11 w-full sm:w-46.5 text-[16px]"
                 size=""
-                disabled={variants.length === 0}
+                disabled={variants.length === 0 || !activeVariant}
                 onClick={handleAddToCart}
               >
                 Add to cart
