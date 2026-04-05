@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useParams, useLocation, Link } from "react-router-dom";
-import { productAPI } from "../products/productAPI";
+import { fetchProductDetail } from "./productDetailAPI";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import FullStar from "../../assets/icons/filled-star.svg";
@@ -19,6 +19,59 @@ import deliveryIcon from "../../assets/icons/delivery.svg";
 import returnIcon from "../../assets/icons/return.svg";
 import AuthModal from "../auth/AuthModal";
 import { addToCart } from "../basket/api/addToCart";
+
+function uniqueColorsFromVariants(variants) {
+  const map = new Map();
+  for (const v of variants) {
+    if (v.color) map.set(v.color.id, v.color);
+  }
+  return [...map.values()];
+}
+
+function uniqueSizesFromVariants(variants) {
+  const map = new Map();
+  for (const v of variants) {
+    if (v.size) map.set(v.size.id, v.size);
+  }
+  return [...map.values()];
+}
+
+function findMatchingVariant(
+  variants,
+  selectedColorId,
+  selectedSizeId,
+  hasColor,
+  hasSize,
+) {
+  if (!variants?.length) return null;
+  if (!hasColor && !hasSize) {
+    return variants[0] ?? null;
+  }
+  if (hasColor && hasSize) {
+    if (selectedColorId == null || selectedSizeId == null) return null;
+    return (
+      variants.find(
+        (v) =>
+          Number(v.colorId) === Number(selectedColorId) &&
+          Number(v.sizeId) === Number(selectedSizeId),
+      ) ?? null
+    );
+  }
+  if (hasColor && !hasSize) {
+    if (selectedColorId == null) return null;
+    return (
+      variants.find((v) => Number(v.colorId) === Number(selectedColorId)) ??
+      null
+    );
+  }
+  if (!hasColor && hasSize) {
+    if (selectedSizeId == null) return null;
+    return (
+      variants.find((v) => Number(v.sizeId) === Number(selectedSizeId)) ?? null
+    );
+  }
+  return null;
+}
 
 function ProductShowcase() {
   const { loggedIn } = useAuth();
@@ -61,7 +114,7 @@ function ProductShowcase() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const data = await productAPI(productId);
+        const data = await fetchProductDetail(productId);
         setProduct(data);
 
         // check if product is in wishlist
@@ -98,18 +151,25 @@ function ProductShowcase() {
       : i18n.language === "ku"
         ? product.attributes.descriptionKu
         : product.attributes.descriptionEn;
-  const productSizes = product.included?.productSizes ?? [];
+  const variants = product.variants ?? [];
+  const hasColor = !!product.attributes.hasColor;
+  const hasSize = !!product.attributes.hasSize;
+  const productColors = uniqueColorsFromVariants(variants);
+  const productSizes = uniqueSizesFromVariants(variants);
+
+  const selectedVariant = findMatchingVariant(
+    variants,
+    selectedColor,
+    selectedSize,
+    hasColor,
+    hasSize,
+  );
+
   const basePrice = Number(product.attributes.effectivePrice);
-
-  const extraPrice = selectedSize
-    ? Number(
-        productSizes.find((s) => s.id === selectedSize)?.attributes
-          .extraPrice ?? 0,
-      )
+  const extraPrice = selectedVariant?.size
+    ? Number(selectedVariant.size.attributes?.extraPrice ?? 0)
     : 0;
-
   const totalPrice = (basePrice + extraPrice).toFixed(2);
-  const productColors = product.included?.productColors ?? [];
 
   const stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -150,14 +210,13 @@ function ProductShowcase() {
       return;
     }
     try {
-      const res = await addToCart(
-        productId,
-        selectedSize,
-        selectedColor,
-        quantity,
-      );
+      if (!selectedVariant) {
+        setErrorMessage(t("products.variantRequired"));
+        return;
+      }
+
+      const res = await addToCart(selectedVariant.id, quantity);
       setSuccessMessage(res.message || "Product added to cart successfully!");
-      console.log("Add to cart response:", res);
     } catch (error) {
       if (error.response?.status === 401) {
         setErrorMessage(t("products.sessionExpired"));
@@ -271,9 +330,17 @@ function ProductShowcase() {
                   {productColors.map((color) => (
                     <div
                       key={color.id}
-                      onClick={() => setSelectedColor(color.id)}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setSelectedColor(Number(color.id))}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          setSelectedColor(Number(color.id));
+                        }
+                      }}
                       className={`w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all hover:shadow-md
-            ${selectedColor === color.id ? "ring-[1px] ring-gray-900 ring-offset-1" : ""}`}
+            ${selectedColor === Number(color.id) ? "ring-[1px] ring-gray-900 ring-offset-1" : ""}`}
                     >
                       <span
                         className="w-6 h-6 rounded-full"
@@ -293,12 +360,9 @@ function ProductShowcase() {
                   {productSizes.map((s) => (
                     <Button
                       key={s.id}
-                      onClick={() => {
-                        setSelectedSize(s.id);
-                        setSelectedSize(s.id);
-                      }}
+                      onClick={() => setSelectedSize(Number(s.id))}
                       className={`aspect-square w-8 h-8 ${
-                        selectedSize === s.id
+                        selectedSize === Number(s.id)
                           ? "bg-[rgb(var(--color-primary-main))] text-white hover:bg-[rgb(var(--color-primary-main))]"
                           : "hover:bg-[rgb(var(--color-primary-3))] hover:text-white"
                       }`}
@@ -341,8 +405,10 @@ function ProductShowcase() {
                 className="h-11 w-full sm:w-46.5 text-[16px]"
                 size=""
                 disabled={
-                  (productColors.length > 0 && !selectedColor) ||
-                  (productSizes.length > 0 && !selectedSize)
+                  variants.length === 0 ||
+                  !selectedVariant ||
+                  (productColors.length > 0 && selectedColor == null) ||
+                  (productSizes.length > 0 && selectedSize == null)
                 }
                 onClick={handleAddToCart}
               >
