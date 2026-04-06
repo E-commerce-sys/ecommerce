@@ -1,5 +1,6 @@
 import axiosInstance from "../../../axios/axiosInterceptor";
 
 export async function removeCart(cartItemId) {
-  return axiosInstance.delete(`/api/cart-items?cartItemId=${cartItemId}`);
+  const res = await axiosInstance.delete(`/api/cart-items?cartItemId=${cartItemId}`);
+  return res.data;
 }

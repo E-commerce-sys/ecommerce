@@ -7,7 +7,7 @@ export const FAKE_ORDERS = [
     orderDate: "1 March 2026",
     itemCount: 3,
     totalPayment: 775,
-    status: "preparing",
+    status: "delivering",
     badge: 1,
     items: [
       {
@@ -18,8 +18,8 @@ export const FAKE_ORDERS = [
         price: 650,
         color: "Red",
         size: "Large",
-        quantity: 1,
-        subtotal: 650,
+        quantity: 12,
+        subtotal: 7800,
       },
       {
         id: 102,

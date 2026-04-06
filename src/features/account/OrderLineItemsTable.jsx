@@ -88,7 +88,7 @@ function OrderLineItemsTable({ items }) {
                   {item.name}
                 </p>
                 <p className="mt-1 text-sm text-[rgb(var(--color-text-main-3))]">
-                  Qty {String(item.quantity).padStart(2, "0")}
+                  Quantity: {String(item.quantity).padStart(2)}
                 </p>
               </div>
             </div>
