@@ -11,39 +11,85 @@ import {
 import {
   getCartItems,
   mapCartItemsFromResponse,
+  mapCartTotalsFromResponse,
+  formatMoneyTwoDecimals,
 } from "../features/basket/api/getCartItems";
 import { updateCart } from "../features/basket/api/updateCart";
 import { removeCart } from "../features/basket/api/removeCart";
 
 const CartContext = createContext();
 
+function applyCartFromGetResponse(setCartItems, setCartTotals, apiBody) {
+  if (!apiBody?.data) return;
+  setCartItems(mapCartItemsFromResponse(apiBody));
+  setCartTotals(mapCartTotalsFromResponse(apiBody));
+}
+
+/**
+ * PATCH/DELETE may return totals but sparse `included.cartItems`. If mapped lines
+ * do not match relationship count, refetch full cart (GET includes variants).
+ */
+async function applyCartFromMutationResponse(setCartItems, setCartTotals, apiBody) {
+  if (!apiBody?.data) return;
+
+  setCartTotals(mapCartTotalsFromResponse(apiBody));
+
+  const relCount = apiBody.data.relationships?.cartItems?.data?.length ?? 0;
+  if (relCount === 0) {
+    setCartItems([]);
+    return;
+  }
+
+  const mapped = mapCartItemsFromResponse(apiBody);
+  if (mapped.length === relCount) {
+    setCartItems(mapped);
+    return;
+  }
+
+  try {
+    const full = await getCartItems();
+    applyCartFromGetResponse(setCartItems, setCartTotals, full);
+  } catch (err) {
+    console.error("Failed to refresh cart after mutation", err);
+    setCartItems(mapped);
+  }
+}
+
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
-
-  const subtotal = Number(
-    cartItems
-      .reduce((sum, item) => sum + item.price * item.quantity, 0)
-      .toFixed(2),
-  );
-
-  const shipping = subtotal > 140 ? 0 : 20;
-  const total = Number((subtotal + shipping).toFixed(2));
+  const [cartTotals, setCartTotals] = useState({
+    subtotal: 0,
+    shippingCost: 0,
+    totalPrice: 0,
+  });
   const [loading, setLoading] = useState(false);
 
   const cartItemsRef = useRef(cartItems);
   cartItemsRef.current = cartItems;
 
+  const subtotalFormatted = useMemo(
+    () => formatMoneyTwoDecimals(cartTotals.subtotal),
+    [cartTotals.subtotal],
+  );
+  const shippingFormatted = useMemo(
+    () => formatMoneyTwoDecimals(cartTotals.shippingCost),
+    [cartTotals.shippingCost],
+  );
+  const totalFormatted = useMemo(
+    () => formatMoneyTwoDecimals(cartTotals.totalPrice),
+    [cartTotals.totalPrice],
+  );
+
   const persistCartItemQuantity = useCallback(async (cartItemId, quantity) => {
     const q = Number(quantity);
     if (isNaN(q) || q < 1) return;
     try {
-      await updateCart(cartItemId, { quantity: q });
+      const apiBody = await updateCart(cartItemId, { quantity: q });
+      await applyCartFromMutationResponse(setCartItems, setCartTotals, apiBody);
     } catch (err) {
       console.error("Failed to update cart quantity", err);
     }
   }, []);
-
-  const getLatestCartItems = useCallback(() => cartItemsRef.current, []);
 
   const flushPendingCartSync = useCallback(async () => {
     const items = cartItemsRef.current;
@@ -52,9 +98,14 @@ export function CartProvider({ children }) {
     );
     if (valid.length === 0) return;
 
-    await Promise.all(
-      valid.map((i) => updateCart(i.id, { quantity: Number(i.quantity) })),
-    );
+    for (const i of valid) {
+      try {
+        const apiBody = await updateCart(i.id, { quantity: Number(i.quantity) });
+        await applyCartFromMutationResponse(setCartItems, setCartTotals, apiBody);
+      } catch (err) {
+        console.error("Failed to sync cart item", i.id, err);
+      }
+    }
   }, []);
 
   const updateQuantity = useCallback((id, value) => {
@@ -75,9 +126,8 @@ export function CartProvider({ children }) {
 
   const removeItem = useCallback(async (cartItemId) => {
     try {
-      setCartItems((prev) => prev.filter((item) => item.id !== cartItemId));
-
-      await removeCart(cartItemId);
+      const apiBody = await removeCart(cartItemId);
+      await applyCartFromMutationResponse(setCartItems, setCartTotals, apiBody);
     } catch (err) {
       console.error("Failed to remove item", err);
     }
@@ -86,11 +136,8 @@ export function CartProvider({ children }) {
   const fetchCart = useCallback(async () => {
     try {
       setLoading(true);
-
-      const res = await getCartItems();
-      const mapped = mapCartItemsFromResponse(res);
-
-      setCartItems(mapped);
+      const apiBody = await getCartItems();
+      applyCartFromGetResponse(setCartItems, setCartTotals, apiBody);
     } catch (err) {
       console.error("Failed to fetch cart", err);
     } finally {
@@ -102,28 +149,28 @@ export function CartProvider({ children }) {
     () => ({
       cartItems,
       loading,
-      subtotal,
-      shipping,
-      total,
+      subtotal: subtotalFormatted,
+      shipping: cartTotals.shippingCost,
+      shippingFormatted,
+      total: totalFormatted,
       updateQuantity,
       removeItem,
       fetchCart,
       flushPendingCartSync,
       persistCartItemQuantity,
-      getLatestCartItems,
     }),
     [
       cartItems,
       loading,
-      subtotal,
-      shipping,
-      total,
+      subtotalFormatted,
+      cartTotals.shippingCost,
+      shippingFormatted,
+      totalFormatted,
       updateQuantity,
       removeItem,
       fetchCart,
       flushPendingCartSync,
       persistCartItemQuantity,
-      getLatestCartItems,
     ],
   );
 

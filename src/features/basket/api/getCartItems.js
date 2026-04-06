@@ -52,6 +52,27 @@ export function mapCartItemsFromResponse(resBody) {
   return raw.map(mapCartItemFromApi).filter(Boolean);
 }
 
+/**
+ * Cart totals from API `data.attributes` (GET / PATCH / DELETE cart responses).
+ */
+export function mapCartTotalsFromResponse(resBody) {
+  const attrs = resBody?.data?.attributes;
+  if (!attrs) {
+    return { subtotal: 0, shippingCost: 0, totalPrice: 0 };
+  }
+  return {
+    subtotal: Number(attrs.subtotal ?? 0),
+    shippingCost: Number(attrs.shippingCost ?? 0),
+    totalPrice: Number(attrs.totalPrice ?? 0),
+  };
+}
+
+export function formatMoneyTwoDecimals(value) {
+  const n = Number(value);
+  if (Number.isNaN(n)) return "0.00";
+  return n.toFixed(2);
+}
+
 export async function getCartItems() {
   const res = await axiosInstance.get(`/api/user-cart?include=${INCLUDE}`);
   return res.data;

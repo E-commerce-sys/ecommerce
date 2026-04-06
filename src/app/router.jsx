@@ -17,7 +17,6 @@ import ContactPage from "../pages/ContactPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import CartPage from "../pages/CartPage";
-import CheckoutPage from "../pages/CheckoutPage";
 import WishlistPage from "../pages/WishlistPage";
 import AccountLayout from "../pages/account/AccountLayout";
 import ProfilePage from "../features/account/ProfilePage.jsx";
@@ -75,7 +74,6 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           { path: "cart", element: <CartPage /> },
-          { path: "checkout", element: <CheckoutPage /> },
           { path: "wishlist", element: <WishlistPage /> },
           // { path: "checkout", element: <CheckoutPage /> },
 

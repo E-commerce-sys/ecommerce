@@ -2,8 +2,23 @@
 /* eslint-disable react/prop-types */
 
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
+
+function BuyNowLink({ productId, className, label }) {
+  if (productId == null || productId === "") return null;
+  return (
+    <Link
+      to={`/products/${productId}`}
+      state={{ from: "/" }}
+      className={className}
+    >
+      {label}
+    </Link>
+  );
+}
 
 function NewArrivals({ data }) {
+  console.log(data);
   const { t, i18n } = useTranslation();
 
   const lang = i18n.language;
@@ -57,9 +72,11 @@ function NewArrivals({ data }) {
                     {data[0].attributes[descriptionKey]}
                   </p>
 
-                  <button className="mt-4 underline text-sm font-medium">
-                    {t("newArrival.buy")}
-                  </button>
+                  <BuyNowLink
+                    productId={data[0].id}
+                    className="mt-4 inline-block text-sm font-medium underline"
+                    label={t("newArrival.buy")}
+                  />
                 </div>
               </div>
             )}
@@ -83,9 +100,11 @@ function NewArrivals({ data }) {
                       {data[1].attributes[descriptionKey]}
                     </p>
 
-                    <button className="mt-3 underline text-sm font-medium">
-                      {t("newArrival.buy")}
-                    </button>
+                    <BuyNowLink
+                      productId={data[1].id}
+                      className="mt-2 inline-block text-sm font-medium underline"
+                      label={t("newArrival.buy")}
+                    />
                   </div>
                 </div>
               )}
@@ -108,9 +127,11 @@ function NewArrivals({ data }) {
                         {data[2].attributes[descriptionKey]}
                       </p>
 
-                      <button className="mt-2 underline text-sm font-medium">
-                        {t("newArrival.buy")}
-                      </button>
+                      <BuyNowLink
+                        productId={data[2].id}
+                        className="mt-2 inline-block text-sm font-medium underline"
+                        label={t("newArrival.buy")}
+                      />
                     </div>
                   </div>
                 )}
@@ -131,9 +152,11 @@ function NewArrivals({ data }) {
                         {data[3].attributes[descriptionKey]}
                       </p>
 
-                      <button className="mt-2 underline text-sm font-medium">
-                        {t("newArrival.buy")}
-                      </button>
+                      <BuyNowLink
+                        productId={data[3].id}
+                        className="mt-2 inline-block text-sm font-medium underline"
+                        label={t("newArrival.buy")}
+                      />
                     </div>
                   </div>
                 )}

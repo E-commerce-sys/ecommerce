@@ -31,7 +31,10 @@ function ProgressPage() {
             const isOpen = expandedOrderId === order.id;
 
             return (
-              <div key={order.id} className="flex w-full min-w-0 flex-col gap-3">
+              <div
+                key={order.id}
+                className="flex w-full min-w-0 flex-col gap-3"
+              >
                 <div className="flex w-full min-w-0 flex-col gap-0">
                   <button
                     type="button"
@@ -39,11 +42,11 @@ function ProgressPage() {
                     className="w-full min-w-0 cursor-pointer rounded-2xl border border-[rgb(var(--color-border))] py-4 text-left transition hover:bg-[rgb(var(--color-grey))]/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary-main))] sm:rounded-3xl sm:py-6"
                   >
                     <div className="flex w-full flex-col gap-2 px-4 sm:gap-3 sm:px-6 md:px-8">
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex items-start justify-between">
                         <p className="min-w-0 text-base text-[rgb(var(--color-text-main-3))] sm:text-lg">
                           Order date: {order.orderDate}
                         </p>
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center self-start rounded-full bg-[rgb(var(--color-primary-1))] text-sm text-[rgb(var(--color-primary-main))] sm:h-[30px] sm:w-[30px]">
+                        <div className="flex md:h-8 md:w-8 shrink-0 items-center justify-center self-start rounded-full bg-[rgb(var(--color-primary-1))] text-sm text-[rgb(var(--color-primary-main))] h-7 w-7">
                           {order.badge}
                         </div>
                       </div>
