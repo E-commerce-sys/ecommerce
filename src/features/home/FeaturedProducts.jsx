@@ -10,9 +10,13 @@ import Button from "../../components/Button";
 function FeaturedProducts({ data }) {
   // randomly pick 8 products
   const { t } = useTranslation();
-  const products = useMemo(() => {
-    return [...data].sort(() => Math.random() - 0.5).slice(0, 8);
-  }, [data]);
+  const products = useMemo(
+    () =>
+      [...data]
+        .sort((a, b) => Number(a.id) - Number(b.id))
+        .slice(0, 8),
+    [data],
+  );
 
   return (
     <section className="flex w-full min-w-0 justify-center overflow-x-hidden py-12">

@@ -1,7 +1,11 @@
 import axiosInstance from "../../../axios/axiosInstance";
 import i18n from "i18next";
 
-export async function filtersAPI(
+/**
+ * Shared by `filtersAPI` and `productsLoader` so the route loader and filters
+ * use the same query shape.
+ */
+export function buildProductsQueryParams({
   page = 1,
   search = "",
   isDiscounted = false,
@@ -12,8 +16,8 @@ export async function filtersAPI(
   priceSort = null,
   discount = null,
   category,
-) {
-  const params = { page };
+} = {}) {
+  const params = { page: Number(page) || 1 };
 
   if (search) {
     const map = {
@@ -27,14 +31,15 @@ export async function filtersAPI(
     params[`filter[${field}]`] = search;
   }
 
-  if (discount !== null) {
+  if (discount !== null && discount !== undefined) {
     params["filter[discountPercentage]"] = discount;
   }
 
   if (isDiscounted) params["filter[hasDiscount]"] = true;
 
-  if (minPrice > 0 || maxPrice)
+  if (minPrice > 0 || maxPrice) {
     params["filter[priceBetween]"] = `${minPrice},${maxPrice}`;
+  }
 
   const sorts = [];
 
@@ -44,13 +49,39 @@ export async function filtersAPI(
   if (ratingSort === "low") sorts.push("averageRating");
   if (ratingSort === "high") sorts.push("-averageRating");
 
-  if (sorts.length) params["sort"] = sorts;
+  if (sorts.length) params.sort = sorts.join(",");
 
   if (isBestSelling) params["filter[isBestSelling]"] = true;
 
   if (category) params["filter[category]"] = category;
 
-  if (sorts.length) params["sort"] = sorts.join(",");
+  return params;
+}
+
+export async function filtersAPI(
+  page = 1,
+  search = "",
+  isDiscounted = false,
+  minPrice,
+  maxPrice,
+  ratingSort = null,
+  isBestSelling = false,
+  priceSort = null,
+  discount = null,
+  category,
+) {
+  const params = buildProductsQueryParams({
+    page,
+    search,
+    isDiscounted,
+    minPrice,
+    maxPrice,
+    ratingSort,
+    isBestSelling,
+    priceSort,
+    discount,
+    category,
+  });
 
   const res = await axiosInstance.get("/api/products", { params });
 

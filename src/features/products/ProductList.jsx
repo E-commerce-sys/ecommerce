@@ -1,68 +1,17 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
-import { useProductContext } from "./ProductContext";
-import { useProductFilters } from "./useProductFilters";
 
 import CartItemSummary from "../../features/cart/CartSummary";
 import Pagination from "./Pagination";
-import { filtersAPI } from "./filters/filtersAPI";
 import { useTranslation } from "react-i18next";
 
-function ProductList({ initialProducts = [] }) {
+/**
+ * Product data comes from the route `productsLoader` only. Filter changes
+ * update the URL → loader revalidates → parent passes new `products` (no
+ * duplicate client fetch).
+ */
+function ProductList({ products = [] }) {
   const { t } = useTranslation();
-
-  const [products, setProducts] = useState(initialProducts);
-  const { setTotalPages } = useProductContext();
-  const { filters } = useProductFilters();
-
-  const {
-    page = 1,
-    search = "",
-    hasDiscount = false,
-    minPrice = 0,
-    maxPrice = 5000,
-    ratingSort = null,
-    priceSort = null,
-    bestSelling = false,
-    discount = null,
-    category
-  } = filters;
-
-  useEffect(() => {
-    async function fetchProducts() {
-      const { data, meta } = await filtersAPI(
-        page,
-        search,
-        hasDiscount,
-        minPrice,
-        maxPrice,
-        ratingSort,
-        bestSelling,
-        priceSort,
-        discount,
-        category
-      );
-
-      setProducts(data ?? []);
-      setTotalPages(meta.last_page);
-
-      window.scrollTo(0, 0);
-    }
-
-    fetchProducts();
-  }, [
-    page,
-    search,
-    hasDiscount,
-    minPrice,
-    maxPrice,
-    ratingSort,
-    priceSort,
-    bestSelling,
-    discount,
-    category
-  ]);
 
   return (
     <section className="flex w-full min-w-0 flex-wrap justify-center overflow-x-hidden py-12">

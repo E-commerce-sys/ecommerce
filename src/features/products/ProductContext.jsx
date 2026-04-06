@@ -1,16 +1,17 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 const ProductContext = createContext();
 
 export function ProductProvider({ children, initialTotalPages = 1 }) {
-  const [totalPages, setTotalPages] = useState(initialTotalPages);
+  const value = useMemo(
+    () => ({ totalPages: initialTotalPages }),
+    [initialTotalPages],
+  );
 
   return (
-    <ProductContext.Provider value={{ totalPages, setTotalPages }}>
-      {children}
-    </ProductContext.Provider>
+    <ProductContext.Provider value={value}>{children}</ProductContext.Provider>
   );
 }
 
