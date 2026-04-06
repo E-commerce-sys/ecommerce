@@ -1,15 +1,11 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { lazy, Suspense } from "react";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";
 import AdminLayout from "../layout/AdminLayout";
 
-import Spinner from "../components/Spinner";
-
-// Pages (home is code-split — loads only when visiting `/`)
-const HomePage = lazy(() => import("../pages/HomePage"));
+import HomePage from "../pages/HomePage";
 import ProductsPage from "../pages/ProductsPage";
 import ProductDetailPage from "../pages/ProductDetailPage";
 import AboutPage from "../pages/AboutPage";
@@ -33,6 +29,7 @@ import AdminAdsPage from "../pages/admin/AdminAdsPage";
 
 import NotFoundPage from "../pages/NotFoundPage";
 import { productsLoader } from "../features/products/productsLoader.js";
+import { homeLoader } from "../features/home/homeLoader.js";
 
 // Route Guards
 import ProtectedRoute from "../routes/ProtectedRoute";
@@ -50,11 +47,8 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: (
-          <Suspense fallback={<Spinner />}>
-            <HomePage />
-          </Suspense>
-        ),
+        loader: homeLoader,
+        element: <HomePage />,
       },
 
       { path: "products", element: <ProductsPage />, loader: productsLoader },

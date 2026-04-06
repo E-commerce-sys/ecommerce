@@ -8,14 +8,14 @@ import Filters from "../features/products/filters/Filters";
 import CategoryMenu from "../features/categories/CategoryMenu";
 
 function ProductsPage() {
-  const { categories, products, totalPages } = useLoaderData();
+  const { products, totalPages } = useLoaderData();
 
   return (
     <ProductProvider initialTotalPages={totalPages}>
-      <CategoryMenu categories={categories} />
+      <CategoryMenu />
       <div className="mx-auto w-full min-w-0 max-w-[1240px] px-5 py-8 md:px-10">
         <Filters />
-        <ProductList initialProducts={products} />
+        <ProductList products={products} />
       </div>
     </ProductProvider>
   );
