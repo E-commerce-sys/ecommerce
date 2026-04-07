@@ -166,6 +166,7 @@ function Navbar() {
         >
           {loggedIn ? (
             <NavLink
+              onClick={() => setOpen(true)}
               to="/account"
               className={({ isActive }) =>
                 `flex items-center gap-2 ${
