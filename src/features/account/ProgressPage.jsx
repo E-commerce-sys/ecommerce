@@ -1,19 +1,45 @@
 /* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import OrderProgress from "./OrderProgress";
 import OrderLineItemsTable from "./OrderLineItemsTable";
-import { FAKE_ORDERS } from "./progressPageFakeData";
+import { getUserOrders, ORDER_STATUS_FILTERS } from "./API/getOrders";
 
 function ProgressPage() {
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+
+    async function load() {
+      try {
+        setLoading(true);
+        setError("");
+        const data = await getUserOrders(ORDER_STATUS_FILTERS.progress);
+        if (!active) return;
+        setOrders(data);
+      } catch {
+        if (!active) return;
+        setError("Failed to load your orders.");
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   function toggleOrder(orderId) {
     setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
   }
-
+  console.log(orders);
   return (
     <div className="mx-auto box-border w-full max-w-[1024px] rounded-lg p-4 shadow sm:rounded-xl sm:p-6">
       <div className="flex w-full min-w-0 flex-col gap-8 sm:gap-11">
@@ -27,7 +53,19 @@ function ProgressPage() {
         </div>
 
         <div className="flex flex-col gap-8 sm:gap-10">
-          {FAKE_ORDERS.map((order) => {
+          {loading ? (
+            <p className="text-sm text-[rgb(var(--color-text-main-3))]">
+              Loading...
+            </p>
+          ) : null}
+          {error ? <p className="text-sm text-red-500">{error}</p> : null}
+          {!loading && !error && orders.length === 0 ? (
+            <p className="text-sm text-[rgb(var(--color-text-main-3))]">
+              No active orders found.
+            </p>
+          ) : null}
+
+          {orders.map((order) => {
             const isOpen = expandedOrderId === order.id;
 
             return (

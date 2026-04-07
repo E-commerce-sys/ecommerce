@@ -3,8 +3,11 @@
 
 function OrderProgress({ currentStatus }) {
   const steps = ["pending", "preparing", "shipping", "delivering", "arrived"];
+  const normalizedStatus = String(currentStatus ?? "pending")
+    .trim()
+    .toLowerCase();
 
-  const rawIndex = steps.indexOf(currentStatus);
+  const rawIndex = steps.indexOf(normalizedStatus);
   const currentIndex = rawIndex === -1 ? 0 : rawIndex;
   const progressPct =
     steps.length > 1 ? (currentIndex / (steps.length - 1)) * 100 : 100;
