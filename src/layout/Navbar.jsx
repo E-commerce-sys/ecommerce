@@ -116,7 +116,7 @@ function Navbar() {
                   </NavLink>
 
                   <NavLink
-                    to="/account/orders"
+                    to="/account/progress"
                     className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4"
                     onClick={() => setAccountOpen(false)}
                   >

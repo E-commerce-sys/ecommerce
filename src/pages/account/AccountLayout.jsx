@@ -6,7 +6,7 @@ import { Link, NavLink, Outlet } from "react-router-dom";
 import { useUser } from "../../context/ProfileContext";
 
 function navClass(isActive) {
-  return `whitespace-nowrap rounded-md px-2 py-1 text-sm transition-colors lg:px-0 lg:py-1 lg:text-base ${
+  return `whitespace-nowrap w-fit rounded-md px-2 py-1 text-sm transition-colors lg:px-0 lg:py-1 lg:text-base ${
     isActive
       ? "bg-[rgb(var(--color-primary-1))] font-medium text-[rgb(var(--color-primary-5))] lg:bg-transparent"
       : "text-[rgb(var(--color-text-main-2))] hover:text-[rgb(var(--color-primary-3))]"
@@ -37,7 +37,8 @@ function AccountLayout() {
           <p className="shrink-0 text-sm text-[rgb(var(--color-text-main))] md:text-base">
             Welcome!{" "}
             <span className="text-[rgb(var(--color-primary-main))]">
-              {capitalize(user?.attributes.firstName)} {capitalize(user?.attributes.lastName)}
+              {capitalize(user?.attributes.firstName)}{" "}
+              {capitalize(user?.attributes.lastName)}
             </span>
           </p>
         </div>
