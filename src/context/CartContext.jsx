@@ -29,7 +29,11 @@ function applyCartFromGetResponse(setCartItems, setCartTotals, apiBody) {
  * PATCH/DELETE may return totals but sparse `included.cartItems`. If mapped lines
  * do not match relationship count, refetch full cart (GET includes variants).
  */
-async function applyCartFromMutationResponse(setCartItems, setCartTotals, apiBody) {
+async function applyCartFromMutationResponse(
+  setCartItems,
+  setCartTotals,
+  apiBody,
+) {
   if (!apiBody?.data) return;
 
   setCartTotals(mapCartTotalsFromResponse(apiBody));

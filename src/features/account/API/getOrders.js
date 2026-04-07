@@ -5,7 +5,7 @@ const INCLUDE =
 
 export const ORDER_STATUS_FILTERS = {
   progress: ["pending", "preparing", "shipping", "delivering"],
-  canceled: ["canceled"],
+  cancelled: ["cancelled"],
   arrived: ["arrived"],
 };
 

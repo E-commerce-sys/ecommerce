@@ -26,12 +26,8 @@ function numericQtyForSubtotal(lineQty, item) {
 }
 
 function Items() {
-  const {
-    cartItems,
-    updateQuantity,
-    removeItem,
-    persistCartItemQuantity,
-  } = useCart();
+  const { cartItems, updateQuantity, removeItem, persistCartItemQuantity } =
+    useCart();
 
   const { outOfStockCartItemId, clearOutOfStockHighlight } =
     useCheckoutAddress();
@@ -60,7 +56,6 @@ function Items() {
       return next;
     });
   }, [cartItems]);
-
   function commitLineQuantity(item) {
     const raw = lineQty[item.id] ?? String(item.quantity);
     let q = Number(raw);
@@ -227,7 +222,11 @@ function Items() {
               />
 
               <div className="flex flex-col items-center gap-2">
-                <img src={item.img} className="w-26 h-26 object-contain" alt="" />
+                <img
+                  src={item.img}
+                  className="w-26 h-26 object-contain"
+                  alt=""
+                />
                 <p className="text-sm text-center">
                   {i18n.language === "ar"
                     ? item.nameAr
@@ -278,9 +277,9 @@ function Items() {
                 <span>
                   {t("cart.subtotal")}: $
                   {Number(
-                    (
-                      item.price * numericQtyForSubtotal(lineQty, item)
-                    ).toFixed(2),
+                    (item.price * numericQtyForSubtotal(lineQty, item)).toFixed(
+                      2,
+                    ),
                   )}
                 </span>
               </div>

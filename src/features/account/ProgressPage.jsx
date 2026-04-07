@@ -39,9 +39,9 @@ function ProgressPage() {
   function toggleOrder(orderId) {
     setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
   }
-  console.log(orders);
+
   return (
-    <div className="mx-auto box-border w-full max-w-[1024px] rounded-lg p-4 shadow sm:rounded-xl sm:p-6">
+    <div className="mx-auto w-full max-w-[1024px] p-4 sm:p-6">
       <div className="flex w-full min-w-0 flex-col gap-8 sm:gap-11">
         <div className="flex flex-col gap-1.5">
           <p className="text-lg font-medium text-[rgb(var(--color-primary-main))] sm:text-xl">
