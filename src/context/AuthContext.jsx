@@ -6,24 +6,11 @@ import axiosInstance from "../axios/axiosInterceptor"; // 👈 import this
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
 
   const [loggedIn, setLoggedIn] = useState(() => {
     return !!localStorage.getItem("token");
   });
 
-  const saveUserName = (first, last) => {
-    const userData = { ...user, first, last };
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-  };
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   const login = (token) => {
     localStorage.setItem("token", token);
@@ -41,7 +28,6 @@ export function AuthProvider({ children }) {
       // ✅ Always clear local state
       localStorage.removeItem("token");
       setLoggedIn(false);
-      setUser(null);
     }
   };
 
@@ -61,7 +47,6 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const onUnauthorized = () => {
       setLoggedIn(false);
-      setUser(null);
     };
     window.addEventListener("auth:unauthorized", onUnauthorized);
     return () => window.removeEventListener("auth:unauthorized", onUnauthorized);
@@ -69,7 +54,7 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider
-      value={{ loggedIn, user, saveUserName, login, logout }}
+      value={{ loggedIn, login, logout }}
     >
       {children}
     </AuthContext.Provider>

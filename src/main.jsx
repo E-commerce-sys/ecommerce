@@ -10,16 +10,19 @@ import { LanguageProvider } from "./context/LanguageContext.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import { CategoryProvider } from "./context/CategoryContext";
 import { CartProvider } from "./context/CartContext.jsx";
+import { UserProvider } from "./context/ProfileContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <LanguageProvider>
+        <UserProvider>
         <CategoryProvider>
           <CartProvider>
             <App />
           </CartProvider>
         </CategoryProvider>
+        </UserProvider>
       </LanguageProvider>
     </AuthProvider>
   </StrictMode>,
