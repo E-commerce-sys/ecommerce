@@ -11,7 +11,6 @@ function Adress() {
   const {
     savedAddresses,
     placeholderValue,
-    newAddressValue,
     selectedOption,
     setSelectedOption,
     formData,
@@ -39,7 +38,7 @@ function Adress() {
             value={selectedOption}
             onChange={(e) => setSelectedOption(e.target.value)}
           >
-            <option value={placeholderValue} disabled>
+            <option value={placeholderValue}>
               {t("checkout.chooseSavedAddress")}
             </option>
             {savedAddresses.map((a) => (
@@ -47,9 +46,6 @@ function Adress() {
                 {t(a.labelKey)}
               </option>
             ))}
-            <option value={newAddressValue}>
-              {t("checkout.newAddressOption")}
-            </option>
           </select>
         </div>
 
@@ -73,8 +69,8 @@ function Adress() {
             </label>
             <input
               type="text"
-              name="street"
-              value={formData.street}
+              name="streetName"
+              value={formData.streetName}
               onChange={updateFormField}
               className={`${inputStyle} w-full`}
             />
@@ -86,8 +82,8 @@ function Adress() {
             </label>
             <input
               type="text"
-              name="apartment"
-              value={formData.apartment}
+              name="houseNumber"
+              value={formData.houseNumber}
               onChange={updateFormField}
               className={`${inputStyle} w-full`}
             />

@@ -26,9 +26,9 @@ function CartPage() {
   }
 
   return (
-    <div className="mt-17 w-full min-w-0">
-      <Items />
-      <CheckoutAddressProvider>
+    <CheckoutAddressProvider>
+      <div className="mt-17 w-full min-w-0">
+        <Items />
         <div className="mx-auto flex w-full max-w-7xl min-w-0 flex-col gap-10 px-4 py-8 md:px-8 md:py-12 lg:flex-row lg:justify-center lg:gap-30 lg:px-10 lg:py-20 xl:px-20">
           <div className="min-w-0 w-full lg:w-auto lg:max-w-none lg:flex-1 lg:shrink">
             <Adress />
@@ -37,8 +37,8 @@ function CartPage() {
             <CartTotal />
           </div>
         </div>
-      </CheckoutAddressProvider>
-    </div>
+      </div>
+    </CheckoutAddressProvider>
   );
 }
 

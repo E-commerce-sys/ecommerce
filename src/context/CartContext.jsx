@@ -133,16 +133,22 @@ export function CartProvider({ children }) {
     }
   }, []);
 
-  const fetchCart = useCallback(async () => {
+  const fetchCart = useCallback(async (options = {}) => {
+    const silent = options.silent === true;
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
       const apiBody = await getCartItems();
       applyCartFromGetResponse(setCartItems, setCartTotals, apiBody);
     } catch (err) {
       console.error("Failed to fetch cart", err);
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
+  }, []);
+
+  const clearCartLocally = useCallback(() => {
+    setCartItems([]);
+    setCartTotals({ subtotal: 0, shippingCost: 0, totalPrice: 0 });
   }, []);
 
   const value = useMemo(
@@ -156,6 +162,7 @@ export function CartProvider({ children }) {
       updateQuantity,
       removeItem,
       fetchCart,
+      clearCartLocally,
       flushPendingCartSync,
       persistCartItemQuantity,
     }),
@@ -169,6 +176,7 @@ export function CartProvider({ children }) {
       updateQuantity,
       removeItem,
       fetchCart,
+      clearCartLocally,
       flushPendingCartSync,
       persistCartItemQuantity,
     ],
