@@ -10,8 +10,11 @@ function CartTotal() {
   const { cartItems, subtotal, shipping, shippingFormatted, total } = useCart();
   const { t } = useTranslation();
   const {
-    orderAddressError,
-    tryValidateAddressForOrder,
+    placeOrder,
+    orderLoading,
+    orderError,
+    orderSuccess,
+    canPlaceOrder,
   } = useCheckoutAddress();
 
   const hasInvalidQuantity = cartItems?.some(
@@ -64,20 +67,35 @@ function CartTotal() {
           </Button>
         </div>
         <div className="flex flex-col items-stretch gap-2 lg:items-end">
-          {orderAddressError ? (
-            <p className="text-sm text-red-500 lg:text-right">
-              {t("checkout.addressRequired")}
+          {orderSuccess ? (
+            <p className="text-sm text-green-600 lg:text-right">{orderSuccess}</p>
+          ) : null}
+          {orderError ? (
+            <p className="whitespace-pre-line text-sm text-red-500 lg:text-right">
+              {orderError}
             </p>
           ) : null}
           <div className="flex justify-stretch lg:justify-end">
             <Button
               type="button"
-              disabled={hasInvalidQuantity || isCartEmpty}
+              disabled={
+                orderLoading ||
+                hasInvalidQuantity ||
+                isCartEmpty ||
+                !canPlaceOrder
+              }
               className="h-12 w-full text-sm md:w-57.5 md:text-base"
               variant="primary"
               onClick={() => {
-                if (hasInvalidQuantity || isCartEmpty) return;
-                tryValidateAddressForOrder();
+                if (
+                  orderLoading ||
+                  hasInvalidQuantity ||
+                  isCartEmpty ||
+                  !canPlaceOrder
+                ) {
+                  return;
+                }
+                void placeOrder();
               }}
             >
               {t("checkout.order")}

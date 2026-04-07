@@ -9,6 +9,7 @@ import cancel from "../../assets/icons/cancel-fill.svg";
 import arrow from "../../assets/icons/arrow-left.svg";
 
 import { useCart } from "../../context/CartContext";
+import { useCheckoutAddress } from "../../context/CheckoutAddressContext";
 
 function displayQuantityForLine(lineQty, item) {
   const raw = lineQty[item.id];
@@ -32,7 +33,15 @@ function Items() {
     persistCartItemQuantity,
   } = useCart();
 
+  const { outOfStockCartItemId, clearOutOfStockHighlight } =
+    useCheckoutAddress();
+
   const [lineQty, setLineQty] = useState({});
+
+  function lineIsOutOfStockHighlight(item) {
+    if (outOfStockCartItemId == null) return false;
+    return Number(outOfStockCartItemId) === Number(item.id);
+  }
 
   useEffect(() => {
     setLineQty((prev) => {
@@ -70,6 +79,7 @@ function Items() {
   const isRight = i18n.language === "ar" || i18n.language === "ku";
 
   function handleDelete(cartItemId) {
+    clearOutOfStockHighlight();
     removeItem(cartItemId);
   }
 
@@ -112,10 +122,13 @@ function Items() {
 
           <tbody>
             {cartItems.map((item) => {
+              const oos = lineIsOutOfStockHighlight(item);
               return (
                 <tr
                   key={item.id}
-                  className="border-b border-[rgb(var(--color-border))]"
+                  className={`border-b border-[rgb(var(--color-border))] ${
+                    oos ? "bg-red-500/5 ring-2 ring-inset ring-red-500" : ""
+                  }`}
                 >
                   {/* PRODUCT */}
                   <td className="py-6 px-3 md:px-6 md:py-8.5">
@@ -155,6 +168,7 @@ function Items() {
                       min="1"
                       value={displayQuantityForLine(lineQty, item)}
                       onChange={(e) => {
+                        clearOutOfStockHighlight();
                         setLineQty((l) => ({
                           ...l,
                           [item.id]: e.target.value,
@@ -195,10 +209,15 @@ function Items() {
       {/* MOBILE */}
       <div className="flex flex-col gap-4 sm:hidden px-4 py-4">
         {cartItems.map((item) => {
+          const oos = lineIsOutOfStockHighlight(item);
           return (
             <div
               key={item.id}
-              className="relative border border-[rgb(var(--color-border))] shadow rounded-lg p-4 flex flex-col gap-4"
+              className={`relative shadow rounded-lg p-4 flex flex-col gap-4 ${
+                oos
+                  ? "border-2 border-red-500 bg-red-500/5"
+                  : "border border-[rgb(var(--color-border))]"
+              }`}
             >
               <img
                 src={cancel}
@@ -244,6 +263,7 @@ function Items() {
                   min="1"
                   value={displayQuantityForLine(lineQty, item)}
                   onChange={(e) => {
+                    clearOutOfStockHighlight();
                     setLineQty((l) => ({
                       ...l,
                       [item.id]: e.target.value,
