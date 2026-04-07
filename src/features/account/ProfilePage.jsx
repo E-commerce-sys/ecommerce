@@ -1,31 +1,47 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
+import { useUser } from "../../context/ProfileContext";
 
 function ProfilePage() {
   const { t } = useTranslation();
+  const { user, loading } = useUser();
 
-  const userData = {
-    first_name: "John",
-    last_name: "Doe",
-    email: "john.doe@gmail.com",
-  };
-
-  // useEffect()            for API integration
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    first_name: userData.first_name,
-    last_name: userData.last_name,
-    email: userData.email,
+    first_name: '',
+    last_name: '',
+    email: '',
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
   const [savedData, setSavedData] = useState({ ...formData });
+
+  useEffect(() => {
+  if (user) {
+    setFormData({
+      first_name: user.attributes.firstName,
+      last_name: user.attributes.lastName,
+      email: user.attributes.email,
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+    setSavedData({
+      first_name: user.attributes.firstName,
+      last_name: user.attributes.lastName,
+      email: user.attributes.email,
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  }
+}, [user]);
 
   function handleChange(e) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -46,6 +62,10 @@ function ProfilePage() {
     setIsEditing(false);
     console.log("Saved:", formData);
   }
+
+  
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>User not found</div>;
 
   return (
     <div className="mx-auto mb-16 border border-[rgb(var(--color-border))] flex w-full min-w-0 max-w-4xl flex-col gap-6 rounded-xl p-6 sm:mb-24 sm:gap-8 md:p-8 lg:mb-32">

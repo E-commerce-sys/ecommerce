@@ -17,7 +17,7 @@ import Input from "../../../components/Input";
 function RegisterForm() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { login, saveUserName } = useAuth();
+  const { login} = useAuth();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
@@ -105,7 +105,6 @@ function RegisterForm() {
       );
       // save token in localStorage
       login(res.data.token);
-      saveUserName(res.data.user.first_name, res.data.user.last_name);
       // store email for UI
       sessionStorage.setItem("verifyEmail", form.email);
 

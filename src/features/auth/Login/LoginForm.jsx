@@ -23,7 +23,7 @@ function LoginForm() {
   const [formError, setFormError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, saveUserName } = useAuth();
+  const { login } = useAuth();
 
   const isFormValid =
     email.trim() !== "" &&
@@ -49,8 +49,6 @@ function LoginForm() {
       setLoading(true);
       const res = await loginAPI(email, password);
       login(res.data.token);
-      saveUserName(res.data.user.first_name, res.data.user.last_name);
-
       navigate(from, { replace: true });
     } catch (error) {
       console.error("Login error:", error?.response?.data);
