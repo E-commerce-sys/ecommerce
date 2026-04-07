@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getUserAPI } from "../features/account/API/userAPI";
-import { useAuth } from "./AuthContext"; // 👈 import this
+import { useAuth } from "./AuthContext";
 
 const UserContext = createContext({ user: null, loading: true, error: null });
 
 export function UserProvider({ children }) {
-  const { loggedIn } = useAuth(); 
+  const { loggedIn } = useAuth();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  async function fetchUser() {
+  const fetchUser = async () => {
     try {
       setLoading(true);
       const userData = await getUserAPI();
@@ -22,24 +22,18 @@ export function UserProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  // 🔥 THIS IS THE KEY
   useEffect(() => {
     if (!loggedIn) {
       setUser(null);
       setLoading(false);
       return;
     }
-
     fetchUser();
-  }, [loggedIn]); // 👈 dependency added
+  }, [loggedIn]);
 
-  return (
-    <UserContext.Provider value={{ user, loading, error }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, setUser, loading, error }}>{children}</UserContext.Provider>;
 }
 
 export function useUser() {

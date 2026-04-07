@@ -1,3 +1,4 @@
+
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useState,useEffect } from "react";
@@ -5,10 +6,11 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
 import { useUser } from "../../context/ProfileContext";
+import { updateUserAPI } from "./API/userAPI";
 
 function ProfilePage() {
   const { t } = useTranslation();
-  const { user, loading } = useUser();
+  const { user, setUser, loading } = useUser();
 
 
   const [isEditing, setIsEditing] = useState(false);
@@ -40,6 +42,7 @@ function ProfilePage() {
       newPassword: "",
       confirmPassword: "",
     });
+    console.log("User data loaded:", user);
   }
 }, [user]);
 
@@ -56,12 +59,55 @@ function ProfilePage() {
     setIsEditing(false);
   }
 
-  function handleSave(e) {
-    e.preventDefault();
+  async function handleSave(e) {
+  e.preventDefault();
+
+  try {
+    const payload = {};
+
+    if (formData.first_name !== savedData.first_name) {
+      payload.firstName = formData.first_name;
+    }
+
+    if (formData.last_name !== savedData.last_name) {
+      payload.lastName = formData.last_name;
+    }
+
+    if (formData.email !== savedData.email) {
+      payload.email = formData.email;
+    }
+
+    if (formData.currentPassword || formData.newPassword || formData.confirmPassword) {
+      if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
+        alert("Please fill all password fields");
+        return;
+      }
+
+      if (formData.newPassword !== formData.confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      payload.currentPassword = formData.currentPassword; // old password, if backend requires it
+      payload.password = formData.newPassword;            // new password
+      payload.password_confirmation = formData.confirmPassword; // confirmation
+    }
+    if (!Object.keys(payload).length) {
+      console.log("No changes detected");
+      return;
+    }
+
+    const updatedUser = await updateUserAPI(payload);
+
+    // update savedData AFTER successful save
+    setUser(updatedUser);
     setSavedData({ ...formData });
     setIsEditing(false);
-    console.log("Saved:", formData);
+
+  } catch (error) {
+    console.error("Failed to update:", error.response?.data || error.message);
   }
+}
 
   
   if (loading) return <div>Loading...</div>;
