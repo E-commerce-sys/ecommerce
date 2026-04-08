@@ -5,7 +5,13 @@ export async function getUserAPI() {
   return res.data.data;
 }
 
-export async function updateUserAPI(data) {
-  const res = await axiosInstance.patch("/api/user", data);
+export async function updateUserAPI(payload) {
+  const update = {
+    data: {
+      attributes: payload
+    }
+  };
+
+  const res = await axiosInstance.patch("/api/user", update);
   return res.data.data;
 }
