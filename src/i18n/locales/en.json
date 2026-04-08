@@ -185,6 +185,7 @@
     "save": "Save this information for faster check-out next time",
     "order": "Place Order",
     "chooseSavedAddress": "Choose a saved address",
+    "loadingAddresses": "Loading your saved addresses…",
     "newAddressOption": "Enter a new address",
     "savedAddress1": "Address 1",
     "savedAddress2": "Address 2",

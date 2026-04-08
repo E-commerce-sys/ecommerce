@@ -179,6 +179,7 @@
     "save": "احفظ هذه المعلومات لتسريع عملية الشراء في المرة القادمة",
     "order": "إتمام الطلب",
     "chooseSavedAddress": "اختر عنواناً محفوظاً",
+    "loadingAddresses": "جاري تحميل عناوينك المحفوظة…",
     "newAddressOption": "إدخال عنوان جديد",
     "savedAddress1": "العنوان 1",
     "savedAddress2": "العنوان 2",

@@ -10,27 +10,29 @@ import {
 import { useNavigate } from "react-router-dom";
 import { createOrder } from "../features/basket/api/createOrder";
 import { useCart } from "./CartContext";
-
+import { useAddress } from "./AddressContext";
 const CheckoutAddressContext = createContext(null);
 
 const PLACEHOLDER = "";
 
-const MOCK_SAVED_ADDRESSES = [
-  {
-    id: "1",
-    labelKey: "checkout.savedAddress1",
-    city: "Dallas",
-    streetName: "1st Street",
-    houseNumber: "47A",
-  },
-  {
-    id: "2",
-    labelKey: "checkout.savedAddress2",
-    city: "Houston",
-    streetName: "2nd Street",
-    houseNumber: "52B",
-  },
-];
+/** Set as `orderError` when Place Order runs without a valid saved or manual address. */
+export const ORDER_ERROR_ADDRESS_REQUIRED = "__checkout_address_required__";
+
+/** `address` from AddressContext is `GET /api/user-addresses` → `res.data.data` (array of JSON:API-style rows). */
+function normalizeSavedAddresses(addressList) {
+  if (!Array.isArray(addressList)) return [];
+  return addressList.map((item) => {
+    const id = item?.id;
+    const attr = item?.attributes ?? {};
+    const line1 = [attr.addressName]
+      .filter((x) => x != null && String(x).trim() !== "")
+      .join(" ");
+    const label =
+      [line1].filter(Boolean).join(" — ") ||
+      (id != null ? `Address #${id}` : "Address");
+    return { id: String(id), label };
+  });
+}
 
 /**
  * Laravel / JSON-style: errors[] with { message, ... }
@@ -116,16 +118,22 @@ function buildSavedAddressBody(savedId) {
   };
 }
 
-function isSavedAddressSelection(selectedOption) {
+function isSavedAddressSelection(selectedOption, savedAddresses) {
   return (
     selectedOption !== PLACEHOLDER &&
-    MOCK_SAVED_ADDRESSES.some((a) => a.id === selectedOption)
+    savedAddresses.some((a) => String(a.id) === String(selectedOption))
   );
 }
 
 export function CheckoutAddressProvider({ children }) {
+  const { address, loading: addressLoading } = useAddress();
   const navigate = useNavigate();
   const { fetchCart, clearCartLocally } = useCart();
+
+  const savedAddresses = useMemo(
+    () => normalizeSavedAddresses(address),
+    [address],
+  );
 
   const [selectedOption, setSelectedOption] = useState(PLACEHOLDER);
   const [formData, setFormData] = useState({
@@ -148,12 +156,12 @@ export function CheckoutAddressProvider({ children }) {
 
   /** Saved row selected (inputs stay empty) OR user typed city + street (no saved row). */
   const canPlaceOrder = useMemo(() => {
-    if (isSavedAddressSelection(selectedOption)) return true;
+    if (isSavedAddressSelection(selectedOption, savedAddresses)) return true;
     return (
       String(formData.city ?? "").trim() !== "" &&
       String(formData.streetName ?? "").trim() !== ""
     );
-  }, [selectedOption, formData.city, formData.streetName]);
+  }, [selectedOption, savedAddresses, formData.city, formData.streetName]);
 
   const setSelectedOptionAndSync = useCallback(
     (value) => {
@@ -197,10 +205,17 @@ export function CheckoutAddressProvider({ children }) {
   }, []);
 
   const placeOrder = useCallback(async () => {
+    if (!canPlaceOrder) {
+      setOrderSuccess(null);
+      setOutOfStockCartItemId(null);
+      setOrderError(ORDER_ERROR_ADDRESS_REQUIRED);
+      return;
+    }
+
     setOrderError(null);
     setOrderSuccess(null);
     const saveAddressToUser = !!formData.saveInfo;
-    const useSaved = isSavedAddressSelection(selectedOption);
+    const useSaved = isSavedAddressSelection(selectedOption, savedAddresses);
 
     setOrderLoading(true);
     try {
@@ -244,11 +259,20 @@ export function CheckoutAddressProvider({ children }) {
     } finally {
       setOrderLoading(false);
     }
-  }, [formData, selectedOption, navigate, fetchCart, clearCartLocally]);
+  }, [
+    canPlaceOrder,
+    formData,
+    selectedOption,
+    savedAddresses,
+    navigate,
+    fetchCart,
+    clearCartLocally,
+  ]);
 
   const value = useMemo(
     () => ({
-      savedAddresses: MOCK_SAVED_ADDRESSES,
+      savedAddresses,
+      addressLoading,
       placeholderValue: PLACEHOLDER,
       selectedOption,
       setSelectedOption: setSelectedOptionAndSync,
@@ -263,6 +287,8 @@ export function CheckoutAddressProvider({ children }) {
       canPlaceOrder,
     }),
     [
+      savedAddresses,
+      addressLoading,
       selectedOption,
       setSelectedOptionAndSync,
       formData,

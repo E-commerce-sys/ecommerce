@@ -7,7 +7,8 @@ import { useState, useEffect } from "react";
 import { useAddress } from "../../context/AddressContext";
 function AddressPage() {
   const { t } = useTranslation();
-  const { address, setAddress, loading, error, createAddress,fetchAddress,deleteAddress } = useAddress();
+  const { address, setAddress, createAddress, fetchAddress, deleteAddress } =
+    useAddress();
   const [newAddress, setNewAddress] = useState({
     address_name: "",
     house_number: "",
@@ -17,7 +18,6 @@ function AddressPage() {
     zip_code: "",
     country: "",
   });
-  
 
   const [isEditing, setIsEditing] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -25,31 +25,30 @@ function AddressPage() {
   const [savedData, setSavedData] = useState([]);
 
   useEffect(() => {
-  if (!address?.length) {
-    setSelectedIndex(-1);
-    setIsEditing(true);
-    return;
-  }
+    if (!address?.length) {
+      setSelectedIndex(-1);
+      setIsEditing(true);
+      return;
+    }
 
-  const mapped = address
-    .filter((addr) => addr?.attributes)
-    .map((addr) => ({
-      id: addr.id,
-      address_name: addr.attributes.addressName ?? `Address ${addr.id}`,
-      house_number: addr.attributes.houseNumber ?? "",
-      street_name: addr.attributes.streetName ?? "",
-      city: addr.attributes.city ?? "",
-      state: addr.attributes.state ?? "",
-      zip_code: addr.attributes.zipCode ?? "",
-      country: addr.attributes.country ?? "",
-    }));
+    const mapped = address
+      .filter((addr) => addr?.attributes)
+      .map((addr) => ({
+        id: addr.id,
+        address_name: addr.attributes.addressName ?? `Address ${addr.id}`,
+        house_number: addr.attributes.houseNumber ?? "",
+        street_name: addr.attributes.streetName ?? "",
+        city: addr.attributes.city ?? "",
+        state: addr.attributes.state ?? "",
+        zip_code: addr.attributes.zipCode ?? "",
+        country: addr.attributes.country ?? "",
+      }));
 
-  setFormData(mapped);
-  setSavedData(mapped);
-  setSelectedIndex(0);
-  setIsEditing(false);
-}, [address]);
-
+    setFormData(mapped);
+    setSavedData(mapped);
+    setSelectedIndex(0);
+    setIsEditing(false);
+  }, [address]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -66,12 +65,12 @@ function AddressPage() {
   }
 
   async function handleDelete() {
-  const currentId = formData[selectedIndex]?.id;
-  if (!currentId) return;
+    const currentId = formData[selectedIndex]?.id;
+    if (!currentId) return;
 
-  await deleteAddress(currentId);
-  setSelectedIndex(0);
-}
+    await deleteAddress(currentId);
+    setSelectedIndex(0);
+  }
 
   function handleCancel() {
     setFormData([...savedData]);
@@ -91,38 +90,38 @@ function AddressPage() {
   }
 
   async function handleSave(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (selectedIndex === -1) {
-    await createAddress(
-      newAddress.address_name,
-      newAddress.city,
-      newAddress.zip_code,
-      newAddress.street_name,
-      newAddress.country,
-      newAddress.state,
-      newAddress.house_number,
-    );
+    if (selectedIndex === -1) {
+      await createAddress(
+        newAddress.address_name,
+        newAddress.city,
+        newAddress.zip_code,
+        newAddress.street_name,
+        newAddress.country,
+        newAddress.state,
+        newAddress.house_number,
+      );
 
-    await fetchAddress();
+      await fetchAddress();
 
-    setSelectedIndex(0);
-    setNewAddress({
-      address_name: "",
-      house_number: "",
-      street_name: "",
-      city: "",
-      state: "",
-      zip_code: "",
-      country: "",
-    });
-  } else {
-    setSavedData([...formData]);
-    setAddress([...formData]);
+      setSelectedIndex(0);
+      setNewAddress({
+        address_name: "",
+        house_number: "",
+        street_name: "",
+        city: "",
+        state: "",
+        zip_code: "",
+        country: "",
+      });
+    } else {
+      setSavedData([...formData]);
+      setAddress([...formData]);
+    }
+
+    setIsEditing(false);
   }
-
-  setIsEditing(false);
-}
   const currentAddress =
     selectedIndex === -1 ? newAddress : formData[selectedIndex];
   return (
@@ -155,17 +154,17 @@ function AddressPage() {
             className="min-w-0 w-full max-w-md rounded-md border border-[rgb(var(--color-border))] bg-[rgb(var(--color-grey))] px-3 py-2.5 text-sm outline-none focus:border-[rgb(var(--color-primary-main))] focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
             value={selectedIndex}
             onChange={(e) => {
-            const val = Number(e.target.value);
-            setSelectedIndex(val);
-            setIsEditing(val === -1);
-          }}
+              const val = Number(e.target.value);
+              setSelectedIndex(val);
+              setIsEditing(val === -1);
+            }}
           >
             {formData.map((address, i) => (
               <option key={i} value={i}>
                 {address.address_name}
               </option>
             ))}
-            <option value={-1} >{t("addressPage.newAddress")}</option>
+            <option value={-1}>{t("addressPage.newAddress")}</option>
           </select>
         </div>
 

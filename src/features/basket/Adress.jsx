@@ -10,6 +10,7 @@ function Adress() {
   const { t } = useTranslation();
   const {
     savedAddresses,
+    addressLoading,
     placeholderValue,
     selectedOption,
     setSelectedOption,
@@ -34,8 +35,9 @@ function Adress() {
             {t("checkout.address")}
           </p>
           <select
-            className="min-w-0 w-full rounded-md border border-[rgb(var(--color-border))] bg-[rgb(var(--color-grey))] px-3 py-2.5 text-sm outline-none focus:border-[rgb(var(--color-primary-main))] focus:ring-1 focus:ring-[rgb(var(--color-primary-main))] lg:max-w-md"
+            className="min-w-0 w-full rounded-md border border-[rgb(var(--color-border))] bg-[rgb(var(--color-grey))] px-3 py-2.5 text-sm outline-none focus:border-[rgb(var(--color-primary-main))] focus:ring-1 focus:ring-[rgb(var(--color-primary-main))] lg:max-w-md disabled:cursor-not-allowed disabled:opacity-60"
             value={selectedOption}
+            disabled={addressLoading}
             onChange={(e) => setSelectedOption(e.target.value)}
           >
             <option value={placeholderValue}>
@@ -43,7 +45,7 @@ function Adress() {
             </option>
             {savedAddresses.map((a) => (
               <option key={a.id} value={a.id}>
-                {t(a.labelKey)}
+                {a.label}
               </option>
             ))}
           </select>

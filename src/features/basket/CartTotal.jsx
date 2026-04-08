@@ -1,21 +1,23 @@
 /* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
 
 import { useCart } from "../../context/CartContext";
-import { useCheckoutAddress } from "../../context/CheckoutAddressContext";
+import {
+  ORDER_ERROR_ADDRESS_REQUIRED,
+  useCheckoutAddress,
+} from "../../context/CheckoutAddressContext";
 
 function CartTotal() {
   const { cartItems, subtotal, shipping, shippingFormatted, total } = useCart();
   const { t } = useTranslation();
-  const {
-    placeOrder,
-    orderLoading,
-    orderError,
-    orderSuccess,
-    canPlaceOrder,
-  } = useCheckoutAddress();
+  const { placeOrder, orderLoading, orderError, orderSuccess } =
+    useCheckoutAddress();
+
+  const orderErrorDisplay =
+    orderError === ORDER_ERROR_ADDRESS_REQUIRED
+      ? t("checkout.addressRequired")
+      : orderError;
 
   const hasInvalidQuantity = cartItems?.some(
     (item) => item.quantity === "" || item.quantity < 1,
@@ -70,31 +72,19 @@ function CartTotal() {
           {orderSuccess ? (
             <p className="text-sm text-green-600 lg:text-right">{orderSuccess}</p>
           ) : null}
-          {orderError ? (
+          {orderErrorDisplay ? (
             <p className="whitespace-pre-line text-sm text-red-500 lg:text-right">
-              {orderError}
+              {orderErrorDisplay}
             </p>
           ) : null}
           <div className="flex justify-stretch lg:justify-end">
             <Button
               type="button"
-              disabled={
-                orderLoading ||
-                hasInvalidQuantity ||
-                isCartEmpty ||
-                !canPlaceOrder
-              }
+              disabled={orderLoading || hasInvalidQuantity || isCartEmpty}
               className="h-12 w-full text-sm md:w-57.5 md:text-base"
               variant="primary"
               onClick={() => {
-                if (
-                  orderLoading ||
-                  hasInvalidQuantity ||
-                  isCartEmpty ||
-                  !canPlaceOrder
-                ) {
-                  return;
-                }
+                if (orderLoading || hasInvalidQuantity || isCartEmpty) return;
                 void placeOrder();
               }}
             >
