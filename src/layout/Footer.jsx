@@ -30,7 +30,7 @@ function Footer() {
             to="/about"
             className="text-[rgb(var(--color-text-main-1))]  hover:text-white transition-colors"
           >
-            {t("footer.about")}
+            {t("footer.contact")}
           </Link>
         </div>
 
@@ -79,7 +79,7 @@ function Footer() {
           </p>
         </div>
         <div className=" flex flex-col gap-4 ">
-          <h3 className="font-semibold text-lg ">{t("footer.shop")}</h3>
+          <h3 className="font-semibold text-lg ">{t("footer.details")}</h3>
           <p>
             <Link to="/Privacy&Policy" className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors">
               {t("footer.privacy")}
@@ -100,7 +100,7 @@ function Footer() {
               to="/contact"
               className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
             >
-              {t("footer.contact")}
+              {t("footer.about")}
             </Link>
           </p>
         </div>
@@ -129,7 +129,7 @@ function Footer() {
               className="hover:text-white cursor-pointer transition-colors"
             />
             </Link>
-            <Link to="https://www.instagram.com/fastlink_official/" target="_blank">
+            <Link to="https://www.x.com" target="_blank">
             <img
               src={Twitter}
               size={18}
