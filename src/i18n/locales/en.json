@@ -31,7 +31,8 @@
     "faq": "FAQ",
     "contact": "Contact",
     "download": "Download App",
-    "save": "Save $3 with App New User Only"
+    "save": "Save $3 with App New User Only",
+    "details":"Details"
   },
   "login": {
     "welcome": "Log in to Exclusive",
