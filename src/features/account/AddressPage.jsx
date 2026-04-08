@@ -4,8 +4,10 @@ import { useTranslation } from "react-i18next";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { useState, useEffect } from "react";
+import { useAddress } from "../../context/AddressContext";
 function AddressPage() {
   const { t } = useTranslation();
+  const { address, setAddress, loading, error, createAddress,fetchAddress,deleteAddress } = useAddress();
   const [newAddress, setNewAddress] = useState({
     address_name: "",
     house_number: "",
@@ -15,50 +17,39 @@ function AddressPage() {
     zip_code: "",
     country: "",
   });
-  const userData = [
-    {
-      id: 1,
-      address_name: "Address 1",
-      street_name: "1st Street",
-      house_number: "47A",
-      city: "Dallas",
-      state: "Texas",
-      country: "USA",
-      zip_code: 123,
-    },
-    {
-      id: 2,
-      address_name: "Address 2",
-      street_name: "2nd Street",
-      house_number: "52B",
-      city: "Houston",
-      state: "Texas",
-      country: "USA",
-      zip_code: 456,
-    },
-  ];
+  
 
   const [isEditing, setIsEditing] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [formData, setFormData] = useState(
-    userData.map((address) => ({
-      address_name: address.address_name,
-      house_number: address.house_number,
-      street_name: address.street_name,
-      city: address.city,
-      state: address.state,
-      zip_code: address.zip_code,
-      country: address.country,
-    })),
-  );
-
-  const [savedData, setSavedData] = useState([...formData]);
+  const [formData, setFormData] = useState([]);
+  const [savedData, setSavedData] = useState([]);
 
   useEffect(() => {
-    if (selectedIndex === -1) {
-      setIsEditing(true);
-    }
-  }, [selectedIndex]);
+  if (!address?.length) {
+    setSelectedIndex(-1);
+    setIsEditing(true);
+    return;
+  }
+
+  const mapped = address
+    .filter((addr) => addr?.attributes)
+    .map((addr) => ({
+      id: addr.id,
+      address_name: addr.attributes.addressName ?? `Address ${addr.id}`,
+      house_number: addr.attributes.houseNumber ?? "",
+      street_name: addr.attributes.streetName ?? "",
+      city: addr.attributes.city ?? "",
+      state: addr.attributes.state ?? "",
+      zip_code: addr.attributes.zipCode ?? "",
+      country: addr.attributes.country ?? "",
+    }));
+
+  setFormData(mapped);
+  setSavedData(mapped);
+  setSelectedIndex(0);
+  setIsEditing(false);
+}, [address]);
+
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -67,31 +58,28 @@ function AddressPage() {
       setNewAddress((prev) => ({ ...prev, [name]: value }));
     } else {
       setFormData((prev) =>
-        prev.map((address, i) =>
-          i === selectedIndex ? { ...address, [name]: value } : address,
+        prev.map((addr, i) =>
+          i === selectedIndex ? { ...addr, [name]: value } : addr,
         ),
       );
     }
   }
 
-  function handleEdit() {
-    setIsEditing(true);
-  }
+  async function handleDelete() {
+  const currentId = formData[selectedIndex]?.id;
+  if (!currentId) return;
+
+  await deleteAddress(currentId);
+  setSelectedIndex(0);
+}
 
   function handleCancel() {
     setFormData([...savedData]);
     setIsEditing(false);
-  }
-
-  function handleSave(e) {
-    e.preventDefault();
-
     if (selectedIndex === -1) {
-      const updatedData = [...formData, newAddress];
-      setFormData(updatedData);
-      setSavedData(updatedData);
-      setSelectedIndex(updatedData.length - 1);
+      setSelectedIndex(0);
       setNewAddress({
+        address_name: "",
         house_number: "",
         street_name: "",
         city: "",
@@ -99,13 +87,42 @@ function AddressPage() {
         zip_code: "",
         country: "",
       });
-    } else {
-      setSavedData([...formData]);
     }
-
-    setIsEditing(false);
   }
 
+  async function handleSave(e) {
+  e.preventDefault();
+
+  if (selectedIndex === -1) {
+    await createAddress(
+      newAddress.address_name,
+      newAddress.city,
+      newAddress.zip_code,
+      newAddress.street_name,
+      newAddress.country,
+      newAddress.state,
+      newAddress.house_number,
+    );
+
+    await fetchAddress();
+
+    setSelectedIndex(0);
+    setNewAddress({
+      address_name: "",
+      house_number: "",
+      street_name: "",
+      city: "",
+      state: "",
+      zip_code: "",
+      country: "",
+    });
+  } else {
+    setSavedData([...formData]);
+    setAddress([...formData]);
+  }
+
+  setIsEditing(false);
+}
   const currentAddress =
     selectedIndex === -1 ? newAddress : formData[selectedIndex];
   return (
@@ -117,10 +134,10 @@ function AddressPage() {
         {!isEditing && (
           <button
             type="button"
-            onClick={handleEdit}
+            onClick={handleDelete}
             className="w-full shrink-0 rounded-md border border-[rgb(var(--color-border))] px-4 py-2.5 text-sm font-medium transition-colors hover:bg-[rgb(var(--color-grey))]/50 sm:w-auto sm:px-6 sm:py-2"
           >
-            {t("myAccount.edit")}
+            {t("addressPage.delete")}
           </button>
         )}
       </div>
@@ -137,14 +154,18 @@ function AddressPage() {
           <select
             className="min-w-0 w-full max-w-md rounded-md border border-[rgb(var(--color-border))] bg-[rgb(var(--color-grey))] px-3 py-2.5 text-sm outline-none focus:border-[rgb(var(--color-primary-main))] focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
             value={selectedIndex}
-            onChange={(e) => setSelectedIndex(Number(e.target.value))}
+            onChange={(e) => {
+            const val = Number(e.target.value);
+            setSelectedIndex(val);
+            setIsEditing(val === -1);
+          }}
           >
             {formData.map((address, i) => (
               <option key={i} value={i}>
                 {address.address_name}
               </option>
             ))}
-            <option value={-1}>{t("addressPage.newAddress")}</option>
+            <option value={-1} >{t("addressPage.newAddress")}</option>
           </select>
         </div>
 

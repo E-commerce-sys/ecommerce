@@ -123,14 +123,15 @@ function Navbar() {
                     <img src={mallbag} alt="" />
                     <span>{t("account.orders")}</span>
                   </NavLink>
-
+                  <NavLink to="/" className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4">
                   <button
                     onClick={() => logout()}
-                    className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4 cursor-pointer"
+                    className="items-center flex gap-4 cursor-pointer"
                   >
                     <img src={logoutIcon} alt="" />
                     <span>{t("account.logout")}</span>
                   </button>
+                  </NavLink>
                 </div>
               )}
             </div>
