@@ -13,8 +13,6 @@ function WishlistSection({ shared }) {
         <h1 className="text-[20px]">
           {t("wishlist.wishlist")} ({count})
         </h1>
-
-        <Button variant="outline">{t("wishlist.moveToCart")}</Button>
       </div>
 
       <div className="flex">

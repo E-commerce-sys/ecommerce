@@ -12,7 +12,7 @@
   "navbar": {
     "search": "Search for products",
     "basket": "My cart",
-    "favourite": "My favourites",
+    "favourite": "Wishlist",
     "login": "Log in",
     "account": "My account"
   },
@@ -216,7 +216,8 @@
     "city": "City",
     "state": "State",
     "country": "Country",
-    "zipCode": "Zip Code"
+    "zipCode": "Zip Code",
+    "delete": "Delete"
   },
   "errors": {
     "generic": {
