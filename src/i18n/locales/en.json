@@ -39,7 +39,8 @@
     "about": "About us",
     "forget": "Forget Password?",
     "noAccount": "Don't have an account?",
-    "signUp": "sign up"
+    "signUp": "sign up",
+    "no_token": "Sign-in succeeded but no session token was returned. Please contact support."
   },
   "register": {
     "create": "Create your account",
@@ -47,7 +48,8 @@
     "last_name": "Last Name",
     "confirm_password": "Confirm Password",
     "google": "Sign up using Google",
-    "have_account": "You already have an account?"
+    "have_account": "You already have an account?",
+    "missing_user_id": "Account was created but we could not start email verification. Please try signing in."
   },
   "bestProduct": {
     "month": "This Month",
@@ -109,6 +111,7 @@
   },
   "verify": {
     "secure": "Secure your access",
+    "sendCode": "Send code",
     "resend": "Resend code",
     "time": "Resend code in",
     "invalid": "Invalid verification code",

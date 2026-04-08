@@ -1,34 +1,51 @@
 /* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import axiosInstance from "../../../axios/axiosInterceptor";
+import { useAuth } from "../../../context/AuthContext";
+import { verifyOTP } from "./verifyOTP";
+import { resendOTP } from "./resendOTP";
 
-function VerifyOTPModal() {
+function getBackendErrorMessage(err) {
+  const raw = err?.response?.data?.errors;
+  if (Array.isArray(raw) && raw[0]?.message) {
+    return String(raw[0].message);
+  }
+  if (raw && typeof raw === "object" && !Array.isArray(raw) && raw.message) {
+    return String(raw.message);
+  }
+  const msg = err?.response?.data?.message;
+  if (typeof msg === "string" && msg.trim() !== "") return msg;
+  return null;
+}
+
+function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
+  const { login } = useAuth();
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar" || i18n.language === "ku";
   const navigate = useNavigate();
 
   const [status, setStatus] = useState("idle");
-
   const [error, setError] = useState("");
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
-
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
   const inputsRef = useRef([]);
+  const lastVerifyCodeRef = useRef(null);
 
   const code = otp.join("");
   const isComplete = code.length === 6;
-  const email = sessionStorage.getItem("verifyEmail");
+  const numericUserId = userId != null ? Number(userId) : NaN;
+  const hasUserId = !Number.isNaN(numericUserId);
 
   function handleClose() {
-    navigate("/register");
+    onClose?.();
+    navigate(closePath);
   }
 
-  // Auto focus first input
   useEffect(() => {
     inputsRef.current[0]?.focus();
   }, []);
@@ -47,10 +64,46 @@ function VerifyOTPModal() {
   }, [timer]);
 
   useEffect(() => {
-    if (isComplete && status === "idle") {
-      handleVerify();
-    }
-  }, [code]);
+    if (!isComplete || status !== "idle" || !hasUserId) return;
+    if (lastVerifyCodeRef.current === code) return;
+
+    lastVerifyCodeRef.current = code;
+    setStatus("verifying");
+    const otpValue = code;
+
+    (async () => {
+      try {
+        setError("");
+
+        const data = await verifyOTP({
+          userId: numericUserId,
+          otp: Number(otpValue),
+        });
+
+        const token = data.data.token;
+        if (token) {
+          login(token);
+        }
+
+        setStatus("success");
+
+        setTimeout(() => {
+          navigate("/", { replace: true });
+        }, 700);
+      } catch (err) {
+        const apiError = getBackendErrorMessage(err);
+        setError(apiError || t("verify.invalid"));
+        setStatus("error");
+
+        setTimeout(() => {
+          lastVerifyCodeRef.current = null;
+          setOtp(["", "", "", "", "", ""]);
+          setStatus("idle");
+          inputsRef.current[0]?.focus();
+        }, 900);
+      }
+    })();
+  }, [code, isComplete, status, hasUserId, numericUserId, login, navigate, t]);
 
   function handleChange(value, index) {
     if (!/^[0-9]?$/.test(value)) return;
@@ -70,7 +123,6 @@ function VerifyOTPModal() {
     }
   }
 
-  // Paste OTP support
   function handlePaste(e) {
     const paste = e.clipboardData.getData("text");
 
@@ -82,59 +134,22 @@ function VerifyOTPModal() {
     inputsRef.current[5]?.focus();
   }
 
-  async function handleVerify() {
-    if (!isComplete) return;
-
-    try {
-      setStatus("verifying");
-      setError("");
-
-      await axiosInstance.post("/api/auth/verify-otp", {
-        otp: Number(code),
-      });
-
-      setStatus("success");
-
-      setTimeout(() => {
-        sessionStorage.removeItem("verifyEmail");
-        navigate("/");
-      }, 700);
-    } catch (err) {
-      const apiError = err?.response?.data?.errors?.[0]?.message;
-      console.error(apiError);
-
-      setError(apiError ? t("verify.apiError") : t("verify.invalid"));
-      setStatus("error");
-
-      // reset inputs after small delay
-      setTimeout(() => {
-        setOtp(["", "", "", "", "", ""]);
-        setStatus("idle");
-        inputsRef.current[0]?.focus();
-      }, 900);
-    }
-  }
-
   async function handleResend() {
-    if (!canResend) return;
-
-    if (!email) {
-      navigate("/register");
-      return;
-    }
+    if (!canResend || !hasUserId) return;
 
     try {
       setError("");
-
-      await axiosInstance.post("/api/auth/resend-otp");
-
+      await resendOTP({ userId: numericUserId, email });
       setTimer(60);
       setCanResend(false);
     } catch (err) {
-      const apiError = err?.response?.data?.errors?.[0]?.message;
-
-      setError(apiError ? t("verify.apiError") : t("verify.expired"));
+      const apiError = getBackendErrorMessage(err);
+      setError(apiError || t("verify.expired"));
     }
+  }
+
+  if (!hasUserId) {
+    return null;
   }
 
   return (
@@ -142,30 +157,27 @@ function VerifyOTPModal() {
       dir={isRTL ? "rtl" : "ltr"}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
     >
-      {/* Modal box */}
-      <div className="bg-white rounded-xl w-full max-w-md p-6 sm:p-8 shadow-xl relative">
-        {/* Close button */}
+      <div className="relative w-full max-w-md rounded-xl bg-white p-6 shadow-xl sm:p-8">
         <button
+          type="button"
           onClick={handleClose}
-          className={`absolute top-4 ${
+          className={`absolute top-4 text-gray-400 hover:text-black ${
             isRTL ? "left-4" : "right-4"
-          } text-gray-400 hover:text-black`}
+          }`}
         >
           ✕
         </button>
 
-        {/* Title */}
-        <h2 className="text-xl sm:text-2xl font-semibold mb-2 text-center sm:text-start">
+        <h2 className="mb-2 text-center text-xl font-semibold sm:text-start sm:text-2xl">
           {t("verify.secure")}
         </h2>
 
-        <p className="text-gray-500 mb-6 text-sm sm:text-base text-center sm:text-start">
+        <p className="mb-6 text-center text-sm text-gray-500 sm:text-start sm:text-base">
           {t("verify.enter")}
         </p>
 
-        {/* OTP inputs */}
         <div
-          className="flex justify-center gap-2 sm:gap-3 mb-6"
+          className="mb-6 flex justify-center gap-2 sm:gap-3"
           onPaste={handlePaste}
         >
           {otp.map((digit, index) => (
@@ -174,30 +186,29 @@ function VerifyOTPModal() {
               type="tel"
               maxLength="1"
               value={digit}
-              ref={(el) => (inputsRef.current[index] = el)}
+              ref={(el) => {
+                inputsRef.current[index] = el;
+              }}
               onChange={(e) => handleChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               disabled={status === "verifying" || status === "success"}
-              className={`w-10 h-10 sm:w-12 sm:h-12 border-2 rounded text-center text-lg sm:text-xl 
-transition-all duration-200
-focus:outline-none
-${
-  status === "success"
-    ? "border-green-600"
-    : status === "error"
-      ? "border-red-500 animate-shake"
-      : "border-gray-300 focus:ring-1 focus:ring-[rgb(var(--color-primary-2))]"
-}`}
+              className={`h-10 w-10 rounded border text-center text-lg transition-all duration-200 focus:outline-none sm:h-12 sm:w-12 sm:text-xl ${
+                status === "success"
+                  ? "border-green-600"
+                  : status === "error"
+                    ? "animate-shake border-red-500"
+                    : "border-gray-300 focus:ring-1 focus:ring-[rgb(var(--color-primary-2))]"
+              }`}
             />
           ))}
         </div>
 
-        {/* Resend */}
-        <div className="text-center mb-4 text-sm text-gray-500">
+        <div className="mb-4 text-center text-sm text-gray-500">
           {canResend ? (
             <button
+              type="button"
               onClick={handleResend}
-              className="text-black cursor-pointer font-medium underline"
+              className="cursor-pointer font-medium text-black underline"
             >
               {t("verify.resend")}
             </button>
@@ -208,9 +219,9 @@ ${
           )}
         </div>
 
-        {error && (
-          <p className="text-red-600 text-sm text-center mb-3">{error}</p>
-        )}
+        {error ? (
+          <p className="mb-3 text-center text-sm text-red-600">{error}</p>
+        ) : null}
       </div>
     </div>
   );

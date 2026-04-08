@@ -123,14 +123,17 @@ function Navbar() {
                     <img src={mallbag} alt="" />
                     <span>{t("account.orders")}</span>
                   </NavLink>
-                  <NavLink to="/" className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4">
-                  <button
-                    onClick={() => logout()}
-                    className="items-center flex gap-4 cursor-pointer"
+                  <NavLink
+                    to="/"
+                    className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4"
                   >
-                    <img src={logoutIcon} alt="" />
-                    <span>{t("account.logout")}</span>
-                  </button>
+                    <button
+                      onClick={() => logout()}
+                      className="items-center flex gap-4 cursor-pointer"
+                    >
+                      <img src={logoutIcon} alt="" />
+                      <span>{t("account.logout")}</span>
+                    </button>
                   </NavLink>
                 </div>
               )}
@@ -219,6 +222,17 @@ function Navbar() {
             <img src={basket} className="w-5 h-5" />
             {t("navbar.basket")}
           </NavLink>
+          {loggedIn && (
+            <NavLink to="/" className="flex items-center">
+              <button
+                onClick={() => logout()}
+                className="items-center flex gap-2 cursor-pointer"
+              >
+                <img className="w-5 h-5" src={logoutIcon} alt="" />
+                <span>{t("account.logout")}</span>
+              </button>
+            </NavLink>
+          )}
 
           {/* Language selection */}
           <div className="flex gap-2 mt-2">
