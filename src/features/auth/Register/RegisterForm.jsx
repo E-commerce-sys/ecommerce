@@ -1,26 +1,23 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
-import { Form, Link, useNavigate } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { registerAPI } from "../../auth/Register/registerAPI";
 import { registerSchema } from "./registerSchema";
-import { useAuth } from "../../../context/AuthContext";
-import axiosInstance from "../../../axios/axiosInstance";
 
 import SideImage from "../../../assets/img/shopImg.svg";
 import GoogleIcon from "../../../assets/icons/Google.svg";
 
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
+import VerifyOTPModal from "../VerifyOTP/VerifyOTPModal";
 
 function RegisterForm() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { login} = useAuth();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-
+  const [openAuthModal, setOpenAuthModal] = useState(false);
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -29,7 +26,9 @@ function RegisterForm() {
     confirmPassword: "",
   });
 
+  const [userId, setUserId] = useState(null);
   const [errors, setErrors] = useState({});
+  const [registerError, setRegisterError] = useState("");
 
   function validateForm(data) {
     const result = registerSchema.safeParse(data);
@@ -50,6 +49,7 @@ function RegisterForm() {
     };
 
     setForm(updatedForm);
+    setRegisterError("");
 
     if (submitted) {
       const newErrors = validateForm(updatedForm);
@@ -69,23 +69,9 @@ function RegisterForm() {
     e.preventDefault();
 
     setSubmitted(true);
-
-    const verifyingEmail = sessionStorage.getItem("verifyEmail");
-
-    // If user already started verification flow
-    if (verifyingEmail === form.email) {
-      try {
-        await axiosInstance.post("/api/auth/verify");
-
-        navigate("/register/verify");
-        return;
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    setRegisterError("");
 
     const result = registerSchema.safeParse(form);
-
     if (!result.success) {
       setErrors(result.error.flatten().fieldErrors);
       return;
@@ -103,13 +89,13 @@ function RegisterForm() {
         form.password,
         form.confirmPassword,
       );
-      // save token in localStorage
-      login(res.data.token);
-      // store email for UI
-      sessionStorage.setItem("verifyEmail", form.email);
-
-      // open OTP modal
-      navigate("/register/verify");
+      const id = res.data.user.id;
+      if (id != null) {
+        setUserId(id);
+        setOpenAuthModal(true);
+      } else {
+        setRegisterError(t("register.missing_user_id"));
+      }
     } catch (e) {
       const apiErrors = e?.response?.data?.errors;
 
@@ -120,13 +106,6 @@ function RegisterForm() {
           const source = err?.source ? String(err.source) : "";
           const message = err?.message ? String(err.message) : "";
           if (!message) return;
-
-          // Backend uses JSON:API-ish sources like:
-          // - data.attributes.firstName
-          // - data.attributes.lastName
-          // - data.attributes.email
-          // - data.attributes.password
-          // - data.attributes.confirmPassword (sometimes) or mismatched password confirmation
           const lowerMsg = message.toLowerCase();
 
           let key = null;
@@ -135,8 +114,11 @@ function RegisterForm() {
           else if (source.includes("email")) key = "email";
           else if (source.includes("password")) {
             // Some backends send "confirmation" mismatch but still mark the source as password.
-            key = lowerMsg.includes("confirmation") ? "confirmPassword" : "password";
-          } else if (source.includes("confirmPassword")) key = "confirmPassword";
+            key = lowerMsg.includes("confirmation")
+              ? "confirmPassword"
+              : "password";
+          } else if (source.includes("confirmPassword"))
+            key = "confirmPassword";
 
           if (!key) return;
           nextErrors[key] = [...(nextErrors[key] || []), message];
@@ -150,7 +132,7 @@ function RegisterForm() {
   }
 
   return (
-    <div className="mt-17 md:mt-0 flex lg:items-center justify-center lg:justify-normal gap-32.5">
+    <div className="mt-17 flex lg:items-center justify-center lg:justify-normal gap-32.5">
       <img
         src={SideImage}
         className="hidden lg:block lg:w-[45%] h-auto my-30 shrink-0"
@@ -242,6 +224,10 @@ function RegisterForm() {
             </div>
           </div>
 
+          {registerError ? (
+            <p className="text-center text-sm text-red-600">{registerError}</p>
+          ) : null}
+
           {/* Buttons */}
           <div className="flex flex-col gap-4 items-center">
             <Button
@@ -273,6 +259,14 @@ function RegisterForm() {
           </p>
         </div>
       </div>
+      {openAuthModal && (
+        <VerifyOTPModal
+          userId={userId}
+          email={form.email}
+          closePath="/register"
+          onClose={() => setOpenAuthModal(false)}
+        />
+      )}
     </div>
   );
 }
