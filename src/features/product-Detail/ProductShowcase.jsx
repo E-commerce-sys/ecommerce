@@ -90,12 +90,14 @@ function ProductShowcase() {
         const data = await fetchProductDetail(productId);
         setProduct(data);
 
+        if(loggedIn){
         // check if product is in wishlist
         const wishlist = await getWishlist();
         const isInWishlist = wishlist.some(
           (item) => item.included.product.id === Number(productId),
         );
         setIsWishlisted(isInWishlist);
+      }
       } catch (error) {
         console.error(error);
       } finally {
@@ -271,9 +273,11 @@ function ProductShowcase() {
                 |
               </span>
               <span
-                className={`${product.attributes.stockQuantity !== 0 ? "text-[rgb(var(--color-discount))]" : "text-[rgb(var(--color-primary-5))]"} text-[14px] mx-2`}
+                className={`${!selectionReady
+      ? "text-gray-400":  activeVariant?.isAvailable ? "text-[rgb(var(--color-discount))]" : "text-[rgb(var(--color-primary-5))]"} text-[14px] mx-2`}
               >
-                {product.attributes.stockQuantity !== 0
+                {!selectionReady
+    ? "Select your variant" : activeVariant?.isAvailable
                   ? "In Stock"
                   : "Out of Stock"}
               </span>
