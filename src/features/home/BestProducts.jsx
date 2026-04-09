@@ -35,7 +35,7 @@ function BestProducts({ data }) {
             </p>
           </div>
 
-          <Link to="/products?bestSelling=true">
+          <Link to="/search?bestSelling=true">
             <Button variant="outline" size="sm">
               {t("view")}
             </Button>

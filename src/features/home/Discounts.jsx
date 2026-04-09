@@ -7,7 +7,7 @@ function Discounts() {
   const navigate = useNavigate();
 
   function handleDiscount(discount) {
-    navigate(`/products?discount=${discount}`);
+    navigate(`/search?discount=${discount}`);
   }
 
   return (

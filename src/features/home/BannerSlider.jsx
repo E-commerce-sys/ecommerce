@@ -61,7 +61,7 @@ function BannerSlider({ banners }) {
                   {banner.attributes.title}
                 </h2>
 
-                <Link to="/products">
+                <Link to="/search">
                   <Button>{t("newArrival.buy")}</Button>
                 </Link>
               </div>

@@ -24,7 +24,7 @@ export async function productsLoader({ request }) {
 
   const [{ categories }, productsRes] = await Promise.all([
     loadCategoryTree(),
-    axiosInstance.get("/api/products", { params }),
+    axiosInstance.get("/api/search", { params }),
   ]);
 
   return {

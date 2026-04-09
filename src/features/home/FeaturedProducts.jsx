@@ -36,7 +36,7 @@ function FeaturedProducts({ data }) {
             </p>
           </div>
 
-          <Link to="/products">
+          <Link to="/search">
             <Button variant="outline" size="sm">
               {t("view")}
             </Button>
