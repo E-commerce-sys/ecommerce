@@ -8,7 +8,7 @@ function BuyNowLink({ productId, className, label }) {
   if (productId == null || productId === "") return null;
   return (
     <Link
-      to={`/products/${productId}`}
+      to={`/search/${productId}`}
       state={{ from: "/" }}
       className={className}
     >

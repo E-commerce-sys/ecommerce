@@ -56,18 +56,18 @@ function SearchBar() {
     if (skipFirstNavigation.current) {
       skipFirstNavigation.current = false;
       if (val === "") return;
-      navigate(`/products?search=${encodeURIComponent(val)}`, { replace: true });
+      navigate(`/search?search=${encodeURIComponent(val)}`, { replace: true });
       return;
     }
 
     if (val === "") {
       if (onProducts && hasSearchParam) {
-        navigate("/products", { replace: true });
+        navigate("/search", { replace: true });
       }
       return;
     }
 
-    navigate(`/products?search=${encodeURIComponent(val)}`, { replace: true });
+    navigate(`/search?search=${encodeURIComponent(val)}`, { replace: true });
   }, [debouncedValue, navigate, location.pathname, location.search]);
 
   function handleChange(e) {

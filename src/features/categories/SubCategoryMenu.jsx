@@ -11,7 +11,7 @@ function SubCategoryMenu({ subCategories }) {
       {subCategories.map((sub) => (
         <Link
           key={sub.id}
-          to={`/products?category=${sub.id}`}
+          to={`/search?category=${sub.id}`}
           className="flex flex-col items-center min-w-22.5 cursor-pointer"
         >
           <div
