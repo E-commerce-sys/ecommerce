@@ -31,6 +31,7 @@ function resolveVariant(variant, rootIncludedMap) {
     size,
     colorId: color ? Number(color.id) : null,
     sizeId: size ? Number(size.id) : null,
+    isAvailable: variant.attributes?.isAvailable,
   };
 }
 
@@ -79,6 +80,7 @@ export async function fetchProductDetail(id) {
     type: productNode.type,
     attributes: productNode.attributes,
     relationships: productNode.relationships,
+    included: productNode.included,
     variants,
   };
 }

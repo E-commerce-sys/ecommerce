@@ -18,7 +18,6 @@ function BuyNowLink({ productId, className, label }) {
 }
 
 function NewArrivals({ data }) {
-  console.log(data);
   const { t, i18n } = useTranslation();
 
   const lang = i18n.language;

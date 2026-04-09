@@ -42,7 +42,6 @@ function ProfilePage() {
       newPassword: "",
       confirmPassword: "",
     });
-    console.log("User data loaded:", user);
   }
 }, [user]);
 
