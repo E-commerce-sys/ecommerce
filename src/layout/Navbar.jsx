@@ -1,7 +1,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink,useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
@@ -25,6 +25,11 @@ function Navbar() {
   const languages = ["en", "ar", "ku"];
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef(null);
+  const location = useLocation();
+  const { pathname } = location;
+  const hideNavbarOn = ["/login", "/register", "/register/verify"];
+
+  const shouldHideNavbar = hideNavbarOn.includes(pathname);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -58,15 +63,15 @@ function Navbar() {
         </NavLink>
 
         {/* Search */}
-        <div className="min-w-0 max-w-full flex-1 px-1 md:px-2">
+        {!shouldHideNavbar && (<div className="min-w-0 max-w-full flex-1 px-1 md:px-2">
           <SearchBar />
-        </div>
+        </div>)}
 
         {/* Desktop Right Side */}
         <div className="hidden shrink-0 items-center justify-end gap-3 lg:flex lg:gap-5">
           <LanguageList />
 
-          <NavLink
+          {!shouldHideNavbar && (<NavLink
             to="/cart"
             className={({ isActive }) =>
               `flex justify-center items-center gap-1 cursor-pointer ${
@@ -77,20 +82,21 @@ function Navbar() {
           >
             <img src={basket} className="w-6 h-6" />
             <p className="text-sm">{t("navbar.basket")}</p>
-          </NavLink>
+          </NavLink>)}
 
-          <NavLink
-            to="/wishlist"
-            className={({ isActive }) =>
-              `flex justify-center items-center gap-1 cursor-pointer ${
-                isActive &&
-                "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
-              }`
-            }
-          >
-            <img src={heart} className="w-6 h-6" />
-            <p className="text-sm">{t("navbar.favourite")}</p>
-          </NavLink>
+          {!shouldHideNavbar && (
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            `flex justify-center items-center gap-1 cursor-pointer ${
+              isActive && "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+            }`
+          }
+        >
+          <img src={heart} className="w-6 h-6" />
+          <p className="text-sm">{t("navbar.favourite")}</p>
+        </NavLink>
+      )}
 
           {loggedIn ? (
             <div ref={accountRef} className="relative">
