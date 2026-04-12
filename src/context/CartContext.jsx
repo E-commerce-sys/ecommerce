@@ -32,7 +32,16 @@ async function applyCartFromMutationResponse(
   setCartTotals,
   apiBody,
 ) {
-  if (!apiBody?.data) return;
+  // DELETE often returns 204 / a body without `data`; PATCH can too. Refetch so UI matches API.
+  if (!apiBody?.data) {
+    try {
+      const full = await getCartItems();
+      applyCartFromGetResponse(setCartItems, setCartTotals, full);
+    } catch (err) {
+      console.error("Failed to refresh cart after mutation", err);
+    }
+    return;
+  }
 
   setCartTotals(mapCartTotalsFromResponse(apiBody));
 
