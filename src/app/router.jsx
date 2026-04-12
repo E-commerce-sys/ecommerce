@@ -26,7 +26,6 @@ import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
 import AdminAdsPage from "../pages/admin/AdminAdsPage";
 
 import NotFoundPage from "../pages/NotFoundPage";
-import { homeLoader } from "../features/home/homeLoader.js";
 
 // Route Guards
 import ProtectedRoute from "../routes/ProtectedRoute";
@@ -44,7 +43,6 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: homeLoader,
         element: <HomePage />,
       },
 
