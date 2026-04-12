@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { loginAPI } from "./loginAPI";
 import { useState } from "react";
 import { loginSchema } from "./loginSchema";
-import { useAuth } from "../../../context/AuthContext";
+import { hasAdminPrivileges, useAuth } from "../../../context/AuthContext";
 import { resendOTP } from "../VerifyOTP/resendOTP";
 import VerifyOTPModal from "../VerifyOTP/VerifyOTPModal";
 
@@ -89,11 +89,13 @@ function LoginForm() {
     try {
       setLoading(true);
       const res = await loginAPI(email, password);
+      const token = res?.data?.token;
+      const attributes = res?.data?.user?.attributes;
 
-      const token = res.data.token;
       if (token) {
-        login(token);
-        navigate(from, { replace: true });
+        login(token, attributes);
+        const target = hasAdminPrivileges(attributes) ? "/admin" : from;
+        navigate(target, { replace: true });
       } else {
         setFormError(t("login.no_token"));
       }
