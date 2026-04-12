@@ -25,12 +25,13 @@ function CartItem({
           {t("new")}
         </span>
       )}
+      <Link to={`/products/${id}`}>
         <img
           src={img}
           alt="product"
           className="w-full h-full p-2 md:p-5 object-contain transition-transform duration-300 group-hover:scale-105"
         />
-
+      </Link>
       <button
         type="button"
         className="absolute top-1 right-1 md:top-3 md:right-3 w-5 h-5 md:w-8.5 md:h-8.5 bg-white p-1 rounded-full shadow-md cursor-pointer"
@@ -38,6 +39,7 @@ function CartItem({
       >
         <img src={icon} alt="favorite" className="w-full h-full" />
       </button>
+
       <Link to={`/products/${id}`}>
         <button
           type="button"

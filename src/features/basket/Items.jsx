@@ -289,7 +289,7 @@ function Items() {
       <div className="flex justify-start">
         <button
           type="button"
-          onClick={() => navigate("/products")}
+          onClick={() => navigate("/search")}
           className="flex gap-2 mx-4 md:mx-10 lg:mx-40 py-2 px-2 md:py-4 md:px-5 rounded border-2 border-[rgb(var(--color-border))] w-fit items-center cursor-pointer text-sm md:text-base"
         >
           <img
