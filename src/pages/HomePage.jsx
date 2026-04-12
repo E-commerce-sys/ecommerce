@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-
 import { useLoaderData } from "react-router-dom";
 
 import CategoryMenu from "../features/categories/CategoryMenu";

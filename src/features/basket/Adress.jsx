@@ -1,9 +1,5 @@
-/* eslint-disable react/prop-types */
-
 import { useTranslation } from "react-i18next";
 import { Form } from "react-router-dom";
-
-/* eslint-disable react/react-in-jsx-scope */
 import { useCheckoutAddress } from "../../context/CheckoutAddressContext";
 
 function Adress() {

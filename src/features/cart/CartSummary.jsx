@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -83,11 +81,7 @@ function CartSummary({ product, className, icon, wrapperClassName }) {
 
   return (
     <>
-      <div
-        className={
-          wrapperClassName ?? "flex flex-col gap-5 m-5"
-        }
-      >
+      <div className={wrapperClassName ?? "flex flex-col gap-5 m-5"}>
         <CartItem
           img={image}
           className={className}

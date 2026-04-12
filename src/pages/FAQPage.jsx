@@ -1,8 +1,11 @@
-/* eslint-disable react/react-in-jsx-scope */
-import FAQ from "../features/footerPages/FAQ"
+import FAQ from "../features/footerPages/FAQ";
 
-function FAQPage(){
-    return <div><FAQ/></div>
+function FAQPage() {
+  return (
+    <div>
+      <FAQ />
+    </div>
+  );
 }
 
-export default FAQPage
+export default FAQPage;

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useTranslation } from "react-i18next";
 import Input from "../../components/Input";
 import Button from "../../components/Button";

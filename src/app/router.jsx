@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";

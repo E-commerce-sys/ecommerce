@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { Link } from "react-router-dom";
 import ContactForm from "../features/contact/ContactForm";
 import ContactInfo from "../features/contact/ContactInfo.jsx";

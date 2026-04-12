@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-
 function OrderLineItemsTable({ items }) {
   if (!items?.length) return null;
 

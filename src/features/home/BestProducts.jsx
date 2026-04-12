@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -10,10 +8,7 @@ import Button from "../../components/Button";
 function BestProducts({ data }) {
   const { t } = useTranslation();
   const products = useMemo(
-    () =>
-      [...data]
-        .sort((a, b) => Number(a.id) - Number(b.id))
-        .slice(0, 4),
+    () => [...data].sort((a, b) => Number(a.id) - Number(b.id)).slice(0, 4),
     [data],
   );
 

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
 import { NavLink } from "react-router-dom";

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useProductFilters } from "../useProductFilters";

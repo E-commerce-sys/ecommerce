@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useProductFilters } from "./useProductFilters";
 import { useProductContext } from "./ProductContext";
 

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -11,10 +9,7 @@ function FeaturedProducts({ data }) {
   // randomly pick 8 products
   const { t } = useTranslation();
   const products = useMemo(
-    () =>
-      [...data]
-        .sort((a, b) => Number(a.id) - Number(b.id))
-        .slice(0, 8),
+    () => [...data].sort((a, b) => Number(a.id) - Number(b.id)).slice(0, 8),
     [data],
   );
 

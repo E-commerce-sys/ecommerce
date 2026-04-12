@@ -1,7 +1,4 @@
-
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
@@ -12,12 +9,11 @@ function ProfilePage() {
   const { t } = useTranslation();
   const { user, setUser, loading } = useUser();
 
-
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
+    first_name: "",
+    last_name: "",
+    email: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -25,25 +21,25 @@ function ProfilePage() {
   const [savedData, setSavedData] = useState({ ...formData });
 
   useEffect(() => {
-  if (user) {
-    setFormData({
-      first_name: user.attributes.firstName,
-      last_name: user.attributes.lastName,
-      email: user.attributes.email,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-    setSavedData({
-      first_name: user.attributes.firstName,
-      last_name: user.attributes.lastName,
-      email: user.attributes.email,
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
-  }
-}, [user]);
+    if (user) {
+      setFormData({
+        first_name: user.attributes.firstName,
+        last_name: user.attributes.lastName,
+        email: user.attributes.email,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setSavedData({
+        first_name: user.attributes.firstName,
+        last_name: user.attributes.lastName,
+        email: user.attributes.email,
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    }
+  }, [user]);
 
   function handleChange(e) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,56 +55,62 @@ function ProfilePage() {
   }
 
   async function handleSave(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const payload = {};
+    try {
+      const payload = {};
 
-    if (formData.first_name !== savedData.first_name) {
-      payload.firstName = formData.first_name;
-    }
+      if (formData.first_name !== savedData.first_name) {
+        payload.firstName = formData.first_name;
+      }
 
-    if (formData.last_name !== savedData.last_name) {
-      payload.lastName = formData.last_name;
-    }
+      if (formData.last_name !== savedData.last_name) {
+        payload.lastName = formData.last_name;
+      }
 
-    if (formData.email !== savedData.email) {
-      payload.email = formData.email;
-    }
+      if (formData.email !== savedData.email) {
+        payload.email = formData.email;
+      }
 
-    if (formData.currentPassword || formData.newPassword || formData.confirmPassword) {
-      if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
-        alert("Please fill all password fields");
+      if (
+        formData.currentPassword ||
+        formData.newPassword ||
+        formData.confirmPassword
+      ) {
+        if (
+          !formData.currentPassword ||
+          !formData.newPassword ||
+          !formData.confirmPassword
+        ) {
+          alert("Please fill all password fields");
+          return;
+        }
+
+        if (formData.newPassword !== formData.confirmPassword) {
+          alert("Passwords do not match");
+          return;
+        }
+
+        payload.currentPassword = formData.currentPassword; // old password, if backend requires it
+        payload.password = formData.newPassword; // new password
+        payload.password_confirmation = formData.confirmPassword; // confirmation
+      }
+      if (!Object.keys(payload).length) {
+        console.log("No changes detected");
         return;
       }
 
-      if (formData.newPassword !== formData.confirmPassword) {
-        alert("Passwords do not match");
-        return;
-      }
+      const updatedUser = await updateUserAPI(payload);
 
-      payload.currentPassword = formData.currentPassword; // old password, if backend requires it
-      payload.password = formData.newPassword;            // new password
-      payload.password_confirmation = formData.confirmPassword; // confirmation
+      // update savedData AFTER successful save
+      setUser(updatedUser);
+      setSavedData({ ...formData });
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update:", error.response?.data || error.message);
     }
-    if (!Object.keys(payload).length) {
-      console.log("No changes detected");
-      return;
-    }
-
-    const updatedUser = await updateUserAPI(payload);
-
-    // update savedData AFTER successful save
-    setUser(updatedUser);
-    setSavedData({ ...formData });
-    setIsEditing(false);
-
-  } catch (error) {
-    console.error("Failed to update:", error.response?.data || error.message);
   }
-}
 
-  
   if (loading) return <div>Loading...</div>;
   if (!user) return <div>User not found</div>;
 

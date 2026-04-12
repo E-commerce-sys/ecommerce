@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/react-in-jsx-scope */
 import {
   createContext,
   useContext,
@@ -104,8 +102,14 @@ export function CartProvider({ children }) {
 
     for (const i of valid) {
       try {
-        const apiBody = await updateCart(i.id, { quantity: Number(i.quantity) });
-        await applyCartFromMutationResponse(setCartItems, setCartTotals, apiBody);
+        const apiBody = await updateCart(i.id, {
+          quantity: Number(i.quantity),
+        });
+        await applyCartFromMutationResponse(
+          setCartItems,
+          setCartTotals,
+          apiBody,
+        );
       } catch (err) {
         console.error("Failed to sync cart item", i.id, err);
       }

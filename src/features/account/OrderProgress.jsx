@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-
 function OrderProgress({ currentStatus }) {
   const steps = ["pending", "preparing", "shipping", "delivering", "arrived"];
   const normalizedStatus = String(currentStatus ?? "pending")

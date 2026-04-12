@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/react-in-jsx-scope */
 import {
   createContext,
   useCallback,
@@ -34,10 +32,6 @@ function normalizeSavedAddresses(addressList) {
   });
 }
 
-/**
- * Laravel / JSON-style: errors[] with { message, ... }
- * Legacy: errors: { message, outOfStockItemId }
- */
 function parseOrderErrorPayload(payload) {
   const errors = payload?.errors;
   if (Array.isArray(errors)) {

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 function Spinner() {
   return (
     <div className="flex justify-center items-center h-40">

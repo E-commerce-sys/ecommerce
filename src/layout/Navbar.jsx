@@ -1,7 +1,5 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useState, useEffect, useRef } from "react";
-import { NavLink,useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
@@ -63,40 +61,45 @@ function Navbar() {
         </NavLink>
 
         {/* Search */}
-        {!shouldHideNavbar && (<div className="min-w-0 max-w-full flex-1 px-1 md:px-2">
-          <SearchBar />
-        </div>)}
+        {!shouldHideNavbar && (
+          <div className="min-w-0 max-w-full flex-1 px-1 md:px-2">
+            <SearchBar />
+          </div>
+        )}
 
         {/* Desktop Right Side */}
         <div className="hidden shrink-0 items-center justify-end gap-3 lg:flex lg:gap-5">
           <LanguageList />
 
-          {!shouldHideNavbar && (<NavLink
-            to="/cart"
-            className={({ isActive }) =>
-              `flex justify-center items-center gap-1 cursor-pointer ${
-                isActive &&
-                "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
-              }`
-            }
-          >
-            <img src={basket} className="w-6 h-6" />
-            <p className="text-sm">{t("navbar.basket")}</p>
-          </NavLink>)}
+          {!shouldHideNavbar && (
+            <NavLink
+              to="/cart"
+              className={({ isActive }) =>
+                `flex justify-center items-center gap-1 cursor-pointer ${
+                  isActive &&
+                  "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+                }`
+              }
+            >
+              <img src={basket} className="w-6 h-6" />
+              <p className="text-sm">{t("navbar.basket")}</p>
+            </NavLink>
+          )}
 
           {!shouldHideNavbar && (
-        <NavLink
-          to="/wishlist"
-          className={({ isActive }) =>
-            `flex justify-center items-center gap-1 cursor-pointer ${
-              isActive && "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
-            }`
-          }
-        >
-          <img src={heart} className="w-6 h-6" />
-          <p className="text-sm">{t("navbar.favourite")}</p>
-        </NavLink>
-      )}
+            <NavLink
+              to="/wishlist"
+              className={({ isActive }) =>
+                `flex justify-center items-center gap-1 cursor-pointer ${
+                  isActive &&
+                  "py-1 border-b border-b-[rgb(var(--color-primary-main))]"
+                }`
+              }
+            >
+              <img src={heart} className="w-6 h-6" />
+              <p className="text-sm">{t("navbar.favourite")}</p>
+            </NavLink>
+          )}
 
           {loggedIn ? (
             <div ref={accountRef} className="relative">

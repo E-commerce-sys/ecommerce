@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";

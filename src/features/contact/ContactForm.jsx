@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { useState } from "react";
 import { Form } from "react-router-dom";
 import { useTranslation } from "react-i18next";

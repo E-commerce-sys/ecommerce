@@ -1,7 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 import { useEffect, useState } from "react";
-
 import OrderLineItemsTable from "./OrderLineItemsTable";
 import { getUserOrders, ORDER_STATUS_FILTERS } from "./API/getOrders";
 

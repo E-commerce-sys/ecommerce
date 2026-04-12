@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ProductProvider } from "../features/products/ProductContext";
 import { useProductFilters } from "../features/products/useProductFilters";

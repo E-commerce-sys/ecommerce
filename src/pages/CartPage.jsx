@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useEffect } from "react";
 
 import Items from "../features/basket/Items";

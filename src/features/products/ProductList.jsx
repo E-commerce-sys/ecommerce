@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-
 import CartItemSummary from "../../features/cart/CartSummary";
 import Pagination from "./Pagination";
 import { useTranslation } from "react-i18next";

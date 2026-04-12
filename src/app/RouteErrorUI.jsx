@@ -18,7 +18,6 @@ function isNetworkError(err) {
 
   if (networkCodes.has(code)) return true;
 
-  // Common browser/fetch phrasing (and sometimes axios wrapping)
   const networkPhrases = [
     "network error",
     "failed to fetch",
@@ -47,4 +46,3 @@ function RouteErrorUI({ showLayout = false }) {
 }
 
 export default RouteErrorUI;
-

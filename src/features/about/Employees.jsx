@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/react-in-jsx-scope */
 import Instagram from "../../assets/icons/Instagram.svg";
 import Linkedin from "../../assets/icons/Linkedin.svg";
 import Twitter from "../../assets/icons/Twitter.svg";

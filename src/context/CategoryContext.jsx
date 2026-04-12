@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { createContext, useContext, useEffect, useState } from "react";
 import { loadCategoryTree } from "../features/categories/loadCategoryTree";
 

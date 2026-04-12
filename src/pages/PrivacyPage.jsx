@@ -1,8 +1,11 @@
-/* eslint-disable react/react-in-jsx-scope */
-import PrivacyPolicy from "../features/footerPages/PrivacyPolicy"
+import PrivacyPolicy from "../features/footerPages/PrivacyPolicy";
 
-function PrivacyPage(){
-    return <div><PrivacyPolicy/></div>
+function PrivacyPage() {
+  return (
+    <div>
+      <PrivacyPolicy />
+    </div>
+  );
 }
 
-export default PrivacyPage
+export default PrivacyPage;

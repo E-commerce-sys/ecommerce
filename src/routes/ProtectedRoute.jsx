@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 function ProtectedRoute() {

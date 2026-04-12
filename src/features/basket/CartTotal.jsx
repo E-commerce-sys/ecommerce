@@ -1,7 +1,5 @@
-/* eslint-disable react/react-in-jsx-scope */
 import Button from "../../components/Button";
 import { useTranslation } from "react-i18next";
-
 import { useCart } from "../../context/CartContext";
 import {
   ORDER_ERROR_ADDRESS_REQUIRED,
@@ -70,7 +68,9 @@ function CartTotal() {
         </div>
         <div className="flex flex-col items-stretch gap-2 lg:items-end">
           {orderSuccess ? (
-            <p className="text-sm text-green-600 lg:text-right">{orderSuccess}</p>
+            <p className="text-sm text-green-600 lg:text-right">
+              {orderSuccess}
+            </p>
           ) : null}
           {orderErrorDisplay ? (
             <p className="whitespace-pre-line text-sm text-red-500 lg:text-right">

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CartSummary from "../cart/CartSummary";

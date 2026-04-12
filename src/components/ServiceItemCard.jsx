@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-// eslint-disable-next-line react/prop-types
 function ServiceItemCard({ Icon, IconHover, title, subtitle }) {
   return (
     <div className="group border border-[rgb(var(--color-border))] rounded-lg flex flex-col items-center justify-center text-center py-10 transition-all duration-300 hover:bg-[rgb(var(--color-primary-main))] hover:shadow-md cursor-pointer">

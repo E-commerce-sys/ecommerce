@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-
 import { useCallback, useEffect, useState } from "react";
 import OrderProgress from "./OrderProgress";
 import OrderLineItemsTable from "./OrderLineItemsTable";

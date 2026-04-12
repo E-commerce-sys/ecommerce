@@ -12,7 +12,6 @@ const AddressContext = createContext({
   error: null,
 });
 
-// eslint-disable-next-line react/prop-types
 export function AddressProvider({ children }) {
   const { loggedIn } = useAuth();
   const [address, setAddress] = useState(null);

@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-// import ServiceItem from "../../components/ServiceItem";
 import { useTranslation } from "react-i18next";
 
 import ServiceItemSimple from "../../components/ServiceItemSimple";

@@ -15,7 +15,6 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    // eslint-disable-next-line no-console
     console.error("Render error caught by ErrorBoundary:", error, info);
   }
 
@@ -32,4 +31,3 @@ class ErrorBoundary extends React.Component {
 }
 
 export default ErrorBoundary;
-

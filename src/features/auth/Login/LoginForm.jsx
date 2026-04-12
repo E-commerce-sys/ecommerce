@@ -1,4 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
 import { Form, Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { loginAPI } from "./loginAPI";

@@ -1,5 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import DiscountButton from "../../components/DiscountButton";
 

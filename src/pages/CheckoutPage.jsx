@@ -1,6 +1,3 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable react/prop-types */
-
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
