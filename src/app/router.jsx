@@ -97,7 +97,8 @@ export const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorUI showLayout={true} />,
     children: [
-      { path: "dashboard", index: true, element: <Dashboard /> },
+      { index: true, element: <Navigate to="/admin/dashboard" replace /> },
+      { path: "dashboard", element: <Dashboard /> },
       { path: "products", element: <Products /> },
       { path: "categories", element: <Categories /> },
       { path: "orders", element: <Orders /> },
