@@ -101,7 +101,7 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
 
         setStatus("success");
 
-        const dest = hasAdminPrivileges(attributes) ? "/admin" : "/";
+        const dest = hasAdminPrivileges(attributes) ? "/admin/dashboard" : "/";
         setTimeout(() => {
           navigate(dest, { replace: true });
         }, 700);

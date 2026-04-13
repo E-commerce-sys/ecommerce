@@ -94,7 +94,7 @@ function LoginForm() {
 
       if (token) {
         login(token, attributes);
-        const target = hasAdminPrivileges(attributes) ? "/admin" : from;
+        const target = hasAdminPrivileges(attributes) ? "/admin/dashboard" : from;
         navigate(target, { replace: true });
       } else {
         setFormError(t("login.no_token"));
