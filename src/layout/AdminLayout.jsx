@@ -156,7 +156,7 @@ function AdminLayout() {
           </div>
         </div>
       </aside>
-      <div className="flex p-2 border border-[rgb(var(--color-border))] rounded w-full">
+      <div className="flex p-6 border border-[rgb(var(--color-border))] rounded w-full">
         <Outlet />
       </div>
     </div>

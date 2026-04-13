@@ -41,6 +41,8 @@ import FAQPage from "../pages/FAQPage.jsx";
 import PrivacyPage from "../pages/PrivacyPage.jsx";
 import RouteErrorUI from "./RouteErrorUI";
 
+import { getCategories } from "../features/admin/categories/api/getCategories.js";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -100,7 +102,11 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
       { path: "dashboard", element: <Dashboard /> },
       { path: "products", element: <Products /> },
-      { path: "categories", element: <Categories /> },
+      {
+        path: "categories",
+        element: <Categories />,
+        loader: getCategories,
+      },
       { path: "orders", element: <Orders /> },
       { path: "users", element: <Users /> },
       { path: "staff", element: <Staff /> },

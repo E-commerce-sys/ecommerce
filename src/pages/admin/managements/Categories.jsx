@@ -1,5 +1,6 @@
+import Catagories from "../../../features/admin/categories/Catagories";
 function Categories() {
-  return <div>categories</div>;
+  return <Catagories />;
 }
 
 export default Categories;
