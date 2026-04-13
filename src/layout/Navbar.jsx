@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../context/LanguageContext";
 import { useAuth } from "../context/AuthContext";
@@ -24,7 +24,13 @@ function Navbar() {
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const { pathname } = location;
+
+  async function handleLogout() {
+    await logout();
+    navigate("/", { replace: true });
+  }
   const hideNavbarOn = ["/login", "/register", "/register/verify"];
 
   const shouldHideNavbar = hideNavbarOn.includes(pathname);
@@ -137,7 +143,8 @@ function Navbar() {
                     className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4"
                   >
                     <button
-                      onClick={() => logout()}
+                      type="button"
+                      onClick={() => void handleLogout()}
                       className="items-center flex gap-4 cursor-pointer"
                     >
                       <img src={logoutIcon} alt="" />
@@ -234,7 +241,8 @@ function Navbar() {
           {loggedIn && (
             <NavLink to="/" className="flex items-center">
               <button
-                onClick={() => logout()}
+                type="button"
+                onClick={() => void handleLogout()}
                 className="items-center flex gap-2 cursor-pointer"
               >
                 <img className="w-5 h-5" src={logoutIcon} alt="" />

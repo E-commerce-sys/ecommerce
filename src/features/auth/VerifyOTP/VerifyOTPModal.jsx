@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
-import { useAuth } from "../../../context/AuthContext";
+import { hasAdminPrivileges, useAuth } from "../../../context/AuthContext";
+import { getUserAPI } from "../../account/API/userAPI";
 import { verifyOTP } from "./verifyOTP";
 import { resendOTP } from "./resendOTP";
 
@@ -78,15 +79,31 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
           otp: Number(otpValue),
         });
 
-        const token = data.data.token;
+        const token =
+          data?.data?.token ?? data?.token ?? null;
+        let attributes =
+          data?.data?.user?.attributes ?? data?.user?.attributes ?? null;
+
         if (token) {
-          login(token);
+          login(token, attributes);
+          if (!attributes) {
+            try {
+              const user = await getUserAPI();
+              attributes = user?.attributes ?? null;
+              if (attributes) {
+                login(token, attributes);
+              }
+            } catch {
+              /* AuthContext will retry via GET /api/user effect */
+            }
+          }
         }
 
         setStatus("success");
 
+        const dest = hasAdminPrivileges(attributes) ? "/admin" : "/";
         setTimeout(() => {
-          navigate("/", { replace: true });
+          navigate(dest, { replace: true });
         }, 700);
       } catch (err) {
         const apiError = getBackendErrorMessage(err);

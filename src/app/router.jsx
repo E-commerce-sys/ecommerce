@@ -19,11 +19,17 @@ import ProgressPage from "../features/account/ProgressPage.jsx";
 import ArrivedPage from "../features/account/ArrivedPage.jsx";
 import CanceledPage from "../features/account/CanceledPage.jsx";
 
-import AdminDashboard from "../pages/admin/AdminDashboard";
-import AdminProductsPage from "../pages/admin/AdminProductsPage";
-import AdminCategoriesPage from "../pages/admin/AdminCategoriesPage";
-import AdminOrdersPage from "../pages/admin/AdminOrdersPage";
-import AdminAdsPage from "../pages/admin/AdminAdsPage";
+import Dashboard from "../pages/admin/Dashboard.jsx";
+import Products from "../pages/admin/managements/Products.jsx";
+import Categories from "../pages/admin/managements/Categories.jsx";
+import Orders from "../pages/admin/managements/Orders.jsx";
+import Users from "../pages/admin/managements/Users.jsx";
+import Staff from "../pages/admin/managements/Staff.jsx";
+import Coupons from "../pages/admin/marketing/Coupons.jsx";
+import Discounts from "../pages/admin/marketing/Discounts.jsx";
+import Contacts from "../pages/admin/content/Contacts.jsx";
+import Reports from "../pages/admin/analytics/Reports.jsx";
+import Settings from "../pages/admin/system/Settings.jsx";
 
 import NotFoundPage from "../pages/NotFoundPage";
 
@@ -91,11 +97,17 @@ export const router = createBrowserRouter([
     ),
     errorElement: <RouteErrorUI showLayout={true} />,
     children: [
-      { index: true, element: <AdminDashboard /> },
-      { path: "products", element: <AdminProductsPage /> },
-      { path: "categories", element: <AdminCategoriesPage /> },
-      { path: "orders", element: <AdminOrdersPage /> },
-      { path: "ads", element: <AdminAdsPage /> },
+      { path: "dashboard", index: true, element: <Dashboard /> },
+      { path: "products", element: <Products /> },
+      { path: "categories", element: <Categories /> },
+      { path: "orders", element: <Orders /> },
+      { path: "users", element: <Users /> },
+      { path: "staff", element: <Staff /> },
+      { path: "coupons", element: <Coupons /> },
+      { path: "discounts", element: <Discounts /> },
+      { path: "contacts", element: <Contacts /> },
+      { path: "reports", element: <Reports /> },
+      { path: "settings", element: <Settings /> },
     ],
   },
 
