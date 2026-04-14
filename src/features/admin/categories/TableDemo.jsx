@@ -40,6 +40,11 @@ export default function TableDemo({ categories }) {
     nameAr: "",
     icon: null,
   });
+  const [originalForm, setOriginalForm] = useState({
+    nameEn: "",
+    nameKu: "",
+    nameAr: "",
+  });
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
@@ -60,59 +65,55 @@ export default function TableDemo({ categories }) {
       setSubmitError("");
 
       const formData = new FormData();
-      formData.append("data[attributes][nameEn]", form.nameEn.trim());
-      formData.append("data[attributes][nameKu]", form.nameKu.trim());
-      formData.append("data[attributes][nameAr]", form.nameAr.trim());
+      const next = {
+        nameEn: form.nameEn.trim(),
+        nameKu: form.nameKu.trim(),
+        nameAr: form.nameAr.trim(),
+      };
+      const original = {
+        nameEn: String(originalForm.nameEn ?? "").trim(),
+        nameKu: String(originalForm.nameKu ?? "").trim(),
+        nameAr: String(originalForm.nameAr ?? "").trim(),
+      };
+
+      if (next.nameEn !== original.nameEn) {
+        formData.append("data[attributes][nameEn]", next.nameEn);
+      }
+      if (next.nameKu !== original.nameKu) {
+        formData.append("data[attributes][nameKu]", next.nameKu);
+      }
+      if (next.nameAr !== original.nameAr) {
+        formData.append("data[attributes][nameAr]", next.nameAr);
+      }
 
       if (form.icon instanceof File) {
         formData.append("data[attributes][icon]", form.icon, form.icon.name);
       }
 
+      const hasChanges =
+        formData.has("data[attributes][nameEn]") ||
+        formData.has("data[attributes][nameKu]") ||
+        formData.has("data[attributes][nameAr]") ||
+        formData.has("data[attributes][icon]");
+
+      if (!hasChanges) {
+        setOpenEdit(false);
+        return;
+      }
+
       await updateCategory(editingId, formData);
       revalidator.revalidate();
-
-      // setLocalCategories((prev) =>
-      //   prev.map((cat) => {
-      //     if (cat.id === editingId) {
-      //       return {
-      //         ...cat,
-      //         attributes: {
-      //           ...cat.attributes,
-      //           nameEn: form.nameEn,
-      //           nameKu: form.nameKu,
-      //           nameAr: form.nameAr,
-      //         },
-      //       };
-      //     }
-
-      //     return {
-      //       ...cat,
-      //       included: {
-      //         ...cat.included,
-      //         children: cat.included.children.map((child) =>
-      //           child.id === editingId
-      //             ? {
-      //                 ...child,
-      //                 attributes: {
-      //                   ...child.attributes,
-      //                   nameEn: form.nameEn,
-      //                   nameKu: form.nameKu,
-      //                   nameAr: form.nameAr,
-      //                 },
-      //               }
-      //             : child,
-      //         ),
-      //       },
-      //     };
-      //   }),
-      // );
 
       setOpenEdit(false);
       setEditingId(null);
       setEditingType(null);
+      setOriginalForm({ nameEn: "", nameKu: "", nameAr: "" });
     } catch (error) {
       console.error("Error updating category:", error);
-      setSubmitError("Failed to update category");
+      const msg =
+        error?.response?.data?.errors?.[0]?.message ||
+        "Failed to update category";
+      setSubmitError(String(msg));
     } finally {
       setSubmitting(false);
     }
@@ -127,10 +128,14 @@ export default function TableDemo({ categories }) {
 
       const data = await getOneCategory(id);
       const cat = data.data;
-      setForm({
+      const base = {
         nameEn: cat.attributes.nameEn || "",
         nameKu: cat.attributes.nameKu || "",
         nameAr: cat.attributes.nameAr || "",
+      };
+      setOriginalForm(base);
+      setForm({
+        ...base,
         icon: null,
       });
     } catch (error) {
