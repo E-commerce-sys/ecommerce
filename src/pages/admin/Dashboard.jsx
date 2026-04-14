@@ -78,7 +78,7 @@ const products = [
 
 function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-[rgb(var(--color-grey))] p-8">
+    <div className="min-h-screen p-8">
 
       {/* Header */}
       <h1 className="text-3xl font-bold text-[rgb(var(--color-text-main))] mb-8">
