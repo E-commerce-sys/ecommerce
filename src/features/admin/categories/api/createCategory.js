@@ -1,7 +1,10 @@
-import axiosInstace from "../../../../axios/axiosInterceptor";
+import axiosInstance from "../../../../axios/axiosInterceptor";
 
-export async function createCategory(categoryData) {
-  const res = await axiosInstace.post("/api/categories", categoryData);
-  console.log(res.data);
+/**
+ * multipart/form-data — interceptor strips default JSON Content-Type so the
+ * browser sets multipart boundary; icon must be appended as a File in the UI.
+ */
+export async function createCategory(formData) {
+  const res = await axiosInstance.post("/api/categories", formData);
   return res.data;
 }

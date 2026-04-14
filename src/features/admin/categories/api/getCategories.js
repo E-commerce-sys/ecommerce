@@ -1,9 +1,8 @@
-import axiosInstace from "../../../../axios/axiosInterceptor";
+import axiosInstance from "../../../../axios/axiosInterceptor";
 
 export async function getCategories() {
-  const res = await axiosInstace.get(
+  const res = await axiosInstance.get(
     "/api/categories?include=children&filter[parentCategory]=",
   );
-  console.log(res.data);
   return res.data;
 }
