@@ -1,7 +1,15 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 import logo from "../assets/icons/logo.svg";
+import { useAuth } from "@/context/AuthContext";
+
 function AdminLayout() {
+  const { logout } = useAuth();
+
+  async function handleLogout() {
+    await logout();
+    navigate("/", { replace: true });
+  }
   return (
     <div className="flex gap-4 p-3">
       <aside className="flex flex-col gap-6 py-2 border border-[rgb(var(--color-border))] rounded w-[250px]">
@@ -146,7 +154,15 @@ function AdminLayout() {
                 >
                   Settings
                 </NavLink>
-                <p className="px-5 py-1 cursor-pointer">Log out</p>
+                <div className="flex justify-start px-5 py-1">
+                  <button
+                    type="button"
+                    onClick={() => void handleLogout()}
+                    className="cursor-pointer"
+                  >
+                    Log out
+                  </button>
+                </div>
               </div>
             </div>
           </div>
