@@ -34,7 +34,7 @@ const emptyForm = () => ({
   icon: null,
 });
 
-function Catagories() {
+function Categories() {
   const data = useLoaderData();
   const revalidator = useRevalidator();
 
@@ -254,4 +254,4 @@ function Catagories() {
   );
 }
 
-export default Catagories;
+export default Categories;

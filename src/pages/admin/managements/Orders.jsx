@@ -1,5 +1,6 @@
+import Order from "../../../features/admin/orders/Order";
 function Orders() {
-  return <div>orders</div>;
+  return <Order />;
 }
 
 export default Orders;

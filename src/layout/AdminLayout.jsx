@@ -1,9 +1,10 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import logo from "../assets/icons/logo.svg";
 import { useAuth } from "@/context/AuthContext";
 
 function AdminLayout() {
+  const navigate = useNavigate();
   const { logout } = useAuth();
 
   async function handleLogout() {
@@ -15,9 +16,17 @@ function AdminLayout() {
       <aside className="flex flex-col gap-6 py-2 border border-[rgb(var(--color-border))] rounded w-[250px]">
         <div className="flex gap-4 p-3 items-center border-b border-[rgb(var(--color-grey))]">
           <img src={logo} alt="" className="w-10 h-10" />
-          <p className="text-[20px] font-bold text-[rgb(var(--color-primary-5))]">
-            Exclusive
-          </p>
+          <div className="flex flex-col gap-1 justify-center">
+            <p className="text-[20px] font-bold text-[rgb(var(--color-primary-5))]">
+              Exclusive
+            </p>
+            <p
+              className="text-[12px] text-[rgb(var(--color-text-main-2))] cursor-pointer"
+              onClick={() => navigate("/")}
+            >
+              Back to Shopping
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-col gap-20 text-[rgb(var(--color-text-main))]">
