@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import TableDemo from "./TableDemo";
 import { useState } from "react";
+import { useLoaderData, useSearchParams } from "react-router-dom";
 
 import {
   Pagination,
@@ -23,17 +24,64 @@ import {
 } from "@/components/ui/select";
 
 const states = [
-  { id: 2, name: "Pending" },
-  { id: 3, name: "Preparing" },
-  { id: 4, name: "Shipping" },
-  { id: 5, name: "Delivering" },
-  { id: 6, name: "Arrived" },
-  { id: 7, name: "Cancelled" },
+  {
+    id: 1,
+    name: "Pending",
+    value: "pending",
+    style: "bg-gray-200 border-gray-600",
+  },
+  {
+    id: 2,
+    name: "Preparing",
+    value: "preparing",
+    style: "bg-yellow-200 border-[#FBBF24]",
+  },
+  {
+    id: 3,
+    name: "Shipping",
+    value: "shipping",
+    style: "bg-purple-200 border-[#8B5CF6]",
+  },
+  {
+    id: 4,
+    name: "Delivering",
+    value: "delivering",
+    style: "bg-orange-200 border-[#F97316]",
+  },
+  {
+    id: 5,
+    name: "Arrived",
+    value: "arrived",
+    style: "bg-green-200 border-[#22C55E]",
+  },
+  {
+    id: 6,
+    name: "Cancelled",
+    value: "cancelled",
+    style: "bg-red-200 border-red-600",
+  },
 ];
 
+function buildPageNumbers(current, last) {
+  if (!last || last < 1) return [];
+  if (last <= 5) return Array.from({ length: last }, (_, i) => i + 1);
+
+  const set = new Set([1, last, current - 1, current, current + 1]);
+  return [...set].filter((n) => n >= 1 && n <= last).sort((a, b) => a - b);
+}
+
 function Order() {
+  const loaderData = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isEditing, setIsEditing] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState([]);
+  const currentStatus = searchParams.get("status") || "all";
+
+  const orders = loaderData?.data ?? [];
+  const meta = loaderData?.meta ?? {};
+  const currentPage = Number(meta.current_page ?? 1);
+  const lastPage = Number(meta.last_page ?? 1);
+  const pages = buildPageNumbers(currentPage, lastPage);
 
   const toggleOrder = (orderId) => {
     setSelectedOrders(
@@ -52,40 +100,67 @@ function Order() {
           <p className="text-sm text-gray-500">Manage your orders here</p>
         </div>
 
-        <Button
-          size="sm"
-          variant={`${isEditing ? "primary" : "outline"}`}
-          onClick={() => {
-            if (isEditing) {
-              // 🔥 CALL API HERE
-              console.log("Selected Orders:", selectedOrders);
+        <div className="flex gap-2">
+          {isEditing && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                // ❌ cancel everything
+                setSelectedOrders([]);
+                setIsEditing(false);
+              }}
+            >
+              Cancel
+            </Button>
+          )}
 
-              // ✅ CLEAR SELECTION AFTER SAVE
-              setSelectedOrders([]);
-            }
+          <Button
+            size="sm"
+            variant={isEditing ? "primary" : "outline"}
+            onClick={() => {
+              if (isEditing) {
+                console.log("Selected Orders:", selectedOrders);
 
-            // toggle edit mode
-            setIsEditing((prev) => !prev);
-          }}
-        >
-          {isEditing ? "Save" : "Edit"}
-        </Button>
+                // ✅ clear after save
+                setSelectedOrders([]);
+              }
+
+              setIsEditing((prev) => !prev);
+            }}
+          >
+            {isEditing ? "Save" : "Edit"}
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 items-center">
           <p>Filter by states</p>
-          <Select>
+          <Select
+            value={currentStatus}
+            onValueChange={(value) => {
+              const next = new URLSearchParams(searchParams);
+              if (value === "all") {
+                next.delete("status");
+              } else {
+                next.set("status", value);
+              }
+              next.set("page", "1");
+
+              setSearchParams(next);
+            }}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>States</SelectLabel>
-                <SelectItem>All</SelectItem>
-                {states.map((cat) => (
-                  <SelectItem key={cat.id} value={String(cat.name)}>
-                    {cat.name}
+                <SelectItem value="all">All</SelectItem>
+                {states.map((state) => (
+                  <SelectItem key={state.id} value={state.value}>
+                    {state.name}
                   </SelectItem>
                 ))}
               </SelectGroup>
@@ -94,6 +169,7 @@ function Order() {
         </div>
         <div className="w-full">
           <TableDemo
+            orders={orders}
             isEditing={isEditing}
             selectedOrders={selectedOrders}
             toggleOrder={toggleOrder}
@@ -104,24 +180,55 @@ function Order() {
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            <PaginationPrevious href="#" />
+            <PaginationPrevious
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage <= 1) return;
+                const next = new URLSearchParams(searchParams);
+                next.set("page", String(currentPage - 1));
+                setSearchParams(next);
+              }}
+            />
           </PaginationItem>
+          {pages.map((page, index) => {
+            const prev = pages[index - 1];
+            const gap = prev != null && page - prev > 1;
+            return (
+              <div key={page} className="flex items-center">
+                {gap ? (
+                  <PaginationItem>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                ) : null}
+                <PaginationItem>
+                  <PaginationLink
+                    href="#"
+                    isActive={page === currentPage}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const next = new URLSearchParams(searchParams);
+                      next.set("page", String(page));
+                      setSearchParams(next);
+                    }}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              </div>
+            );
+          })}
           <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
+            <PaginationNext
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                if (currentPage >= lastPage) return;
+                const next = new URLSearchParams(searchParams);
+                next.set("page", String(currentPage + 1));
+                setSearchParams(next);
+              }}
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
