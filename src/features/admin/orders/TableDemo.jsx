@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -8,212 +8,88 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const orders = [
-  {
-    id: 1,
-    name: "Ali",
-    email: "ali@example.com",
-    orderStatus: "pending",
-    date: "2023-10-01",
-    totalPrice: "$250.00",
-    numItems: 3,
-    items: [
-      {
-        product: "T-Shirt",
-        productImg: "/images/t-shirt.jpg",
-        price: "$50",
-        color: "Red",
-        size: "M",
-        quantity: 2,
-      },
-      {
-        product: "Jeans",
-        productImg: "/images/jeans.jpg",
-        price: "$150",
-        color: "Blue",
-        size: "L",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Ahmed",
-    email: "ahmed@example.com",
-    orderStatus: "preparing",
-    date: "2023-10-02",
-    totalPrice: "$150.00",
-    numItems: 2,
-    items: [
-      {
-        product: "Shoes",
-        productImg: "/images/t-shirt.jpg",
+const STATUS_STYLES = {
+  pending: "bg-gray-100 border-gray-600",
+  preparing: "bg-yellow-100 border-[#FBBF24]",
+  shipping: "bg-purple-100 border-[#8B5CF6]",
+  delivering: "bg-orange-100 border-[#F97316]",
+  arrived: "bg-green-100 border-[#22C55E]",
+  cancelled: "bg-red-100 border-red-600",
+};
 
-        price: "$100",
-        color: "Black",
-        size: "42",
-        quantity: 1,
-      },
-      {
-        product: "Cap",
-        productImg: "/images/t-shirt.jpg",
+function formatMoney(value) {
+  const n = Number(value ?? 0);
+  if (Number.isNaN(n)) return "$0.00";
+  return `$${n.toFixed(2)}`;
+}
 
-        price: "$50",
-        color: "White",
-        size: "Free",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Ahmed",
-    email: "ahmed@example.com",
-    orderStatus: "preparing",
-    date: "2023-10-02",
-    totalPrice: "$150.00",
-    numItems: 2,
-    items: [
-      {
-        product: "Shoes",
-        productImg: "/images/t-shirt.jpg",
+function formatDate(iso) {
+  if (!iso) return "-";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "-";
+  return date.toLocaleDateString();
+}
 
-        price: "$100",
-        color: "Black",
-        size: "42",
-        quantity: 1,
-      },
-      {
-        product: "Cap",
-        productImg: "/images/t-shirt.jpg",
+function normalizeOrder(raw) {
+  const attrs = raw?.attributes ?? {};
+  const user = raw?.included?.user?.attributes ?? {};
+  const items = raw?.included?.OrderItems ?? raw?.included?.orderItems ?? [];
+  return {
+    id: Number(raw?.id),
+    name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "-",
+    email: user.email ?? "-",
+    orderStatus: attrs.status ?? "-",
+    date: formatDate(attrs.createdAt),
+    totalPrice: formatMoney(attrs.totalPrice),
+    numItems: items.length,
+    items: items.map((item) => {
+      const itemAttrs = item?.attributes ?? {};
+      const variant = item?.included?.productVariant;
+      const product = variant?.included?.product?.attributes ?? {};
+      const color = variant?.included?.color?.attributes?.name ?? "-";
+      const size = variant?.included?.size?.attributes?.sizeLabel ?? "-";
+      const quantity = Number(itemAttrs.quantity ?? 0);
+      const unit = Number(itemAttrs.unitPrice ?? 0);
+      return {
+        product: product.nameEn ?? "-",
+        productImg: product.primaryImage ?? "",
+        price: formatMoney(unit),
+        color,
+        size,
+        quantity,
+        subtotal: formatMoney(unit * quantity),
+      };
+    }),
+  };
+}
 
-        price: "$50",
-        color: "White",
-        size: "Free",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Ahmed",
-    email: "ahmed@example.com",
-    orderStatus: "preparing",
-    date: "2023-10-02",
-    totalPrice: "$150.00",
-    numItems: 2,
-    items: [
-      {
-        product: "Shoes",
-        productImg: "/images/t-shirt.jpg",
+function normalizeStatus(status) {
+  return String(status ?? "")
+    .trim()
+    .toLowerCase();
+}
 
-        price: "$100",
-        color: "Black",
-        size: "42",
-        quantity: 1,
-      },
-      {
-        product: "Cap",
-        productImg: "/images/t-shirt.jpg",
+function formatStatusLabel(status) {
+  const normalized = normalizeStatus(status);
+  if (!normalized) return "-";
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
 
-        price: "$50",
-        color: "White",
-        size: "Free",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 5,
-    name: "Ahmed",
-    email: "ahmed@example.com",
-    orderStatus: "preparing",
-    date: "2023-10-02",
-    totalPrice: "$150.00",
-    numItems: 2,
-    items: [
-      {
-        product: "Shoes",
-        productImg: "/images/t-shirt.jpg",
+function getStatusBadgeClass(status) {
+  const normalized = normalizeStatus(status);
+  return (
+    STATUS_STYLES[normalized] ?? "bg-gray-100 border-[rgb(var(--color-border))]"
+  );
+}
 
-        price: "$100",
-        color: "Black",
-        size: "42",
-        quantity: 1,
-      },
-      {
-        product: "Cap",
-        productImg: "/images/t-shirt.jpg",
-
-        price: "$50",
-        color: "White",
-        size: "Free",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 6,
-    name: "Ahmed",
-    email: "ahmed@example.com",
-    orderStatus: "preparing",
-    date: "2023-10-02",
-    totalPrice: "$150.00",
-    numItems: 2,
-    items: [
-      {
-        product: "Shoes",
-        productImg: "/images/t-shirt.jpg",
-
-        price: "$100",
-        color: "Black",
-        size: "42",
-        quantity: 1,
-      },
-      {
-        product: "Cap",
-        productImg: "/images/t-shirt.jpg",
-
-        price: "$50",
-        color: "White",
-        size: "Free",
-        quantity: 1,
-      },
-    ],
-  },
-  {
-    id: 7,
-    name: "Ahmed",
-    email: "ahmed@example.com",
-    orderStatus: "preparing",
-    date: "2023-10-02",
-    totalPrice: "$150.00",
-    numItems: 2,
-    items: [
-      {
-        product: "Shoes",
-        productImg: "/images/t-shirt.jpg",
-
-        price: "$100",
-        color: "Black",
-        size: "42",
-        quantity: 1,
-      },
-      {
-        product: "Cap",
-        productImg: "/images/t-shirt.jpg",
-
-        price: "$50",
-        color: "White",
-        size: "Free",
-        quantity: 1,
-      },
-    ],
-  },
-];
-
-export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
+export function TableDemo({
+  orders = [],
+  isEditing,
+  selectedOrders,
+  toggleOrder,
+}) {
   const [expanded, setExpanded] = useState({});
+  const rows = useMemo(() => orders.map(normalizeOrder), [orders]);
 
   const toggleRow = (index) => {
     setExpanded((prev) => ({
@@ -238,36 +114,49 @@ export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
       </TableHeader>
 
       <TableBody>
-        {orders.map((order, index) => (
+        {rows.map((order, index) => (
           <React.Fragment key={index}>
             {/* 🔹 MAIN ROW */}
             <TableRow
-              className={`cursor-pointer hover:bg-gray-50 transition-colors border-b-0 ${
-                selectedOrders.includes(order.id) ? "bg-blue-50" : ""
+              className={`cursor-pointer transition-colors border-b-0 ${
+                selectedOrders.includes(order.id)
+                  ? "bg-blue-50!"
+                  : "hover:bg-gray-50"
               }`}
               onClick={() => toggleRow(index)}
             >
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{order.id || index + 1}</TableCell>
               <TableCell>{order.name}</TableCell>
               <TableCell className="text-center">{order.email}</TableCell>
-              <TableCell className="text-center">{order.orderStatus}</TableCell>
+              <TableCell className="text-center ">
+                <span
+                  className={`inline-flex min-w-24 items-center justify-center rounded-full border px-1 py-1 text-xs ${getStatusBadgeClass(order.orderStatus)}`}
+                >
+                  {formatStatusLabel(order.orderStatus)}
+                </span>
+              </TableCell>
               <TableCell className="text-center">{order.date}</TableCell>
               <TableCell className="text-center">{order.numItems}</TableCell>
               <TableCell className="text-center">{order.totalPrice}</TableCell>
               <TableCell className="text-right pr-4">
-                <span
+                <button
                   onClick={(e) => {
-                    e.stopPropagation(); // prevent row expand
+                    e.stopPropagation();
                     if (isEditing) toggleOrder(order.id);
                   }}
-                  className={` hover:underline ${
-                    isEditing
-                      ? "hover:text-blue-600 text-gray-600 cursor-pointer"
-                      : "text-gray-300 cursor-not-allowed"
-                  }`}
+                  disabled={!isEditing}
+                  className={`px-3 py-1 rounded-md text-sm transition
+    ${
+      selectedOrders.includes(order.id)
+        ? "bg-blue-600 text-white"
+        : isEditing
+          ? "bg-gray-100 text-gray-700 hover:bg-blue-100"
+          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+    }
+  `}
                 >
-                  next state
-                </span>
+                  Next State
+                </button>
               </TableCell>
             </TableRow>
 
@@ -302,7 +191,17 @@ export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
                       <TableBody>
                         {order.items.map((item, i) => (
                           <TableRow key={i}>
-                            <TableCell>{item.productImg}</TableCell>
+                            <TableCell className="h-13 w-13">
+                              {item.productImg ? (
+                                <img
+                                  src={item.productImg}
+                                  alt={item.product}
+                                  className="h-fit w-fit rounded object-cover"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </TableCell>
                             <TableCell className="text-center">
                               {item.product}
                             </TableCell>
@@ -319,7 +218,7 @@ export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
                               {item.quantity}
                             </TableCell>
                             <TableCell className="text-right pr-4">
-                              {`$${parseFloat(item.price.slice(1)) * item.quantity}`}
+                              {item.subtotal}
                             </TableCell>
                           </TableRow>
                         ))}

@@ -42,6 +42,7 @@ import PrivacyPage from "../pages/PrivacyPage.jsx";
 import RouteErrorUI from "./RouteErrorUI";
 
 import { getCategories } from "../features/admin/categories/api/getCategories.js";
+import { getOrders } from "../features/admin/orders/api/getOrders";
 
 export const router = createBrowserRouter([
   {
@@ -107,7 +108,7 @@ export const router = createBrowserRouter([
         element: <Category />,
         loader: getCategories,
       },
-      { path: "orders", element: <Orders /> },
+      { path: "orders", element: <Orders />, loader: getOrders },
       { path: "users", element: <Users /> },
       { path: "staff", element: <Staff /> },
       { path: "coupons", element: <Coupons /> },
