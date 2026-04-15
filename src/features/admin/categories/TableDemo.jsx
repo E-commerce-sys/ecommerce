@@ -208,7 +208,7 @@ export default function TableDemo({ categories }) {
               {expanded[cat.id] &&
                 (cat.included?.children ?? []).map((child) => (
                   <TableRow key={child.id} className="bg-gray-50">
-                    <TableCell>{child.id}</TableCell>
+                    <TableCell>{""}</TableCell>
 
                     <TableCell className="pl-8 flex gap-3">
                       ↳ <span>{child.attributes.nameEn}</span>
