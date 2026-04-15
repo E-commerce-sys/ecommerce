@@ -157,7 +157,7 @@ export default function TableDemo({ categories }) {
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-100">
-            <TableHead>ID</TableHead>
+            <TableHead>{""}</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Products</TableHead>
             <TableHead className="text-right pr-4">Action</TableHead>
@@ -165,7 +165,7 @@ export default function TableDemo({ categories }) {
         </TableHeader>
 
         <TableBody>
-          {localCategories.map((cat) => (
+          {localCategories.map((cat, index) => (
             <React.Fragment key={cat.id}>
               {/* 🔹 Parent Row */}
               <TableRow
@@ -173,7 +173,7 @@ export default function TableDemo({ categories }) {
                 className="cursor-pointer"
                 onClick={() => toggleRow(cat.id)}
               >
-                <TableCell>{cat.id}</TableCell>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell className="flex gap-3">
                   <span>{cat.attributes.nameEn}</span>
                   <span> {cat.attributes.nameKu}</span>

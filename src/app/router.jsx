@@ -21,7 +21,7 @@ import CanceledPage from "../features/account/CanceledPage.jsx";
 
 import Dashboard from "../pages/admin/Dashboard.jsx";
 import Products from "../pages/admin/managements/Products.jsx";
-import Categories from "../pages/admin/managements/Categories.jsx";
+import Category from "../pages/admin/managements/Category.jsx";
 import Orders from "../pages/admin/managements/Orders.jsx";
 import Users from "../pages/admin/managements/Users.jsx";
 import Staff from "../pages/admin/managements/Staff.jsx";
@@ -104,7 +104,7 @@ export const router = createBrowserRouter([
       { path: "products", element: <Products /> },
       {
         path: "categories",
-        element: <Categories />,
+        element: <Category />,
         loader: getCategories,
       },
       { path: "orders", element: <Orders /> },
