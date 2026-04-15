@@ -33,12 +33,16 @@ function formatDate(iso) {
 function normalizeOrder(raw) {
   const attrs = raw?.attributes ?? {};
   const user = raw?.included?.user?.attributes ?? {};
+  const adress = raw?.included?.shippingAddress?.attributes ?? {};
   const items = raw?.included?.OrderItems ?? raw?.included?.orderItems ?? [];
   return {
     id: Number(raw?.id),
     name: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "-",
     email: user.email ?? "-",
     orderStatus: attrs.status ?? "-",
+    address:
+      `${adress.houseNumber ?? ""} ${adress.streetName ?? ""} | ${adress.city ?? ""}`.trim() ||
+      "-",
     date: formatDate(attrs.createdAt),
     totalPrice: formatMoney(attrs.totalPrice),
     numItems: items.length,
@@ -105,6 +109,7 @@ export function TableDemo({
           <TableHead>#</TableHead>
           <TableHead>Customer Name</TableHead>
           <TableHead className="text-center">Customer Email</TableHead>
+          <TableHead className="text-center">Customer Address</TableHead>
           <TableHead className="text-center">Order Status</TableHead>
           <TableHead className="text-center">Order Date</TableHead>
           <TableHead className="text-center">Num. Items</TableHead>
@@ -128,6 +133,7 @@ export function TableDemo({
               <TableCell>{order.id || index + 1}</TableCell>
               <TableCell>{order.name}</TableCell>
               <TableCell className="text-center">{order.email}</TableCell>
+              <TableCell className="text-center">{order.address}</TableCell>
               <TableCell className="text-center ">
                 <span
                   className={`inline-flex min-w-24 items-center justify-center rounded-full border px-1 py-1 text-xs ${getStatusBadgeClass(order.orderStatus)}`}
@@ -162,7 +168,7 @@ export function TableDemo({
 
             {/* 🔽 EXPANDED ROW WITH ANIMATION */}
             <TableRow>
-              <TableCell colSpan={8} className="p-0">
+              <TableCell colSpan={9} className="p-0">
                 <div
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     expanded[index]
