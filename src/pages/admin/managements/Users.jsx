@@ -1,5 +1,6 @@
+import User from "../../../features/admin/users/User";
 function Users() {
-  return <div>users</div>;
+  return <User />;
 }
 
 export default Users;

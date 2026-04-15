@@ -1,5 +1,6 @@
+import Coupon from "../../../features/admin/coupon/Coupon";
 function Coupons() {
-  return <div>coupons</div>;
+  return <Coupon />;
 }
 
 export default Coupons;

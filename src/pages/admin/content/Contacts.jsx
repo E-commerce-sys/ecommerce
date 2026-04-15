@@ -1,5 +1,6 @@
+import Contact from "../../../features/admin/contact/Contact";
 function Contacts() {
-  return <div>contacts</div>;
+  return <Contact />;
 }
 
 export default Contacts;
