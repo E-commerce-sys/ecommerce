@@ -41,7 +41,7 @@ function normalizeOrder(raw) {
     email: user.email ?? "-",
     orderStatus: attrs.status ?? "-",
     address:
-      `${adress.houseNumber} ${adress.streetName} | ${adress.city ?? ""}`.trim() ||
+      `${adress.houseNumber ?? ""} ${adress.streetName ?? ""} | ${adress.city ?? ""}`.trim() ||
       "-",
     date: formatDate(attrs.createdAt),
     totalPrice: formatMoney(attrs.totalPrice),
