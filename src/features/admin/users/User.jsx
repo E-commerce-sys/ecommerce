@@ -1,4 +1,3 @@
-import Button from "@/components/Button";
 import TableDemo from "./TableDemo";
 
 import {
@@ -14,17 +13,21 @@ import {
 function User() {
   return (
     <div className="flex w-full flex-col gap-10">
-      <div className="flex justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="text-2xl font-semibold">Users</p>
-          <p className="text-sm text-gray-500">Manage users here</p>
-        </div>
-
-        <Button size="sm">Edit</Button>
+      <div className="flex flex-col gap-1">
+        <p className="text-2xl font-semibold">Users</p>
+        <p className="text-sm text-gray-500">Manage users here</p>
       </div>
-
-      <div className="w-full">
-        <TableDemo />
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Search users..."
+            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:ring outline-none focus:ring-[rgb(var(--color-primary-main))]"
+          />
+        </div>{" "}
+        <div className="w-full">
+          <TableDemo />
+        </div>
       </div>
 
       <Pagination>

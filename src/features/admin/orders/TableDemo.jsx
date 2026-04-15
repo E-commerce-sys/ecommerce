@@ -14,6 +14,7 @@ const orders = [
     name: "Ali",
     email: "ali@example.com",
     orderStatus: "pending",
+    date: "2023-10-01",
     totalPrice: "$250.00",
     numItems: 3,
     items: [
@@ -40,11 +41,14 @@ const orders = [
     name: "Ahmed",
     email: "ahmed@example.com",
     orderStatus: "preparing",
+    date: "2023-10-02",
     totalPrice: "$150.00",
     numItems: 2,
     items: [
       {
         product: "Shoes",
+        productImg: "/images/t-shirt.jpg",
+
         price: "$100",
         color: "Black",
         size: "42",
@@ -52,6 +56,153 @@ const orders = [
       },
       {
         product: "Cap",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$50",
+        color: "White",
+        size: "Free",
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Ahmed",
+    email: "ahmed@example.com",
+    orderStatus: "preparing",
+    date: "2023-10-02",
+    totalPrice: "$150.00",
+    numItems: 2,
+    items: [
+      {
+        product: "Shoes",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$100",
+        color: "Black",
+        size: "42",
+        quantity: 1,
+      },
+      {
+        product: "Cap",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$50",
+        color: "White",
+        size: "Free",
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Ahmed",
+    email: "ahmed@example.com",
+    orderStatus: "preparing",
+    date: "2023-10-02",
+    totalPrice: "$150.00",
+    numItems: 2,
+    items: [
+      {
+        product: "Shoes",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$100",
+        color: "Black",
+        size: "42",
+        quantity: 1,
+      },
+      {
+        product: "Cap",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$50",
+        color: "White",
+        size: "Free",
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: "Ahmed",
+    email: "ahmed@example.com",
+    orderStatus: "preparing",
+    date: "2023-10-02",
+    totalPrice: "$150.00",
+    numItems: 2,
+    items: [
+      {
+        product: "Shoes",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$100",
+        color: "Black",
+        size: "42",
+        quantity: 1,
+      },
+      {
+        product: "Cap",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$50",
+        color: "White",
+        size: "Free",
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "Ahmed",
+    email: "ahmed@example.com",
+    orderStatus: "preparing",
+    date: "2023-10-02",
+    totalPrice: "$150.00",
+    numItems: 2,
+    items: [
+      {
+        product: "Shoes",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$100",
+        color: "Black",
+        size: "42",
+        quantity: 1,
+      },
+      {
+        product: "Cap",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$50",
+        color: "White",
+        size: "Free",
+        quantity: 1,
+      },
+    ],
+  },
+  {
+    id: 7,
+    name: "Ahmed",
+    email: "ahmed@example.com",
+    orderStatus: "preparing",
+    date: "2023-10-02",
+    totalPrice: "$150.00",
+    numItems: 2,
+    items: [
+      {
+        product: "Shoes",
+        productImg: "/images/t-shirt.jpg",
+
+        price: "$100",
+        color: "Black",
+        size: "42",
+        quantity: 1,
+      },
+      {
+        product: "Cap",
+        productImg: "/images/t-shirt.jpg",
+
         price: "$50",
         color: "White",
         size: "Free",
@@ -79,6 +230,7 @@ export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
           <TableHead>Customer Name</TableHead>
           <TableHead className="text-center">Customer Email</TableHead>
           <TableHead className="text-center">Order Status</TableHead>
+          <TableHead className="text-center">Order Date</TableHead>
           <TableHead className="text-center">Num. Items</TableHead>
           <TableHead className="text-center">Total Price</TableHead>
           <TableHead className="text-right pr-4">Action</TableHead>
@@ -99,6 +251,7 @@ export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
               <TableCell>{order.name}</TableCell>
               <TableCell className="text-center">{order.email}</TableCell>
               <TableCell className="text-center">{order.orderStatus}</TableCell>
+              <TableCell className="text-center">{order.date}</TableCell>
               <TableCell className="text-center">{order.numItems}</TableCell>
               <TableCell className="text-center">{order.totalPrice}</TableCell>
               <TableCell className="text-right pr-4">
@@ -120,7 +273,7 @@ export function TableDemo({ isEditing, selectedOrders, toggleOrder }) {
 
             {/* 🔽 EXPANDED ROW WITH ANIMATION */}
             <TableRow>
-              <TableCell colSpan={7} className="p-0">
+              <TableCell colSpan={8} className="p-0">
                 <div
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
                     expanded[index]
