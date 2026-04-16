@@ -14,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { getProducts } from "./adminProducts"
+import { getProducts,deleteProduct } from "./adminProducts"
 
 const emptyProduct = {
   attributes: {
@@ -109,11 +109,21 @@ function Products() {
     setIsDeleteOpen(true);
   };
 
-  const confirmDelete = () => {
-    setProducts((prev) => prev.filter((p) => p.id !== selectedProduct.id));
+  const confirmDelete = async () => {
+  try {
+    await deleteProduct(selectedProduct.id); // ✅ API CALL FIRST
+
+    // ✅ then update UI
+    setProducts((prev) =>
+      prev.filter((p) => p.id !== selectedProduct.id)
+    );
+
     setIsDeleteOpen(false);
     setSelectedProduct(null);
-  };
+  } catch (err) {
+    console.error("❌ Delete failed:", err.response?.data || err);
+  }
+};
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (

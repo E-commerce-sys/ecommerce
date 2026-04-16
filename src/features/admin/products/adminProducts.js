@@ -33,3 +33,8 @@ export async function editProduct(id, formData) {
 
   return res.data;
 }
+
+export async function deleteProduct(id) {
+  const res = await axiosInstance.delete(`/api/products/${id}`);
+  return res.data;
+}

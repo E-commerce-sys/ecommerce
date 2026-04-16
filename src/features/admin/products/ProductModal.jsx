@@ -102,7 +102,10 @@ const handleSubmit = async () => {
     const variantsPayload = (formData.variants || [])
       .filter((v) => v?.stock !== undefined && v?.stock !== "")
       .map((v) => {
-        const hasColor = v.color?.trim();
+        const hasColor =
+        typeof v.color === "string" &&
+        v.color.startsWith("#") &&
+        v.color.length === 7;
         const hasSize = v.size?.trim();
 
         return {
