@@ -1,5 +1,6 @@
-function Products() {
-  return <div>Products</div>;
+import Products from "@/features/admin/products/Products";
+function ProductsPage() {
+  return <div className="w-full"><Products/></div>;
 }
 
-export default Products;
+export default ProductsPage;
