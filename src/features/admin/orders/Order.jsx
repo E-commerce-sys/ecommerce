@@ -2,6 +2,8 @@ import Button from "@/components/Button";
 import TableDemo from "./TableDemo";
 import { useState } from "react";
 import { useLoaderData, useSearchParams } from "react-router-dom";
+import { useRevalidator } from "react-router-dom";
+import { updateOrdersState } from "./api/updateOrdersState";
 
 import {
   Pagination,
@@ -76,7 +78,7 @@ function Order() {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState([]);
   const currentStatus = searchParams.get("status") || "all";
-
+  const { revalidate } = useRevalidator();
   const orders = loaderData?.data ?? [];
   const meta = loaderData?.meta ?? {};
   const currentPage = Number(meta.current_page ?? 1);
@@ -118,12 +120,17 @@ function Order() {
           <Button
             size="sm"
             variant={isEditing ? "primary" : "outline"}
-            onClick={() => {
+            onClick={async () => {
               if (isEditing) {
-                console.log("Selected Orders:", selectedOrders);
+                try {
+                  await updateOrdersState({ orderIds: selectedOrders });
+                  revalidate();
 
-                // ✅ clear after save
-                setSelectedOrders([]);
+                  // ✅ clear after success
+                  setSelectedOrders([]);
+                } catch (err) {
+                  console.error(err);
+                }
               }
 
               setIsEditing((prev) => !prev);

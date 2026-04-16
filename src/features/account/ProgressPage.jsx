@@ -54,7 +54,7 @@ function ProgressPage() {
     if (!selectedOrderId || cancelLoading) return;
     try {
       setCancelLoading(true);
-      await cancelOrder(selectedOrderId, { status: "cancelled" });
+      await cancelOrder(selectedOrderId);
       closeCancelModal();
       await loadOrders();
     } catch {
