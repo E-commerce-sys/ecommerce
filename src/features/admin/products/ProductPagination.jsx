@@ -1,41 +1,67 @@
-export default function Pagination({ meta, onPageChange }) {
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+
+export default function ProductPagination({ meta, onPageChange }) {
   if (!meta?.links?.length) return null;
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-6">
-      {meta.links.map((link, index) => {
-        const label = link.label
-          .replace("&laquo; Previous", "Prev")
-          .replace("Next &raquo;", "Next");
+    <Pagination className="mt-6">
+  <PaginationContent>
+    {meta.links.map((link, index) => {
+      const isPrev = link.label.includes("Previous");
+      const isNext = link.label.includes("Next");
+      const isEllipsis = link.label === "...";
 
-        const isActive = link.active;
-
-        if (!link.url) {
-          return (
-            <span
-              key={index}
-              className="w-8 h-8 flex items-center justify-center text-sm opacity-40"
-            >
-              {label}
-            </span>
-          );
-        }
-
+      if (isPrev) {
         return (
-          <button
-            key={index}
-            onClick={() => onPageChange(link.page)}
-            className={`w-8 h-8 rounded text-sm transition
-              ${
-                isActive
-                  ? "bg-[rgb(var(--color-primary-main))] text-white"
-                  : "bg-gray-100 hover:bg-gray-200"
-              }`}
-          >
-            {label}
-          </button>
+          <PaginationItem key={index}>
+            <PaginationPrevious
+              onClick={() => link.url && onPageChange(link.page)}
+              className={!link.url ? "pointer-events-none opacity-40" : "cursor-pointer"}
+            />
+          </PaginationItem>
         );
-      })}
-    </div>
+      }
+
+      if (isNext) {
+        return (
+          <PaginationItem key={index}>
+            <PaginationNext
+              onClick={() => link.url && onPageChange(link.page)}
+              className={!link.url ? "pointer-events-none opacity-40" : "cursor-pointer"}
+            />
+          </PaginationItem>
+        );
+      }
+
+      if (isEllipsis) {
+        return (
+          <PaginationItem key={index}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      return (
+        <PaginationItem key={index}>
+          <PaginationLink
+            isActive={link.active}
+            onClick={() => onPageChange(link.page)}
+            className="cursor-pointer"
+          >
+            {link.label}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    })}
+  </PaginationContent>
+</Pagination>
   );
 }
