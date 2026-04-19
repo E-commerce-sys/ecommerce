@@ -155,14 +155,6 @@ function AdminLayout() {
                 System
               </p>
               <div className="flex flex-col gap-2">
-                <NavLink
-                  to="settings"
-                  className={({ isActive }) =>
-                    `px-5 py-1 ${isActive && "bg-[#FBECED] text-[rgb(var(--color-primary-5))] font-medium"}`
-                  }
-                >
-                  Settings
-                </NavLink>
                 <div className="flex justify-start px-5 py-1">
                   <button
                     type="button"

@@ -86,10 +86,10 @@ function AccountLayout() {
                   Arrived
                 </NavLink>
                 <NavLink
-                  to="/account/canceled"
+                  to="/account/cancelled"
                   className={({ isActive }) => navClass(isActive)}
                 >
-                  Canceled
+                  Cancelled
                 </NavLink>
               </div>
             </nav>

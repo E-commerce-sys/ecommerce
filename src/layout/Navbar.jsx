@@ -19,14 +19,15 @@ function Navbar() {
   const { language, changeLanguage, dir } = useLanguage();
   const menuRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const { loggedIn, logout } = useAuth();
+  const { loggedIn, logout, adminFlags } = useAuth();
+  const isAdmin =
+    adminFlags?.isAdmin === true || adminFlags?.isSuperAdmin === true;
   const languages = ["en", "ar", "ku"];
   const [accountOpen, setAccountOpen] = useState(false);
   const accountRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { pathname } = location;
-
   async function handleLogout() {
     await logout();
     navigate("/", { replace: true });
@@ -57,14 +58,22 @@ function Navbar() {
       {" "}
       <div className="flex w-full min-w-0 max-w-full items-center justify-between gap-2 px-2 text-lg text-[rgb(var(--color-text-main))] md:gap-3 md:px-4">
         {/* Logo */}
-        <NavLink to="/" className="shrink-0">
-          <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center shrink-0">
+          <NavLink to="/" className="flex gap-2 items-center">
             <img src={logo} alt="" className="w-6 h-8 md:w-7 md:h-9" />
-            <p className="font-bold text-lg md:text-xl lg:text-2xl cursor-pointer ">
+            <p className="font-bold text-lg md:text-xl lg:text-2xl cursor-pointer">
               Exclusive
             </p>
-          </div>
-        </NavLink>
+          </NavLink>
+          {isAdmin && (
+            <NavLink
+              to="/admin"
+              className="text-sm text-[rgb(var(--color-text-main-2))] cursor-pointer"
+            >
+              go to Admin
+            </NavLink>
+          )}
+        </div>
 
         {/* Search */}
         {!shouldHideNavbar && (
@@ -138,19 +147,14 @@ function Navbar() {
                     <img src={mallbag} alt="" />
                     <span>{t("account.orders")}</span>
                   </NavLink>
-                  <NavLink
-                    to="/"
-                    className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4"
+                  <button
+                    type="button"
+                    onClick={() => void handleLogout()}
+                    className="px-4 py-2 items-center hover:bg-gray-200 text-sm flex gap-4 cursor-pointer text-left"
                   >
-                    <button
-                      type="button"
-                      onClick={() => void handleLogout()}
-                      className="items-center flex gap-4 cursor-pointer"
-                    >
-                      <img src={logoutIcon} alt="" />
-                      <span>{t("account.logout")}</span>
-                    </button>
-                  </NavLink>
+                    <img src={logoutIcon} alt="" />
+                    <span>{t("account.logout")}</span>
+                  </button>
                 </div>
               )}
             </div>
@@ -239,16 +243,14 @@ function Navbar() {
             {t("navbar.basket")}
           </NavLink>
           {loggedIn && (
-            <NavLink to="/" className="flex items-center">
-              <button
-                type="button"
-                onClick={() => void handleLogout()}
-                className="items-center flex gap-2 cursor-pointer"
-              >
-                <img className="w-5 h-5" src={logoutIcon} alt="" />
-                <span>{t("account.logout")}</span>
-              </button>
-            </NavLink>
+            <button
+              type="button"
+              onClick={() => void handleLogout()}
+              className="items-center flex gap-2 cursor-pointer"
+            >
+              <img className="w-5 h-5" src={logoutIcon} alt="" />
+              <span>{t("account.logout")}</span>
+            </button>
           )}
 
           {/* Language selection */}
