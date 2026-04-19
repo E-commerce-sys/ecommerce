@@ -22,7 +22,7 @@ function User() {
           <input
             type="text"
             placeholder="Search users..."
-            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:ring outline-none focus:ring-[rgb(var(--color-primary-main))]"
+            className="w-full rounded-full border border-gray-300 px-4 py-2 focus:ring outline-none focus:ring-[rgb(var(--color-primary-main))]"
           />
         </div>{" "}
         <div className="w-full">
