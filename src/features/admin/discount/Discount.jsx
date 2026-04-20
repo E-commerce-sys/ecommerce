@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useLoaderData, useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useLoaderData, useSearchParams, useRevalidator } from "react-router-dom";
 import TableDemo from "./TableDemo.jsx";
 import { getChildCategories } from "./api/getChildCategories.js";
 
@@ -38,6 +38,7 @@ function Discount() {
   const [searchInput, setSearchInput] = useState(
     searchParams.get("search") || "",
   );
+  const { revalidate } = useRevalidator();
 
   const products = loaderData?.data ?? [];
   const meta = loaderData?.meta ?? {};
@@ -48,7 +49,7 @@ function Discount() {
   const hasDiscountFilter = searchParams.get("hasDiscount") === "true";
   const selectedCategory = searchParams.get("category") || "all";
 
-  useEffect(() => {
+  React.useEffect(() => {
     async function fetchCategories() {
       try {
         const result = await getChildCategories();
@@ -92,6 +93,10 @@ function Discount() {
     }
     next.set("page", "1");
     setSearchParams(next);
+  };
+
+  const handleUpdateSuccess = () => {
+    revalidate();
   };
 
   return (
@@ -140,7 +145,7 @@ function Discount() {
           </Select>
         </div>
         <div className="w-full">
-          <TableDemo products={products} />
+          <TableDemo products={products} onUpdateSuccess={handleUpdateSuccess} />
         </div>
       </div>
 
