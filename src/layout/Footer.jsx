@@ -24,12 +24,14 @@ function Footer() {
           <p className="text-[rgb(var(--color-text-main-1))] ">
             {t("footer.discount")}
           </p>
-          <Link
-            to="/about"
-            className="text-[rgb(var(--color-text-main-1))]  hover:text-white transition-colors"
-          >
-            {t("footer.contact")}
-          </Link>
+          <p>
+            <Link
+              to="/contact"
+              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
+            >
+              {t("footer.contact")}
+            </Link>
+          </p>
         </div>
 
         <div className=" flex flex-col gap-4 ">
@@ -104,8 +106,8 @@ function Footer() {
           </p>
           <p>
             <Link
-              to="/contact"
-              className="text-[rgb(var(--color-text-main-1))] hover:text-white transition-colors"
+              to="/about"
+              className="text-[rgb(var(--color-text-main-1))]  hover:text-white transition-colors"
             >
               {t("footer.about")}
             </Link>

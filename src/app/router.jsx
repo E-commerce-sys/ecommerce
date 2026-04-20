@@ -43,6 +43,7 @@ import RouteErrorUI from "./RouteErrorUI";
 import { getCategories } from "../features/admin/categories/api/getCategories.js";
 import { getOrders } from "../features/admin/orders/api/getOrders";
 import { getProductsWithFilters } from "../features/admin/discount/api/getProductsWithFilters.js";
+import { getContacts } from "../features/admin/contact/getContacts.js";
 
 export const router = createBrowserRouter([
   {
@@ -117,7 +118,7 @@ export const router = createBrowserRouter([
         element: <Discounts />,
         loader: getProductsWithFilters,
       },
-      { path: "contacts", element: <Contacts /> },
+      { path: "contacts", element: <Contacts />, loader: getContacts },
       { path: "reports", element: <Reports /> },
     ],
   },
