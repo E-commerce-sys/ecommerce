@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -17,7 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { cancelOrder } from "../../../features/account/API/cancelOrder";
+import { cancelOrder } from "./api/cancelOrder";
 
 const STATUS_STYLES = {
   pending: "bg-gray-100 border-gray-600",
