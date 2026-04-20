@@ -21,8 +21,8 @@ function User() {
         <div className="flex items-center gap-2">
           <input
             type="text"
-            placeholder="Search users..."
-            className="w-full rounded-full border border-gray-300 px-4 py-2 focus:ring outline-none focus:ring-[rgb(var(--color-primary-main))]"
+            placeholder="Search for users..."
+            className="w-full rounded-full border border-gray-300 px-3 py-1.75 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))]"
           />
         </div>{" "}
         <div className="w-full">
