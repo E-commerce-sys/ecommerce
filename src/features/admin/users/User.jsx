@@ -1,4 +1,7 @@
+import { useState } from "react";
 import TableDemo from "./TableDemo";
+import { useLoaderData, useRevalidator } from "react-router-dom";
+import Button from "@/components/Button";
 
 import {
   Pagination,
@@ -11,11 +14,21 @@ import {
 } from "@/components/ui/pagination";
 
 function User() {
+  const users = useLoaderData();
+  const { revalidate } = useRevalidator();
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleSaveSuccess = () => {
+    revalidate();
+  };
+
   return (
     <div className="flex w-full flex-col gap-10">
-      <div className="flex flex-col gap-1">
-        <p className="text-2xl font-semibold">Users</p>
-        <p className="text-sm text-gray-500">Manage users here</p>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-1">
+          <p className="text-2xl font-semibold">Users</p>
+          <p className="text-sm text-gray-500">Manage users here</p>
+        </div>
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
@@ -24,9 +37,9 @@ function User() {
             placeholder="Search for users..."
             className="w-full rounded-full border border-gray-300 px-3 py-1.75 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))]"
           />
-        </div>{" "}
+        </div>
         <div className="w-full">
-          <TableDemo />
+          <TableDemo users={users} onSaveSuccess={handleSaveSuccess} />
         </div>
       </div>
 
