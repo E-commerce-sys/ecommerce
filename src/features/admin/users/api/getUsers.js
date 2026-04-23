@@ -1,5 +1,20 @@
 import axiosInstance from "../../../../axios/axiosInterceptor";
 
+/**
+ * Load admin users outside route loaders (e.g. coupon “assign to user” select).
+ * Accepts the same search/page semantics as the route loader.
+ */
+export async function fetchAdminUsersForSelect(options = {}) {
+  const search = options.search ?? "";
+  const page = options.page ?? "1";
+  const u = new URL("http://rr.internal/");
+  if (String(search).trim()) {
+    u.searchParams.set("search", String(search).trim());
+  }
+  u.searchParams.set("page", String(page));
+  return getUsers({ request: { url: u.href } });
+}
+
 export async function getUsers({ request }) {
   try {
     const url = new URL(request.url);

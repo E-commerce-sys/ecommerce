@@ -44,6 +44,7 @@ import { getOrders } from "../features/admin/orders/api/getOrders";
 import { getProductsWithFilters } from "../features/admin/discount/api/getProductsWithFilters.js";
 import { getContacts } from "../features/admin/contact/getContacts.js";
 import { getUsers } from "../features/admin/users/api/getUsers.js";
+import { getCoupone } from "../features/admin/coupon/api/getCoupone.js";
 
 export const router = createBrowserRouter([
   {
@@ -112,7 +113,7 @@ export const router = createBrowserRouter([
       { path: "orders", element: <Orders />, loader: getOrders },
       { path: "users", element: <Users />, loader: getUsers },
       { path: "staff", element: <Staff /> },
-      { path: "coupons", element: <Coupons /> },
+      { path: "coupons", element: <Coupons />, loader: getCoupone },
       {
         path: "discounts",
         element: <Discounts />,
