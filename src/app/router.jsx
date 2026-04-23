@@ -17,7 +17,7 @@ import ProfilePage from "../features/account/ProfilePage.jsx";
 import AddressPage from "../features/account/AddressPage.jsx";
 import ProgressPage from "../features/account/ProgressPage.jsx";
 import ArrivedPage from "../features/account/ArrivedPage.jsx";
-import CanceledPage from "../features/account/CanceledPage.jsx";
+import CancelledPage from "../features/account/CancelledPage.jsx";
 
 import Dashboard from "../pages/admin/Dashboard.jsx";
 import Products from "../pages/admin/managements/Products.jsx";
@@ -28,8 +28,6 @@ import Staff from "../pages/admin/managements/Staff.jsx";
 import Coupons from "../pages/admin/marketing/Coupons.jsx";
 import Discounts from "../pages/admin/marketing/Discounts.jsx";
 import Contacts from "../pages/admin/content/Contacts.jsx";
-import Reports from "../pages/admin/analytics/Reports.jsx";
-import Settings from "../pages/admin/system/Settings.jsx";
 
 import NotFoundPage from "../pages/NotFoundPage";
 
@@ -43,6 +41,9 @@ import RouteErrorUI from "./RouteErrorUI";
 
 import { getCategories } from "../features/admin/categories/api/getCategories.js";
 import { getOrders } from "../features/admin/orders/api/getOrders";
+import { getProductsWithFilters } from "../features/admin/discount/api/getProductsWithFilters.js";
+import { getContacts } from "../features/admin/contact/getContacts.js";
+import { getUsers } from "../features/admin/users/api/getUsers.js";
 
 export const router = createBrowserRouter([
   {
@@ -83,7 +84,7 @@ export const router = createBrowserRouter([
               { path: "address", element: <AddressPage /> },
               { path: "progress", element: <ProgressPage /> },
               { path: "arrived", element: <ArrivedPage /> },
-              { path: "canceled", element: <CanceledPage /> },
+              { path: "cancelled", element: <CancelledPage /> },
             ],
           },
         ],
@@ -109,13 +110,15 @@ export const router = createBrowserRouter([
         loader: getCategories,
       },
       { path: "orders", element: <Orders />, loader: getOrders },
-      { path: "users", element: <Users /> },
+      { path: "users", element: <Users />, loader: getUsers },
       { path: "staff", element: <Staff /> },
       { path: "coupons", element: <Coupons /> },
-      { path: "discounts", element: <Discounts /> },
-      { path: "contacts", element: <Contacts /> },
-      { path: "reports", element: <Reports /> },
-      { path: "settings", element: <Settings /> },
+      {
+        path: "discounts",
+        element: <Discounts />,
+        loader: getProductsWithFilters,
+      },
+      { path: "contacts", element: <Contacts />, loader: getContacts },
     ],
   },
 

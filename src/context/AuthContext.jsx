@@ -135,9 +135,7 @@ export function AuthProvider({ children }) {
     [loggedIn, hasAdminAccess, adminFlags, login, logout],
   );
 
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

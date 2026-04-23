@@ -226,7 +226,7 @@ export default function TableDemo({ categories }) {
                       >
                         Edit
                       </button>
-                      {/* Child Delete */}
+                      {/* Delete */}
                       <button
                         className="border border-red-600 bg-red-100 w-15 h-8 rounded-sm hover:bg-red-200 cursor-pointer"
                         onClick={(e) => {

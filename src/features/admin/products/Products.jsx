@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
-import { Input } from "../../../components/ui/input"
-import Arrow from "../../../assets/icons/arrow-left.svg"
-import ProductsTable from "./ProductsTable"
-import ProductModal from "./ProductModal"
-import ProductPagination from "./ProductPagination"
+import { useEffect, useState } from "react";
+import { Input } from "../../../components/ui/input";
+import ProductsTable from "./ProductsTable";
+import ProductModal from "./ProductModal";
+import ProductPagination from "./ProductPagination";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,14 +12,28 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { getProducts,deleteProduct,getOneProduct } from "./adminProducts"
-import { getCategories } from "../categories/api/getCategories"
+} from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getProducts, deleteProduct, getOneProduct } from "./adminProducts";
+import { getCategories } from "../categories/api/getCategories";
+import Button from "@/components/Button";
 
 const emptyProduct = {
   attributes: {
-    nameEn: "", nameAr: "", nameKu: "",
-    descriptionEn: "", descriptionAr: "", descriptionKu: "",
+    nameEn: "",
+    nameAr: "",
+    nameKu: "",
+    descriptionEn: "",
+    descriptionAr: "",
+    descriptionKu: "",
     price: "",
     hasDiscount: false,
     discountPercentage: 0,
@@ -28,177 +41,174 @@ const emptyProduct = {
     hasColor: false,
     newArrivalImage: null,
   },
-  tags: [],           // ["isFeatured", "isNew", ...]
+  tags: [], // ["isFeatured", "isNew", ...]
   categoryId: "",
-  subcategoryId: "",
-  images: [null],     // File objects
+  images: [null], // File objects
   included: {
-    variants: [],     // { colorName, hexCode, sizeName, sizeLabel, extraPrice, stock }
+    variants: [], // { colorName, hexCode, sizeName, sizeLabel, extraPrice, stock }
   },
-}
+};
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-const [subcategories, setSubcategories] = useState([]);
-const [refresh, setRefresh] = useState(0);
+  const [subcategories, setSubcategories] = useState([]);
+  const [refresh, setRefresh] = useState(0);
   const [loading, setLoading] = useState(true);
   const [meta, setMeta] = useState(null);
   const [page, setPage] = useState(1);
   const [editId, setEditId] = useState(null);
   const [search, setSearch] = useState("");
-const [subcategoryFilter, setSubcategoryFilter] = useState("");
-const [tagFilter, setTagFilter] = useState("");
-const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
-const [subcategoryDropdownOpen, setSubcategoryDropdownOpen] = useState(false);
-const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
-const [filterSubcategories, setFilterSubcategories] = useState([]);
-const [selectedCategoryName, setSelectedCategoryName] = useState("");
+  const [subcategoryFilter, setSubcategoryFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState("");
+  const [filterSubcategories, setFilterSubcategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const TAGS = {
-  isBestSelling: "Best Selling",
-  isFeatured: "Featured",
-  isNewArrival: "New Arrival",
-  isNew: "New",
-};
-
-
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-
-      const [productsRes, categoriesRes] = await Promise.all([
-        getProducts(page, { search, category: subcategoryFilter, tag: tagFilter }),
-        getCategories(),
-      ]);
-
-      setProducts(productsRes.data);
-      setMeta(productsRes.meta);
-      setCategories(categoriesRes.data);
-    } catch (error) {
-      console.error("Failed to fetch:", error);
-    } finally {
-      setLoading(false);
-    }
+    isBestSelling: "Best Selling",
+    isFeatured: "Featured",
+    isNewArrival: "New Arrival",
+    isNew: "New",
   };
 
-  fetchData();
-}, [page, refresh, search, subcategoryFilter, tagFilter]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+
+        const [productsRes, categoriesRes] = await Promise.all([
+          getProducts(page, {
+            search,
+            category: subcategoryFilter,
+            tag: tagFilter,
+          }),
+          getCategories(),
+        ]);
+
+        setProducts(productsRes.data);
+        setMeta(productsRes.meta);
+        setCategories(categoriesRes.data);
+      } catch (error) {
+        console.error("Failed to fetch:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [page, refresh, search, subcategoryFilter, tagFilter]);
 
   // ── Modal state ────────────────────────────────────────────────────────────
-  const [isModalOpen, setIsModalOpen]   = useState(false);
-  const [isEditMode, setIsEditMode]     = useState(false);
-  const [formData, setFormData]         = useState(emptyProduct);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState(emptyProduct);
 
   // ── Delete state ───────────────────────────────────────────────────────────
-  const [isDeleteOpen, setIsDeleteOpen]       = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   // ── Handlers ───────────────────────────────────────────────────────────────
   const handlePageChange = (newPage) => {
-  setPage(newPage);
-};
-  
+    setPage(newPage);
+  };
+
   const handleAdd = () => {
     setFormData({ ...emptyProduct });
     setIsEditMode(false);
     setIsModalOpen(true);
   };
-const urlToFile = async (url) => {
-  const res = await fetch(url);
-  const blob = await res.blob();
-  const filename = url.split("/").pop();
-  return new File([blob], filename, { type: blob.type });
-};
-const handleEdit = async (product) => {
-  setEditId(product.id);
+  const urlToFile = async (url) => {
+    const res = await fetch(url);
+    const blob = await res.blob();
+    const filename = url.split("/").pop();
+    return new File([blob], filename, { type: blob.type });
+  };
+  const handleEdit = async (product) => {
+    setEditId(product.id);
 
-  let fullProduct = product;
-  try {
-    const res = await getOneProduct(product.id);
-    fullProduct = res.data;
-  } catch (err) {
-    console.error("Failed to fetch full product:", err);
-  }
+    // fetch full product with variants
+    let fullProduct = product;
+    try {
+      const res = await getOneProduct(product.id);
+      fullProduct = res.data;
+    } catch (err) {
+      console.error("Failed to fetch full product:", err);
+    }
 
-  const existingFiles = await Promise.all(
-    (fullProduct.included?.images || []).map((img) =>
-      urlToFile(img.attributes.image).catch(() => null)
-    )
-  ).then((files) => files.filter(Boolean));
+    // convert existing image URLs to File objects
+    const existingFiles = await Promise.all(
+      (product.included?.images || []).map((img) =>
+        urlToFile(img.attributes.image).catch(() => null),
+      ),
+    ).then((files) => files.filter(Boolean));
 
-  const categoryRelId = fullProduct.relationships?.category?.data?.id;
+    const categoryData = product.included?.category;
+    const parentId = categoryData?.relationships?.parent?.data?.id;
+    const categoryId = parentId
+      ? String(parentId)
+      : String(product.relationships?.category?.data?.id);
+    const subcategoryId = parentId
+      ? String(product.relationships?.category?.data?.id)
+      : "";
 
-  const matchedCategory = categories.find((cat) =>
-    cat.included?.children?.some((child) => child.id === Number(categoryRelId))
-  );
+    if (parentId) {
+      const parentCategory = categories.find(
+        (cat) => cat.id === Number(parentId),
+      );
+      setSubcategories(parentCategory?.included?.children || []);
+    }
 
-  // // 👇 add these
-  // console.log("categoryRelId:", categoryRelId);
-  // console.log("categories:", categories);
-  // console.log("matchedCategory:", matchedCategory);
+    setFormData({
+      attributes: {
+        ...emptyProduct.attributes,
+        ...product.attributes,
+        price: product.attributes.originalPrice,
+      },
+      images: existingFiles.length ? existingFiles : [null],
+      existingImages: [],
+      included: {
+        variants: fullProduct.included?.variants?.length
+          ? fullProduct.included.variants.map((v) => ({
+              color: v.included?.color?.attributes?.hexCode || "",
+              colorName: v.included?.color?.attributes?.name || "",
+              size: v.included?.size?.attributes?.sizeLabel || "",
+              stock: v.attributes?.stock || "",
+              extraPrice: v.included?.size?.attributes?.extraPrice || "",
+            }))
+          : [],
+      },
+      tags: Object.keys(TAGS).filter((key) => !!product.attributes?.[key]),
+      categoryId,
+      subcategoryId,
+    });
 
-  let categoryId = "";
-  let subcategoryId = "";
-
-  if (matchedCategory) {
-    categoryId = String(matchedCategory.id);
-    subcategoryId = String(categoryRelId);
-    setSubcategories(matchedCategory.included?.children || []);
-  } else {
-    categoryId = String(categoryRelId);
-    subcategoryId = "";
-  }
-
-  setFormData({
-    attributes: {
-      ...emptyProduct.attributes,
-      ...fullProduct.attributes,
-      price: fullProduct.attributes.originalPrice,
-    },
-    images: existingFiles.length ? existingFiles : [null],
-    existingImages: [],
-    included: {
-      variants: fullProduct.included?.variants?.length
-        ? fullProduct.included.variants.map((v) => ({
-            color: v.included?.color?.attributes?.hexCode || "",
-            colorName: v.included?.color?.attributes?.name || "",
-            size: v.included?.size?.attributes?.sizeLabel || "",
-            stock: v.attributes?.stock || "",
-            extraPrice: v.included?.size?.attributes?.extraPrice || "",
-          }))
-        : [],
-    },
-    tags: Object.keys(TAGS).filter((key) => !!fullProduct.attributes?.[key]),
-    categoryId,
-    subcategoryId,
-  });
-
-  setIsEditMode(true);
-  setIsModalOpen(true);
-};
-const handleCategoryFilterChange = (catId) => {
-  setCategoryDropdownOpen(false);
-  setSubcategoryFilter("");
-  const parent = categories.find((c) => String(c.id) === catId);
-  setFilterSubcategories(parent?.included?.children || []);
-  setSelectedCategoryName(parent?.attributes.nameEn || "");
-};
+    setIsEditMode(true);
+    setIsModalOpen(true);
+  };
+  const handleCategoryFilterChange = (catId) => {
+    setSubcategoryFilter("");
+    setSelectedCategoryId(catId);
+    if (catId === "all") {
+      setFilterSubcategories([]);
+      return;
+    }
+    const parent = categories.find((c) => String(c.id) === catId);
+    setFilterSubcategories(parent?.included?.children || []);
+  };
 
   const handleSave = async () => {
-  try {
-    const res = await createProduct(formData); // POST request
+    try {
+      const res = await createProduct(formData); // POST request
 
-    // refresh list after adding
-    const updated = await getProducts(page);
-    setProducts(updated.data);
-    setMeta(updated.meta);
+      // refresh list after adding
+      const updated = await getProducts(page);
+      setProducts(updated.data);
+      setMeta(updated.meta);
 
-    setIsModalOpen(false);
-  } catch (err) {
-    console.error(err);
-  }
-};
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleDelete = (product) => {
     setSelectedProduct(product);
@@ -206,215 +216,173 @@ const handleCategoryFilterChange = (catId) => {
   };
 
   const confirmDelete = async () => {
-  try {
-    await deleteProduct(selectedProduct.id); // ✅ API CALL FIRST
+    try {
+      await deleteProduct(selectedProduct.id); // ✅ API CALL FIRST
 
-    // ✅ then update UI
-    setProducts((prev) =>
-      prev.filter((p) => p.id !== selectedProduct.id)
-    );
+      // ✅ then update UI
+      setProducts((prev) => prev.filter((p) => p.id !== selectedProduct.id));
 
-    setIsDeleteOpen(false);
-    setSelectedProduct(null);
-  } catch (err) {
-    console.error("❌ Delete failed:", err.response?.data || err);
-  }
-};
+      setIsDeleteOpen(false);
+      setSelectedProduct(null);
+    } catch (err) {
+      console.error("❌ Delete failed:", err.response?.data || err);
+    }
+  };
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen p-8">
-
+    <div className="min-h-screen w-full flex flex-col gap-10">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-[rgb(var(--color-text-main))] mb-8">
-        Products
-      </h1>
-
-      {/* Toolbar */} 
-      <div className="flex items-center justify-between mb-2">
-       <div className="flex items-center gap-3">
-  <Input
-    placeholder="Search products..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    className="w-72 bg-[rgb(var(--color-grey))] border border-[rgb(var(--color-primary))] text-[rgb(var(--color-text-main))] placeholder:text-[rgb(var(--color-text-main-2))] rounded-lg px-3 py-2 text-sm"
-  />
-
-  {/* Category — just used to load subcategories, not sent to API */}
-  <div className="relative">
-    <button
-      onClick={() => setCategoryDropdownOpen((prev) => !prev)}
-      className={`flex items-center gap-2 bg-[rgb(var(--color-grey))] border text-sm px-3 py-2 rounded-lg transition-colors
-        ${selectedCategoryName
-          ? "border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
-          : "border-[rgb(var(--color-border))] text-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-red-soft))] hover:text-[rgb(var(--color-primary-main))] hover:border-[rgb(var(--color-primary-main))]"
-        }`}
-    >
-      <span>{selectedCategoryName || "Category"}</span>
-      <img src={Arrow} alt="" className="-rotate-90 w-4 h-4" />
-    </button>
-    {categoryDropdownOpen && (
-      <div className="absolute z-50 mt-2 w-48 bg-white border border-[rgb(var(--color-border))] rounded-lg shadow-md p-2 space-y-1">
-        <div
-          className="text-sm px-2 py-1 rounded cursor-pointer hover:bg-gray-100"
-          onClick={() => { setSelectedCategoryName(""); setFilterSubcategories([]); setSubcategoryFilter(""); setCategoryDropdownOpen(false); }}
-        >
-          All
+      <div className="flex justify-between gap-4">
+        <div className="flex flex-col gap-1">
+          <p className="text-2xl font-semibold">Products</p>
+          <p className="text-sm text-gray-500">Manage your products here</p>
         </div>
-        {categories.filter((c) => c.attributes.isParent).map((cat) => (
-          <div
-            key={cat.id}
-            className={`text-sm px-2 py-1 rounded cursor-pointer hover:bg-gray-100
-              ${selectedCategoryName === cat.attributes.nameEn ? "bg-gray-100 font-medium" : ""}`}
-            onClick={() => handleCategoryFilterChange(String(cat.id))}
-          >
-            {cat.attributes.nameEn}
-          </div>
-        ))}
+        <Button onClick={handleAdd} size="sm" type="button">
+          Add +{" "}
+        </Button>
       </div>
-    )}
-  </div>
+      <div className="flex flex-col gap-4">
+        {/* Toolbar */}
+        <div className="w-full">
+          <div className="flex w-full items-center gap-3">
+            <input
+              type="text"
+              placeholder="Search for products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full rounded-full border border-gray-300 px-3 py-1.75 outline-none focus:ring focus:ring-[rgb(var(--color-primary-main))]"
+            />
 
-  {/* Subcategory — this is what actually filters */}
-  {filterSubcategories.length > 0 && (
-    <div className="relative">
-      <button
-        onClick={() => setSubcategoryDropdownOpen((prev) => !prev)}
-        className={`flex items-center gap-2 bg-[rgb(var(--color-grey))] border text-sm px-3 py-2 rounded-lg transition-colors
-          ${subcategoryFilter
-            ? "border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
-            : "border-[rgb(var(--color-border))] text-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-red-soft))] hover:text-[rgb(var(--color-primary-main))] hover:border-[rgb(var(--color-primary-main))]"
-          }`}
-      >
-        <span>
-          {subcategoryFilter
-            ? filterSubcategories.find((s) => String(s.id) === subcategoryFilter)?.attributes.nameEn
-            : "Subcategory"}
-        </span>
-        <img src={Arrow} alt="" className="-rotate-90 w-4 h-4" />
-      </button>
-      {subcategoryDropdownOpen && (
-        <div className="absolute z-50 mt-2 w-48 bg-white border border-[rgb(var(--color-border))] rounded-lg shadow-md p-2 space-y-1">
-          <div
-            className="text-sm px-2 py-1 rounded cursor-pointer hover:bg-gray-100"
-            onClick={() => { setSubcategoryFilter(""); setSubcategoryDropdownOpen(false); }}
-          >
-            All
-          </div>
-          {filterSubcategories.map((sub) => (
-            <div
-              key={sub.id}
-              className={`text-sm px-2 py-1 rounded cursor-pointer hover:bg-gray-100
-                ${subcategoryFilter === String(sub.id) ? "bg-gray-100 font-medium" : ""}`}
-              onClick={() => { setSubcategoryFilter(String(sub.id)); setSubcategoryDropdownOpen(false); }}
+            {/* Category — just used to load subcategories, not sent to API */}
+            <Select
+              value={selectedCategoryId || "all"}
+              onValueChange={handleCategoryFilterChange}
             >
-              {sub.attributes.nameEn}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  )}
+              <SelectTrigger className="w-50">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Categories</SelectLabel>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories
+                    .filter((c) => c.attributes.isParent)
+                    .map((cat) => (
+                      <SelectItem key={cat.id} value={String(cat.id)}>
+                        {cat.attributes.nameEn}
+                      </SelectItem>
+                    ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-  {/* Tag filter */}
-  <div className="relative">
-    <button
-      onClick={() => setTagDropdownOpen((prev) => !prev)}
-      className={`flex items-center gap-2 bg-[rgb(var(--color-grey))] border text-sm px-3 py-2 rounded-lg transition-colors
-        ${tagFilter
-          ? "border-[rgb(var(--color-primary-main))] text-[rgb(var(--color-primary-main))]"
-          : "border-[rgb(var(--color-border))] text-[rgb(var(--color-text-main-3))] hover:bg-[rgb(var(--color-red-soft))] hover:text-[rgb(var(--color-primary-main))] hover:border-[rgb(var(--color-primary-main))]"
-        }`}
-    >
-      <span>{tagFilter ? TAGS[tagFilter] : "Tag"}</span>
-      <img src={Arrow} alt="" className="-rotate-90 w-4 h-4" />
-    </button>
-    {tagDropdownOpen && (
-      <div className="absolute z-50 mt-2 w-48 bg-white border border-[rgb(var(--color-border))] rounded-lg shadow-md p-2 space-y-1">
-        <div
-          className="text-sm px-2 py-1 rounded cursor-pointer hover:bg-gray-100"
-          onClick={() => { setTagFilter(""); setTagDropdownOpen(false); }}
-        >
-          All
-        </div>
-        {Object.entries(TAGS).map(([key, label]) => (
-          <div
-            key={key}
-            className={`text-sm px-2 py-1 rounded cursor-pointer hover:bg-gray-100
-              ${tagFilter === key ? "bg-gray-100 font-medium" : ""}`}
-            onClick={() => { setTagFilter(key); setTagDropdownOpen(false); }}
-          >
-            {label}
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-</div>
+            {/* Subcategory — this is what actually filters */}
+            {filterSubcategories.length > 0 && (
+              <Select
+                value={subcategoryFilter || "all"}
+                onValueChange={(val) =>
+                  setSubcategoryFilter(val === "all" ? "" : val)
+                }
+              >
+                <SelectTrigger className="w-50">
+                  <SelectValue placeholder="Subcategory" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Subcategories</SelectLabel>
+                    <SelectItem value="all">All Subcategories</SelectItem>
+                    {filterSubcategories.map((sub) => (
+                      <SelectItem key={sub.id} value={String(sub.id)}>
+                        {sub.attributes.nameEn}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
 
-        <button
-          onClick={handleAdd}
-          className="flex gap-1 w-15 h-9 items-center justify-center bg-[rgb(var(--color-primary-main))] hover:bg-[rgb(var(--color-primary-5))] text-white rounded transition-colors"
-        >
-          <span>+</span>
-          <span>Add</span>
-        </button>
-      </div>
-
-      {/* Table */}
-      {loading ? (
-      <p className="text-sm text-muted-foreground">Loading...</p>
-    ) : (
-      <ProductsTable
-        products={products}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    )}
-      {/* Delete confirmation */}
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Product</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete{" "}
-              <span className="font-bold text-foreground">{selectedProduct?.name}</span>?
-              This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={confirmDelete}
-              className="bg-red-600 hover:bg-red-700"
+            {/* Tag filter */}
+            <Select
+              value={tagFilter || "all"}
+              onValueChange={(val) => setTagFilter(val === "all" ? "" : val)}
             >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+              <SelectTrigger className="w-50">
+                <SelectValue placeholder="Tag" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Tags</SelectLabel>
+                  <SelectItem value="all">All Tags</SelectItem>
+                  {Object.entries(TAGS).map(([key, label]) => (
+                    <SelectItem key={key} value={key}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
-      {/* Add / Edit modal */}
-      <ProductModal
-        isOpen={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        isEditMode={isEditMode}
-        formData={formData}
-        setFormData={setFormData}
-        onSave={handleSave}
-        id={editId}
-        TAGS={TAGS}
-        categories={categories}
-        subcategories={subcategories}
-        setSubcategories={setSubcategories}
-      />
+        {/* Table */}
+        {loading ? (
+          <p className="text-sm text-muted-foreground">Loading...</p>
+        ) : (
+          <ProductsTable
+            products={products}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
+        {/* Delete confirmation */}
+        <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Product</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete{" "}
+                <span className="font-bold text-foreground">
+                  {selectedProduct?.name}
+                </span>
+                ? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDelete}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
-      {/* <div className="flex flex-col items-center gap-4">
+        {/* Add / Edit modal */}
+        <ProductModal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          isEditMode={isEditMode}
+          formData={formData}
+          setFormData={setFormData}
+          onSave={handleSave}
+          id={editId}
+          TAGS={TAGS}
+          categories={categories}
+          subcategories={subcategories}
+          setSubcategories={setSubcategories}
+        />
+
+        {/* <div className="flex flex-col items-center gap-4">
                 <Pagination />
               </div> */}
+      </div>
+
       <ProductPagination meta={meta} onPageChange={handlePageChange} />
     </div>
-  )
+  );
 }
 
-export default Products
+export default Products;

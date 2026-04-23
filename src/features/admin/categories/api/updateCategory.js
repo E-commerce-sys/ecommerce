@@ -3,7 +3,7 @@ import axiosInstance from "../../../../axios/axiosInterceptor";
 export async function updateCategory(categoryId, formData) {
   try {
     const res = await axiosInstance.patch(
-      `/api/categories/${categoryId}`,
+      `/api/admin/categories/${categoryId}`,
       formData,
     );
     return res.data;

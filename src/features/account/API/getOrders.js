@@ -4,9 +4,9 @@ const INCLUDE =
   "orderItems.productVariant.product.images,orderItems.productVariant.color,orderItems.productVariant.size,orderItems.productVariant.product.productColors,orderItems.productVariant.product.productSizes";
 
 export const ORDER_STATUS_FILTERS = {
-  progress: ["pending", "preparing", "shipping", "delivering"],
-  cancelled: ["cancelled"],
-  arrived: ["arrived"],
+  progress: ["Pending", "Preparing", "Shipping", "Delivering"],
+  cancelled: ["Cancelled"],
+  arrived: ["Arrived"],
 };
 
 function toMoney(value) {
