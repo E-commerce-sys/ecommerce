@@ -28,7 +28,6 @@ import Staff from "../pages/admin/managements/Staff.jsx";
 import Coupons from "../pages/admin/marketing/Coupons.jsx";
 import Discounts from "../pages/admin/marketing/Discounts.jsx";
 import Contacts from "../pages/admin/content/Contacts.jsx";
-import Reports from "../pages/admin/analytics/Reports.jsx";
 
 import NotFoundPage from "../pages/NotFoundPage";
 
@@ -120,7 +119,6 @@ export const router = createBrowserRouter([
         loader: getProductsWithFilters,
       },
       { path: "contacts", element: <Contacts />, loader: getContacts },
-      { path: "reports", element: <Reports /> },
     ],
   },
 

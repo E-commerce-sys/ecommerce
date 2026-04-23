@@ -132,23 +132,6 @@ function AdminLayout() {
               </div>
             </div>
 
-            {/* Analytics */}
-            <div className="flex gap-2 flex-col">
-              <p className="text-[rgb(var(--color-text-main-1))] px-2">
-                Analytics
-              </p>
-              <div className="flex flex-col gap-2">
-                <NavLink
-                  to="reports"
-                  className={({ isActive }) =>
-                    `px-5 py-1 ${isActive && "bg-[#FBECED] text-[rgb(var(--color-primary-5))] font-medium"}`
-                  }
-                >
-                  Reports
-                </NavLink>
-              </div>
-            </div>
-
             {/* System */}
             <div className="flex gap-2 flex-col">
               <p className="text-[rgb(var(--color-text-main-1))]  px-2">
