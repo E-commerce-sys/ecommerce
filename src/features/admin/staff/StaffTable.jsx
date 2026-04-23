@@ -31,7 +31,7 @@ function StaffTable({staff,handleEdit,handleDelete}){
       {/* phoneNo doesn't exist in the API response — remove or replace with a valid field */}
       {s.attributes.isVerified ? "Verified" : "Unverified"}
     </TableCell>
-    <TableCell>
+    <TableCell className="flex gap-2">
       <button
         className="border border-gray-300 w-15 h-8 rounded-sm hover:bg-gray-200 cursor-pointer"
         onClick={() => handleEdit(s)}

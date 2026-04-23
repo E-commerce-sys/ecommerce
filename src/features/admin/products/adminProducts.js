@@ -2,7 +2,7 @@ import { meta } from "zod/v4/core";
 import axiosInstance from "../../../axios/axiosInterceptor";
 
 export async function addProduct(formData) {
-  const res = await axiosInstance.post("/api/products", formData);
+  const res = await axiosInstance.post("/api/admin/products", formData);
   return res.data;
 }
 
@@ -27,12 +27,12 @@ export async function getsubCategories(id) {
 }
 
 export async function editProduct(id, formData) {
-  const res = await axiosInstance.put(`/api/products/${id}`, formData);
+  const res = await axiosInstance.put(`/api/admin/products/${id}`, formData);
   return res.data;
 }
 
 export async function deleteProduct(id) {
-  const res = await axiosInstance.delete(`/api/products/${id}`);
+  const res = await axiosInstance.delete(`/api/admin/products/${id}`);
   return res.data;
 }
 

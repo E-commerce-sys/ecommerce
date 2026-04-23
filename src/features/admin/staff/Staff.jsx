@@ -6,37 +6,25 @@ import ProductPagination from "../products/ProductPagination";
 import { Input } from "@/components/ui/input";
 
 function Staff() {
-  // const initialStaff = [
-  //   {
-  //     id: 1,
-  //     fName: "John",
-  //     lName: "Doe",
-  //     email: "staff1@gmail.com",
-  //     phoneNo: 1234567,
-  //   },
-  //   {
-  //     id: 2,
-  //     fName: "Joe",
-  //     lName: "Doe",
-  //     email: "staff2@gmail.com",
-  //     phoneNo: '1234567',
-  //   },
-  // ];
 
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState("add"); // add | edit | delete
   const [meta, setMeta] = useState(null);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("")
-  const emptyStaff = { fName: "", lName: "", email: "", phoneNo: "" };
+const emptyForm = { firstName: "", lastName: "", email: "", password: "", password_confirmation: "" };
 const [selectedStaff, setSelectedStaff] = useState(null);
 
 const [staffList, setStaffList] = useState([]) // ← default to empty array, not undefined
 const [loading, setLoading] = useState(true)
 
+const [refresh, setRefresh] = useState(0)
+
+// update useEffect to depend on refresh
 useEffect(() => {
   const fetchStaff = async () => {
     try {
+      setLoading(true)
       const staff = await getStaffList(search)
       setStaffList(staff.data)
       setMeta(staff.meta);
@@ -47,31 +35,10 @@ useEffect(() => {
     }
   }
   fetchStaff()
-}, [search,page])
+}, [search, page, refresh]) // ← add refresh
 
 const handlePageChange = (newPage) => {
   setPage(newPage);
-};
-
-const handleSubmit = (data) => {
-  console.log("mode:", mode);
-  console.log("selectedStaff:", selectedStaff);
-  console.log("data:", data);
-  if (mode === "edit") {
-    setStaffList((prev) =>
-      prev.map((s) => s.id === selectedStaff.id ? { ...s, ...data } : s)
-    );
-  } else {
-    setStaffList((prev) => [
-      ...prev,
-      { ...data, id: prev.length ? prev[prev.length - 1].id + 1 : 1 },
-    ]);
-  }
-};
-
-const handleDelete = (id) => {
-  console.log("deleting id:", id);
-  setStaffList((prev) => prev.filter((s) => s.id !== id));
 };
 
 const handleAddClick = () => {
@@ -127,8 +94,7 @@ const handleDeleteClick = (staff) => {
   onClose={() => setIsOpen(false)}
   mode={mode}
   initialData={selectedStaff}
-  onSubmit={handleSubmit}
-  onDelete={handleDelete}
+  onSuccess={() => setRefresh((prev) => prev + 1)} // ← replaces onSubmit/onDelete
 />
 
 <ProductPagination meta={meta} onPageChange={handlePageChange} />
