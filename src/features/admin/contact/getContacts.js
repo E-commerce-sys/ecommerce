@@ -5,7 +5,7 @@ export const getContacts = async ({ request }) => {
     const url = new URL(request.url);
     const page = url.searchParams.get("page") || "1";
 
-    let endpoint = `/api/contacts`;
+    let endpoint = `/api/admin/contacts`;
     if (page && page !== "1") {
       endpoint += `?page=${page}`;
     }

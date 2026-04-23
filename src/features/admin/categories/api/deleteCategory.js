@@ -2,7 +2,7 @@ import axiosInstance from "../../../../axios/axiosInterceptor";
 export async function deleteCategory(categoryId) {
   try {
     const response = await axiosInstance.delete(
-      `/api/categories/${categoryId}`,
+      `/api/admin/categories/${categoryId}`,
     );
     return response.data;
   } catch (error) {

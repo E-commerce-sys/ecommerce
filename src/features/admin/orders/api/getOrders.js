@@ -14,7 +14,7 @@ export async function getOrders({ request }) {
     const status = url.searchParams.get("status");
     const page = url.searchParams.get("page");
 
-    let endpoint = `/api/orders?include=user,shippingAddress,orderItems.productVariant.product.images,orderItems.productVariant.color,orderItems.productVariant.size,orderItems.productVariant.product.productColors,orderItems.productVariant.product.productSizes`;
+    let endpoint = `/api/admin/orders?include=user,shippingAddress,orderItems.productVariant.product.images,orderItems.productVariant.color,orderItems.productVariant.size,orderItems.productVariant.product.productColors,orderItems.productVariant.product.productSizes`;
 
     if (section === "in-progress") {
       if (status && status !== "all") {

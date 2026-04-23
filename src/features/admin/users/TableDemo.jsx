@@ -21,13 +21,19 @@ import {
 import { updateUser } from "./api/updateUser";
 import { deleteUser } from "./api/deleteUser";
 import { blockUser } from "./api/blockUser";
+import { unblockUser } from "./api/unblockUser";
 
-export function TableDemo({ users, onSaveSuccess }) {
+export function TableDemo({ users }) {
   const data = users?.data ?? [];
   const { revalidate } = useRevalidator();
 
   const [editingUserId, setEditingUserId] = useState(null);
   const [editForm, setEditForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
+  const [originalForm, setOriginalForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -43,17 +49,20 @@ export function TableDemo({ users, onSaveSuccess }) {
 
   const handleEditClick = (user) => {
     setEditingUserId(user.id);
-    setEditForm({
+    const formData = {
       firstName: user.attributes.firstName || "",
       lastName: user.attributes.lastName || "",
       email: user.attributes.email || "",
-    });
+    };
+    setEditForm(formData);
+    setOriginalForm(formData);
     setError("");
   };
 
   const handleCancelEdit = () => {
     setEditingUserId(null);
     setEditForm({ firstName: "", lastName: "", email: "" });
+    setOriginalForm({ firstName: "", lastName: "", email: "" });
     setError("");
   };
 
@@ -72,21 +81,40 @@ export function TableDemo({ users, onSaveSuccess }) {
 
     setSaving(true);
     try {
+      // Build payload with only changed fields
+      const changedAttributes = {};
+
+      if (editForm.firstName.trim() !== originalForm.firstName) {
+        changedAttributes.firstName = editForm.firstName.trim();
+      }
+
+      if (editForm.lastName.trim() !== originalForm.lastName) {
+        changedAttributes.lastName = editForm.lastName.trim();
+      }
+
+      if (editForm.email.trim() !== originalForm.email) {
+        changedAttributes.email = editForm.email.trim();
+      }
+
+      // Only send request if there are changes
+      if (Object.keys(changedAttributes).length === 0) {
+        setEditingUserId(null);
+        setEditForm({ firstName: "", lastName: "", email: "" });
+        setOriginalForm({ firstName: "", lastName: "", email: "" });
+        return;
+      }
+
       const payload = {
         data: {
-          attributes: {
-            firstName: editForm.firstName.trim(),
-            lastName: editForm.lastName.trim(),
-            email: editForm.email.trim(),
-          },
+          attributes: changedAttributes,
         },
       };
 
       await updateUser(userId, payload);
       setEditingUserId(null);
       setEditForm({ firstName: "", lastName: "", email: "" });
+      setOriginalForm({ firstName: "", lastName: "", email: "" });
       revalidate();
-      onSaveSuccess?.();
     } catch (err) {
       console.error("Failed to update user:", err);
       setError(
@@ -112,7 +140,6 @@ export function TableDemo({ users, onSaveSuccess }) {
       setDeleteDialogOpen(false);
       setUserToDelete(null);
       revalidate();
-      onSaveSuccess?.();
     } catch (err) {
       console.error("Failed to delete user:", err);
     } finally {
@@ -121,11 +148,15 @@ export function TableDemo({ users, onSaveSuccess }) {
   };
 
   const handleBlockClick = async (user) => {
+    const isBlocked = user.attributes?.isBlocked || false;
     setBlockingUserId(user.id);
     try {
-      await blockUser(user.id);
+      if (isBlocked) {
+        await unblockUser(user.id);
+      } else {
+        await blockUser(user.id);
+      }
       revalidate();
-      onSaveSuccess?.();
     } catch (err) {
       console.error("Failed to block/unblock user:", err);
     } finally {
