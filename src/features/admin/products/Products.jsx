@@ -30,6 +30,7 @@ const emptyProduct = {
   },
   tags: [],           // ["isFeatured", "isNew", ...]
   categoryId: "",
+  subcategoryId: "",
   images: [null],     // File objects
   included: {
     variants: [],     // { colorName, hexCode, sizeName, sizeLabel, extraPrice, stock }
@@ -109,10 +110,9 @@ const urlToFile = async (url) => {
   const filename = url.split("/").pop();
   return new File([blob], filename, { type: blob.type });
 };
-  const handleEdit = async (product) => {
+const handleEdit = async (product) => {
   setEditId(product.id);
 
-  // fetch full product with variants
   let fullProduct = product;
   try {
     const res = await getOneProduct(product.id);
@@ -121,33 +121,40 @@ const urlToFile = async (url) => {
     console.error("Failed to fetch full product:", err);
   }
 
-  // convert existing image URLs to File objects
   const existingFiles = await Promise.all(
-  (product.included?.images || []).map((img) =>
-    urlToFile(img.attributes.image).catch(() => null)
-  )
-).then((files) => files.filter(Boolean));
+    (fullProduct.included?.images || []).map((img) =>
+      urlToFile(img.attributes.image).catch(() => null)
+    )
+  ).then((files) => files.filter(Boolean));
 
+  const categoryRelId = fullProduct.relationships?.category?.data?.id;
 
-  const categoryData = product.included?.category;
-  const parentId = categoryData?.relationships?.parent?.data?.id;
-  const categoryId = parentId
-    ? String(parentId)
-    : String(product.relationships?.category?.data?.id);
-  const subcategoryId = parentId
-    ? String(product.relationships?.category?.data?.id)
-    : "";
+  const matchedCategory = categories.find((cat) =>
+    cat.included?.children?.some((child) => child.id === Number(categoryRelId))
+  );
 
-  if (parentId) {
-    const parentCategory = categories.find((cat) => cat.id === Number(parentId));
-    setSubcategories(parentCategory?.included?.children || []);
+  // // 👇 add these
+  // console.log("categoryRelId:", categoryRelId);
+  // console.log("categories:", categories);
+  // console.log("matchedCategory:", matchedCategory);
+
+  let categoryId = "";
+  let subcategoryId = "";
+
+  if (matchedCategory) {
+    categoryId = String(matchedCategory.id);
+    subcategoryId = String(categoryRelId);
+    setSubcategories(matchedCategory.included?.children || []);
+  } else {
+    categoryId = String(categoryRelId);
+    subcategoryId = "";
   }
 
   setFormData({
     attributes: {
       ...emptyProduct.attributes,
-      ...product.attributes,
-      price: product.attributes.originalPrice,
+      ...fullProduct.attributes,
+      price: fullProduct.attributes.originalPrice,
     },
     images: existingFiles.length ? existingFiles : [null],
     existingImages: [],
@@ -162,7 +169,7 @@ const urlToFile = async (url) => {
           }))
         : [],
     },
-    tags: Object.keys(TAGS).filter((key) => !!product.attributes?.[key]),
+    tags: Object.keys(TAGS).filter((key) => !!fullProduct.attributes?.[key]),
     categoryId,
     subcategoryId,
   });

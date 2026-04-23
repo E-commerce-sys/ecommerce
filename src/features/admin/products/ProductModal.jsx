@@ -138,19 +138,23 @@ newFiles.forEach((file, index) => {
 const addVariant = () => {
   setFormData((prev) => ({
     ...prev,
-    variants: [
-      ...(prev.included.variants?.length
-        ? prev.included.variants
-        : [{ color: "", size: "", stock: "", extraPrice: "" }]),
-      { color: "", size: "", stock: "", extraPrice: "" },
-    ],
+    included: {
+      ...prev.included,
+      variants: [
+        ...(prev.included.variants || []),
+        { color: "", colorName: "", size: "", stock: "", extraPrice: "" },
+      ],
+    },
   }));
 };
 
 const removeVariant = (index) => {
   setFormData((prev) => ({
     ...prev,
-    variants: prev.included.variants.filter((_, i) => i !== index),
+    included: {
+      ...prev.included,
+      variants: prev.included.variants.filter((_, i) => i !== index),
+    },
   }));
 };
   return (
@@ -339,7 +343,8 @@ const removeVariant = (index) => {
   {/* Existing images from server */}
   {formData.existingImages?.map((img, index) => (
     <div key={`existing-${img.id}`} className="flex items-center gap-2">
-      <img src={img.url} className="w-10 h-10 rounded object-cover border" />
+      <img src={img.url} className="w-10 h-10 rounded object-cover border" 
+      crossOrigin="anonymous"/>
       <span className="text-xs flex-1 truncate text-gray-500">{img.url.split("/").pop()}</span>
       <span className="text-xs w-20">{img.isPrimary ? "Primary" : `Photo ${index + 1}`}</span>
       <button
@@ -359,39 +364,52 @@ const removeVariant = (index) => {
 
   {/* New file uploads */}
   {(formData.images?.length ? formData.images : [null]).map((file, index) => (
-    <div key={`new-${index}`} className="flex items-center gap-2">
-      <input
-        type="file"
-        accept="image/*"
-        className="flex-1 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-[rgb(var(--color-primary-1))] file:px-3 file:py-1.5 file:text-sm cursor-pointer"
-        onChange={(e) => {
-          const selected = e.target.files?.[0] ?? null;
-          setFormData((prev) => {
-            const updated = [...(prev.images?.length ? prev.images : [null])];
-            updated[index] = selected;
-            return { ...prev, images: updated };
-          });
-        }}
+  <div key={`new-${index}`} className="flex items-center gap-2">
+    
+    {/* Add preview for selected file */}
+    {file ? (
+      <img
+        src={URL.createObjectURL(file)}
+        className="w-10 h-10 rounded object-cover border"
       />
-      <span className="text-xs w-20">
-        {!formData.existingImages?.length && index === 0 ? "Primary" : `Photo ${index + 1}`}
-      </span>
-      {index > 0 && (
-        <button
-          type="button"
-          onClick={() =>
-            setFormData((prev) => ({
-              ...prev,
-              images: prev.images.filter((_, i) => i !== index),
-            }))
-          }
-          className="text-red-500 text-lg"
-        >
-          ×
-        </button>
-      )}
-    </div>
-  ))}
+    ) : (
+      <div className="w-10 h-10 rounded border bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+        ?
+      </div>
+    )}
+
+    <input
+      type="file"
+      accept="image/*"
+      className="flex-1 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-[rgb(var(--color-primary-1))] file:px-3 file:py-1.5 file:text-sm cursor-pointer"
+      onChange={(e) => {
+        const selected = e.target.files?.[0] ?? null;
+        setFormData((prev) => {
+          const updated = [...(prev.images?.length ? prev.images : [null])];
+          updated[index] = selected;
+          return { ...prev, images: updated };
+        });
+      }}
+    />
+    <span className="text-xs w-20">
+      {!formData.existingImages?.length && index === 0 ? "Primary" : `Photo ${index + 1}`}
+    </span>
+    {index > 0 && (
+      <button
+        type="button"
+        onClick={() =>
+          setFormData((prev) => ({
+            ...prev,
+            images: prev.images.filter((_, i) => i !== index),
+          }))
+        }
+        className="text-red-500 text-lg"
+      >
+        ×
+      </button>
+    )}
+  </div>
+))}
 
   {((formData.existingImages?.length || 0) + (formData.images?.length || 1)) < 4 && (
     <button
