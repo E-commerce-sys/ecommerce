@@ -19,6 +19,35 @@ function formatDate(iso) {
   return `${String(d).padStart(2, "0")}/${String(m).padStart(2, "0")}/${yy}`;
 }
 
+/** Used → blue; expired (by date) → red; active & unused & not expired → green. No “inactive” label. */
+function couponStatusBadge(attrs) {
+  const isUsed = attrs?.isUsed ?? false;
+  const isActive = attrs?.isActive ?? false;
+  const expiredByDate = attrs?.expiresAt
+    ? new Date(attrs.expiresAt) < new Date()
+    : false;
+
+  if (isUsed) {
+    return {
+      label: "Used",
+      className: "bg-blue-100 text-blue-800 border border-blue-800",
+    };
+  }
+  if (expiredByDate) {
+    return {
+      label: "Expired",
+      className: "bg-red-100 text-red-800 border border-red-800",
+    };
+  }
+  if (isActive) {
+    return {
+      label: "Active",
+      className: "bg-green-100 text-green-800 border border-green-800",
+    };
+  }
+  return { label: null, className: "" };
+}
+
 function GivenCouponsTable({ coupons = [] }) {
   return (
     <Table>
@@ -46,10 +75,7 @@ function GivenCouponsTable({ coupons = [] }) {
           coupons.map((coupon, index) => {
             const user = coupon.included?.user?.attributes;
             const attrs = coupon.attributes;
-            const isActive = attrs?.isActive ?? false;
-            const isExpired = attrs?.expiresAt
-              ? new Date(attrs.expiresAt) < new Date()
-              : false;
+            const status = couponStatusBadge(attrs);
 
             return (
               <React.Fragment key={coupon.id || index}>
@@ -81,17 +107,15 @@ function GivenCouponsTable({ coupons = [] }) {
                     {formatDate(attrs?.expiresAt)}
                   </TableCell>
                   <TableCell className="text-center">
-                    <span
-                      className={`inline-flex items-center justify-center rounded-full px-3 py-1 text-xs font-medium ${
-                        isExpired
-                          ? "bg-gray-200 text-gray-700"
-                          : isActive
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {isExpired ? "Expired" : isActive ? "Active" : "Inactive"}
-                    </span>
+                    {status.label == null ? (
+                      <span className="text-sm text-gray-400">—</span>
+                    ) : (
+                      <span
+                        className={`inline-flex min-w-[4.5rem] items-center justify-center rounded-full px-3 py-1 text-xs font-medium ${status.className}`}
+                      >
+                        {status.label}
+                      </span>
+                    )}
                   </TableCell>
                 </TableRow>
               </React.Fragment>
