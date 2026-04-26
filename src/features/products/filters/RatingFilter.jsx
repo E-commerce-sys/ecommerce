@@ -17,10 +17,15 @@ export default function RatingFilter() {
   const ratingSort = filters.ratingSort;
 
   const handleSelect = (value) => {
-    const newSort = ratingSort === value ? null : value;
-    updateFilters({ ratingSort: newSort });
-    setOpen(false);
-  };
+  const newSort = ratingSort === value ? null : value;
+  updateFilters({ 
+    ratingSort: newSort,
+    firstSort: !newSort && !filters.priceSort 
+      ? null  // both removed, clear firstSort
+      : (!filters.firstSort ? (newSort ? "rating" : null) : filters.firstSort), // keep existing or set new
+  });
+  setOpen(false);
+};
 
   useEffect(() => {
     function handleClickOutside(e) {

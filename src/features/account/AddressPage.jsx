@@ -88,38 +88,37 @@ function AddressPage() {
   }
 
   async function handleSave(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (selectedIndex === -1) {
-      await createAddress(
-        newAddress.address_name,
-        newAddress.city,
-        newAddress.zip_code,
-        newAddress.street_name,
-        newAddress.country,
-        newAddress.state,
-        newAddress.house_number,
-      );
+  const dataToValidate = selectedIndex === -1 ? newAddress : formData[selectedIndex];
 
-      await fetchAddress();
-
-      setSelectedIndex(0);
-      setNewAddress({
-        address_name: "",
-        house_number: "",
-        street_name: "",
-        city: "",
-        state: "",
-        zip_code: "",
-        country: "",
-      });
-    } else {
-      setSavedData([...formData]);
-      setAddress([...formData]);
-    }
-
-    setIsEditing(false);
+  if (!dataToValidate.city?.trim() || !dataToValidate.street_name?.trim()) {
+    alert(t("City and Street Name are required fields"));
+    return;
   }
+
+  if (selectedIndex === -1) {
+    await createAddress(newAddress); // ← pass whole object
+
+    await fetchAddress();
+
+    setSelectedIndex(0);
+    setNewAddress({
+      address_name: "",
+      house_number: "",
+      street_name: "",
+      city: "",
+      state: "",
+      zip_code: "",
+      country: "",
+    });
+  } else {
+    setSavedData([...formData]);
+    setAddress([...formData]);
+  }
+
+  setIsEditing(false);
+}
   const currentAddress =
     selectedIndex === -1 ? newAddress : formData[selectedIndex];
   return (

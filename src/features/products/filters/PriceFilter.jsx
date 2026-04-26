@@ -147,6 +147,9 @@ function PriceFilters() {
                 minPrice: min || null,
                 maxPrice: max || null,
                 priceSort,
+                firstSort: !priceSort && !filters.ratingSort
+                  ? null  // both removed, clear firstSort
+                  : (!filters.firstSort ? (priceSort ? "price" : null) : filters.firstSort),
                 page: 1,
               });
               setOpen(false);

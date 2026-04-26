@@ -1,6 +1,6 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { ProductProvider } from "../features/products/ProductContext";
-import { useProductFilters } from "../features/products/useProductFilters";
+import { useProductFilters } from "@/features/products/useProductFilters";
 import { filtersAPI } from "../features/products/filters/filtersAPI";
 
 import ProductList from "../features/products/ProductList";
@@ -23,6 +23,7 @@ function ProductsPage() {
       filters.priceSort,
       filters.discount,
       filters.category,
+      filters.sortOrder
     ],
     queryFn: () =>
       filtersAPI(
@@ -36,13 +37,13 @@ function ProductsPage() {
         filters.priceSort,
         filters.discount,
         filters.category,
+        filters.sortOrder
       ),
     placeholderData: keepPreviousData,
   });
 
   const products = data?.data || [];
   const totalPages = data?.meta?.last_page || 1;
-
   return (
     <ProductProvider initialTotalPages={totalPages}>
       <CategoryMenu />

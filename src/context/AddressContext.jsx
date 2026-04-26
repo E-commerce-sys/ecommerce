@@ -33,25 +33,11 @@ export function AddressProvider({ children }) {
   };
 
   const createAddress = async (
-    addressName = "",
-    city,
-    ZIPcode = 0,
-    streetName,
-    country = "",
-    state = "",
-    houseNumber = "",
+    data
   ) => {
     try {
       setLoading(true);
-      const newAddress = await createAddressAPI(
-        addressName,
-        city,
-        ZIPcode,
-        streetName,
-        country,
-        state,
-        houseNumber,
-      );
+      const newAddress = await createAddressAPI(data);
       setAddress((prev) => [...prev, newAddress]);
       setError(null);
     } catch (err) {

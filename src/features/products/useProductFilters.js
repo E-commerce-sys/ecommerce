@@ -5,46 +5,40 @@ export function useProductFilters() {
 
   const filters = {
     page: Number(searchParams.get("page") || 1),
-
     search: searchParams.get("search") || "",
-
     bestSelling: searchParams.get("bestSelling") === "true",
     hasDiscount: searchParams.get("hasDiscount") === "true",
     discount: searchParams.get("discount")
       ? Number(searchParams.get("discount"))
       : null,
-    minPrice: Number(searchParams.get("minPrice")),
-    maxPrice: Number(searchParams.get("maxPrice")),
-
+    minPrice: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
+maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
     category: searchParams.get("category") || "",
     subcategory: searchParams.get("subcategory") || "",
-
     ratingSort: searchParams.get("ratingSort") || null,
     priceSort: searchParams.get("priceSort") || null,
+    firstSort: searchParams.get("firstSort") || null,
   };
 
   function updateFilters(updates) {
-    const params = new URLSearchParams(searchParams);
+    setSearchParams((prevParams) => {
+      const params = new URLSearchParams(prevParams);
 
-    Object.entries(updates).forEach(([key, value]) => {
-      if (
-        value === null ||
-        value === undefined ||
-        value === "" ||
-        value === false
-      ) {
-        params.delete(key);
-      } else {
-        params.set(key, String(value));
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value === null || value === undefined || value === "" || value === false) {
+          params.delete(key);
+        } else {
+          params.set(key, String(value));
+        }
+      });
+
+      if (!("page" in updates)) {
+        params.set("page", "1");
       }
+
+      return params;
     });
-
-    if (!("page" in updates)) {
-      params.set("page", "1");
-    }
-
-    setSearchParams(params);
   }
 
-  return { filters, updateFilters };
+  return { filters, updateFilters }; // ✅ was missing
 }
