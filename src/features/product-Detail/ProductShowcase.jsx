@@ -18,6 +18,8 @@ import returnIcon from "../../assets/icons/return.svg";
 import AuthModal from "../auth/AuthModal";
 import { addToCart } from "../basket/api/addToCart";
 
+
+const MAX_QTY = 500;
 function uniqueColorsFromVariants(variants) {
   const map = new Map();
   for (const v of variants) {
@@ -364,17 +366,21 @@ function ProductShowcase() {
                 <input
                   type="number"
                   value={quantity}
-                  onChange={(e) =>
-                    setQuantity(Math.max(1, Number(e.target.value)))
-                  }
+                  onChange={(e) => {
+                    let val = Number(e.target.value);
+
+                    if (isNaN(val)) val = 0;
+
+                    setQuantity(Math.min(500, val));
+                  }}
                   className="w-[40px] h-full text-center outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
-                  onClick={() => setQuantity((prev) => prev + 1)}
-                  className="w-[40px] h-full flex items-center justify-center border-l border-gray-300 hover:bg-[rgb(var(--color-primary-main))] cursor-pointer hover:text-white active:bg-[rgb(var(--color-primary-main))] active:text-white text-[24px]"
-                >
-                  +
-                </button>
+                onClick={() => setQuantity((prev) => Math.min(500, prev + 1))}
+                className="w-[40px] h-full flex items-center justify-center border-l border-gray-300 hover:bg-[rgb(var(--color-primary-main))] cursor-pointer hover:text-white active:bg-[rgb(var(--color-primary-main))] active:text-white text-[24px]"
+              >
+                +
+              </button>
               </div>
 
               <Button
@@ -412,7 +418,7 @@ function ProductShowcase() {
                 />
                 <div className="flex flex-col">
                   <span className="font-medium">Free Delivery</span>
-                  <span className="text-[12px] text-gray-500 underline cursor-pointer">
+                  <span className="text-[12px] text-gray-500">
                     Enter your postal code for Delivery Availability
                   </span>
                 </div>
@@ -427,7 +433,7 @@ function ProductShowcase() {
                   <span className="font-medium">Return Delivery</span>
                   <span className="text-[12px] text-gray-500">
                     Free 30 Days Delivery Returns.{" "}
-                    <span className="underline cursor-pointer">Details</span>
+                    <span>Details</span>
                   </span>
                 </div>
               </div>

@@ -37,6 +37,8 @@ function ProductModal({
 
 const [subOpen, setSubOpen] = useState(false);
 const [open, setOpen] = useState(false);
+const [error, setError] = useState("");
+const [loading, setLoading] = useState(false);
 // handleCategoryChange in modal
 const handleCategoryChange = (categoryId) => {
   setFormData((prev) => ({ ...prev, categoryId, subcategoryId: "" }));
@@ -58,6 +60,9 @@ const handleTagToggle = (key) => {
 };
 
 const handleSubmit = async () => {
+  setError("");
+  setLoading(true);
+
   try {
     const fd = new FormData();
 
@@ -65,18 +70,20 @@ const handleSubmit = async () => {
     const variants = formData.included?.variants || [];
 
     // ── Attributes ──────────────────────────────
-    fd.append("data[attributes][nameEn]",             b.nameEn || "");
-    fd.append("data[attributes][nameAr]",             b.nameAr || "");
-    fd.append("data[attributes][nameKu]",             b.nameKu || "");
-    fd.append("data[attributes][descriptionEn]",      b.descriptionEn || "");
-    fd.append("data[attributes][descriptionAr]",      b.descriptionAr || "");
-    fd.append("data[attributes][descriptionKu]",      b.descriptionKu || "");
-    fd.append("data[attributes][price]",              b.price || "0.00");
-    fd.append("data[attributes][isBestSelling]",      formData.tags?.includes("isBestSelling") ? 1 : 0);
-    fd.append("data[attributes][isFeatured]",         formData.tags?.includes("isFeatured")    ? 1 : 0);
-    fd.append("data[attributes][isNewArrival]",       formData.tags?.includes("isNewArrival")  ? 1 : 0);
-    fd.append("data[attributes][isNew]",              formData.tags?.includes("isNew")         ? 1 : 0);
-    fd.append("data[attributes][hasDiscount]",        b.hasDiscount ? 1 : 0);
+    fd.append("data[attributes][nameEn]", b.nameEn || "");
+    fd.append("data[attributes][nameAr]", b.nameAr || "");
+    fd.append("data[attributes][nameKu]", b.nameKu || "");
+    fd.append("data[attributes][descriptionEn]", b.descriptionEn || "");
+    fd.append("data[attributes][descriptionAr]", b.descriptionAr || "");
+    fd.append("data[attributes][descriptionKu]", b.descriptionKu || "");
+    fd.append("data[attributes][price]", b.price || "0.00");
+
+    fd.append("data[attributes][isBestSelling]", formData.tags?.includes("isBestSelling") ? 1 : 0);
+    fd.append("data[attributes][isFeatured]", formData.tags?.includes("isFeatured") ? 1 : 0);
+    fd.append("data[attributes][isNewArrival]", formData.tags?.includes("isNewArrival") ? 1 : 0);
+    fd.append("data[attributes][isNew]", formData.tags?.includes("isNew") ? 1 : 0);
+
+    fd.append("data[attributes][hasDiscount]", b.hasDiscount ? 1 : 0);
     fd.append("data[attributes][discountPercentage]", Number(b.discountPercentage || 0));
 
     if (b.newArrivalImage instanceof File) {
@@ -91,46 +98,90 @@ const handleSubmit = async () => {
 
     // ── Images ──────────────────────────────────
     const newFiles = (formData.images || []).filter((f) => f instanceof File);
-newFiles.forEach((file, index) => {
-  fd.append(`data[included][images][${index}][attributes][image]`,     file);
-  fd.append(`data[included][images][${index}][attributes][isPrimary]`, index === 0 ? 1 : 0);
-});
+
+    newFiles.forEach((file, index) => {
+      fd.append(
+        `data[included][images][${index}][attributes][image]`,
+        file
+      );
+      fd.append(
+        `data[included][images][${index}][attributes][isPrimary]`,
+        index === 0 ? 1 : 0
+      );
+    });
 
     // ── Variants ─────────────────────────────────
-    // FIX: was formData.variants — lives in formData.included.variants
     const validVariants = variants.filter((v) => v?.stock !== "");
+
     validVariants.forEach((v, i) => {
       const hasColor = v.color?.startsWith("#") && v.color.length === 7;
-      const hasSize  = v.size?.trim();
+      const hasSize = v.size?.trim();
 
-      fd.append(`data[included][variants][${i}][attributes][stock]`, Number(v.stock || 0));
+      fd.append(
+        `data[included][variants][${i}][attributes][stock]`,
+        Number(v.stock || 0)
+      );
 
       if (hasColor) {
-        fd.append(`data[included][variants][${i}][included][color][attributes][name]`,    v.colorName || v.color);
-        fd.append(`data[included][variants][${i}][included][color][attributes][hexCode]`, v.color);
+        fd.append(
+          `data[included][variants][${i}][included][color][attributes][name]`,
+          v.colorName || v.color
+        );
+        fd.append(
+          `data[included][variants][${i}][included][color][attributes][hexCode]`,
+          v.color
+        );
       }
 
       if (hasSize) {
-        fd.append(`data[included][variants][${i}][included][size][attributes][name]`,       v.size);
-        fd.append(`data[included][variants][${i}][included][size][attributes][sizeLabel]`,  v.size);
-        fd.append(`data[included][variants][${i}][included][size][attributes][extraPrice]`, v.extraPrice ? Number(v.extraPrice) : 0);
+        fd.append(
+          `data[included][variants][${i}][included][size][attributes][name]`,
+          v.size
+        );
+        fd.append(
+          `data[included][variants][${i}][included][size][attributes][sizeLabel]`,
+          v.size
+        );
+        fd.append(
+          `data[included][variants][${i}][included][size][attributes][extraPrice]`,
+          v.extraPrice ? Number(v.extraPrice) : 0
+        );
       }
     });
 
-    // derive hasColor / hasSize from variants
-    fd.append("data[attributes][hasColor]", validVariants.some((v) => v.color?.startsWith("#")) ? 1 : 0);
-    fd.append("data[attributes][hasSize]",  validVariants.some((v) => v.size?.trim()) ? 1 : 0);
+    // derived flags
+    fd.append(
+      "data[attributes][hasColor]",
+      validVariants.some((v) => v.color?.startsWith("#")) ? 1 : 0
+    );
 
+    fd.append(
+      "data[attributes][hasSize]",
+      validVariants.some((v) => v.size?.trim()) ? 1 : 0
+    );
+
+    // ── API CALL ──────────────────────────────
     if (isEditMode) {
       await editProduct(id, fd);
     } else {
       await addProduct(fd);
     }
 
+    // only runs if request succeeds
+    if (onSuccess) onSuccess();
     setIsOpen(false);
-    onSuccess?.();
+
   } catch (err) {
-    console.error("❌ ERROR:", err.response?.data || err);
+    const message =
+      err?.response?.data?.errors?.[0]?.message ||
+        err?.response?.data?.message ||
+        err?.message ||
+        "Could not create product.";
+
+    setError(message);
+    console.error("❌ ERROR:", err?.response?.data || err);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -184,6 +235,11 @@ const removeVariant = (index) => {
               ? "Update the product details below."
               : "Fill in the details to add a new product."}
           </AlertDialogDescription>
+          {error && (
+        <div className="text-red-500 text-sm font-medium bg-red-50 border border-red-200 p-2 rounded">
+          {error}
+  </div>
+)}
         </AlertDialogHeader>
 
         {/* Name (EN / KU / AR) */}
@@ -520,9 +576,12 @@ const removeVariant = (index) => {
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSubmit}>
-            {isEditMode ? "Save Changes" : "Add Product"}
-          </AlertDialogAction>
+          <Button
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Saving..." : isEditMode ? "Save Changes" : "Add Product"}
+        </Button>
         </AlertDialogFooter>
 
       </AlertDialogContent>

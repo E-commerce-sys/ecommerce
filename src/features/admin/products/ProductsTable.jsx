@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 
 function ProductsTable({ products, onEdit, onDelete }) {
-  console.log(products);
   return (
     <Table>
       <TableCaption>A list of your products.</TableCaption>
