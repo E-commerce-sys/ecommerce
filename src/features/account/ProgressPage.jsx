@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import OrderProgress from "./OrderProgress";
 import OrderLineItemsTable from "./OrderLineItemsTable";
 import { getUserOrders, ORDER_STATUS_FILTERS } from "./API/getOrders";
@@ -6,6 +7,7 @@ import { cancelOrder } from "./API/cancelOrder";
 import Button from "../../components/Button";
 
 function ProgressPage() {
+  const { t } = useTranslation();
   const [expandedOrderId, setExpandedOrderId] = useState(null);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,13 +29,13 @@ function ProgressPage() {
 
     loadOrders().catch(() => {
       if (!active) return;
-      setError("Failed to load your orders.");
+      setError(t("accountFeature.orders.loadError"));
       setLoading(false);
     });
     return () => {
       active = false;
     };
-  }, [loadOrders]);
+  }, [loadOrders, t]);
 
   function toggleOrder(orderId) {
     setExpandedOrderId((prev) => (prev === orderId ? null : orderId));
@@ -54,11 +56,12 @@ function ProgressPage() {
     if (!selectedOrderId || cancelLoading) return;
     try {
       setCancelLoading(true);
+      setError("");
       await cancelOrder(selectedOrderId);
       closeCancelModal();
       await loadOrders();
     } catch {
-      setError("Failed to cancel order.");
+      setError(t("accountFeature.orders.cancelError"));
     } finally {
       setCancelLoading(false);
     }
@@ -69,23 +72,23 @@ function ProgressPage() {
       <div className="flex w-full min-w-0 flex-col gap-8 sm:gap-11">
         <div className="flex flex-col gap-1.5">
           <p className="text-lg font-medium text-[rgb(var(--color-primary-main))] sm:text-xl">
-            Your Progress
+            {t("accountFeature.orders.progressTitle")}
           </p>
           <p className="text-xs font-medium text-[rgb(var(--color-text-main))] sm:text-sm">
-            You can only cancel your order while it is in Pending or Preparing
+            {t("accountFeature.orders.progressHint")}
           </p>
         </div>
 
         <div className="flex flex-col lg:gap-14 gap-10">
           {loading ? (
             <p className="text-sm text-[rgb(var(--color-text-main-3))]">
-              Loading...
+              {t("accountFeature.orders.loading")}
             </p>
           ) : null}
           {error ? <p className="text-sm text-red-500">{error}</p> : null}
           {!loading && !error && orders.length === 0 ? (
             <p className="text-sm text-[rgb(var(--color-text-main-3))]">
-              No active orders found.
+              {t("accountFeature.orders.emptyProgress")}
             </p>
           ) : null}
 
@@ -113,15 +116,19 @@ function ProgressPage() {
                         </div>
                       </div>
                       <p className="text-base text-[rgb(var(--color-text-main-3))] sm:text-lg">
-                        Items : {order.itemCount}
+                        {t("accountFeature.orders.itemsCount", {
+                          count: order.itemCount,
+                        })}
                       </p>
                       <p className="text-base text-[rgb(var(--color-text-main-3))] sm:text-lg">
-                        Total payment : {order.totalPayment} $
+                        {t("accountFeature.orders.totalPayment", {
+                          amount: order.totalPayment,
+                        })}
                       </p>
                       <p className="text-xs text-[rgb(var(--color-text-main-1))]">
                         {isOpen
-                          ? "Tap to hide line items"
-                          : "Tap to view line items"}
+                          ? t("accountFeature.orders.tapCollapse")
+                          : t("accountFeature.orders.tapExpand")}
                       </p>
                     </div>
                   </button>
@@ -139,13 +146,13 @@ function ProgressPage() {
 
                 {(order.status === "pending" ||
                   order.status === "preparing") && (
-                  <div className="flex justify-stretch sm:justify-end">
+                  <div className="flex  justify-stretch">
                     <button
                       type="button"
                       onClick={() => openCancelModal(order.id)}
-                      className="h-11 w-full rounded border border-[rgb(var(--color-border))] font-medium transition hover:bg-[rgb(var(--color-grey))] cursor-pointer sm:h-12 sm:w-24"
+                      className="h-10 w-fit text-sm md:text-base rounded border border-[rgb(var(--color-border))] font-medium px-2 transition hover:bg-[rgb(var(--color-grey))] cursor-pointer md:h-12"
                     >
-                      Cancel
+                      {t("accountFeature.orders.cancel")}
                     </button>
                   </div>
                 )}
@@ -173,20 +180,22 @@ function ProgressPage() {
 
             <div className="flex flex-col gap-4 text-center">
               <h2 className="text-xl md:text-2xl font-semibold text-[rgb(var(--color-text-main))]">
-                Canceling Order
+                {t("accountFeature.orders.cancelModalTitle")}
               </h2>
 
               <p className="text-sm md:text-base text-[rgb(var(--color-text-main-1))] leading-6">
-                Are you sure you want to cancel this order?
+                {t("accountFeature.orders.cancelModalBody")}
               </p>
 
               <div className="flex justify-center sm:flex-row gap-3 mt-2">
                 <Button onClick={handleConfirmCancel} disabled={cancelLoading}>
-                  {cancelLoading ? "Cancelling..." : "Cancel Order"}
+                  {cancelLoading
+                    ? t("accountFeature.orders.cancelOrderLoading")
+                    : t("accountFeature.orders.cancelOrderConfirm")}
                 </Button>
 
                 <Button onClick={closeCancelModal} variant="outline">
-                  Go back
+                  {t("accountFeature.orders.goBack")}
                 </Button>
               </div>
             </div>

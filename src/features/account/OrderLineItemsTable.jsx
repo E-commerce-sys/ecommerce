@@ -1,4 +1,7 @@
+import { useTranslation } from "react-i18next";
+
 function OrderLineItemsTable({ items }) {
+  const { t } = useTranslation();
   if (!items?.length) return null;
 
   return (
@@ -10,22 +13,22 @@ function OrderLineItemsTable({ items }) {
             <thead>
               <tr className="bg-[rgb(var(--color-grey))]">
                 <th className="px-3 py-3 text-sm font-semibold sm:px-4 sm:py-4 sm:text-base">
-                  Product
+                  {t("accountFeature.orderTable.product")}
                 </th>
                 <th className="px-3 py-3 text-center text-sm font-semibold sm:px-4 sm:py-4 sm:text-base">
-                  Price
+                  {t("accountFeature.orderTable.price")}
                 </th>
                 <th className="px-3 py-3 text-center text-sm font-semibold sm:px-4 sm:py-4 sm:text-base">
-                  Color
+                  {t("accountFeature.orderTable.color")}
                 </th>
                 <th className="px-3 py-3 text-center text-sm font-semibold sm:px-4 sm:py-4 sm:text-base">
-                  size
+                  {t("accountFeature.orderTable.size")}
                 </th>
                 <th className="px-3 py-3 text-center text-sm font-semibold sm:px-4 sm:py-4 sm:text-base">
-                  Quantity
+                  {t("accountFeature.orderTable.quantity")}
                 </th>
                 <th className="px-3 py-3 text-center text-sm font-semibold sm:px-4 sm:py-4 sm:text-base">
-                  Subtotal
+                  {t("accountFeature.orderTable.subtotal")}
                 </th>
               </tr>
             </thead>
@@ -85,18 +88,28 @@ function OrderLineItemsTable({ items }) {
                   {item.name}
                 </p>
                 <p className="mt-1 text-sm text-[rgb(var(--color-text-main-3))]">
-                  Quantity: {String(item.quantity).padStart(2)}
+                  {t("accountFeature.orderTable.quantityLabel", {
+                    qty: String(item.quantity).padStart(2, "0"),
+                  })}
                 </p>
               </div>
             </div>
             <dl className="mt-3 grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
-              <dt className="text-[rgb(var(--color-text-main-3))]">Price</dt>
+              <dt className="text-[rgb(var(--color-text-main-3))]">
+                {t("accountFeature.orderTable.price")}
+              </dt>
               <dd className="text-right font-medium">${item.price}</dd>
-              <dt className="text-[rgb(var(--color-text-main-3))]">Color</dt>
+              <dt className="text-[rgb(var(--color-text-main-3))]">
+                {t("accountFeature.orderTable.color")}
+              </dt>
               <dd className="text-right">{item.color}</dd>
-              <dt className="text-[rgb(var(--color-text-main-3))]">Size</dt>
+              <dt className="text-[rgb(var(--color-text-main-3))]">
+                {t("accountFeature.orderTable.size")}
+              </dt>
               <dd className="text-right capitalize">{item.size}</dd>
-              <dt className="text-[rgb(var(--color-text-main-3))]">Subtotal</dt>
+              <dt className="text-[rgb(var(--color-text-main-3))]">
+                {t("accountFeature.orderTable.subtotal")}
+              </dt>
               <dd className="text-right font-semibold">${item.subtotal}</dd>
             </dl>
           </li>

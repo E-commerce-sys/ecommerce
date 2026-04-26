@@ -33,7 +33,9 @@ function AddressPage() {
       .filter((addr) => addr?.attributes)
       .map((addr) => ({
         id: addr.id,
-        address_name: addr.attributes.addressName ?? `Address ${addr.id}`,
+        address_name:
+          addr.attributes.addressName ??
+          t("addressPage.addressLabel", { id: addr.id }),
         house_number: addr.attributes.houseNumber ?? "",
         street_name: addr.attributes.streetName ?? "",
         city: addr.attributes.city ?? "",
@@ -46,7 +48,7 @@ function AddressPage() {
     setSavedData(mapped);
     setSelectedIndex(0);
     setIsEditing(false);
-  }, [address]);
+  }, [address, t]);
 
   function handleChange(e) {
     const { name, value } = e.target;
