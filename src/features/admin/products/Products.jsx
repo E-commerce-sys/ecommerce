@@ -331,6 +331,7 @@ function Products() {
         ) : (
           <ProductsTable
             products={products}
+            meta={meta}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />

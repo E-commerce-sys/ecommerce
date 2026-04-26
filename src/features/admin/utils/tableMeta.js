@@ -1,18 +1,26 @@
-/** Global row index for paginated tables (uses API meta.from when present). */
+/**
+ * Stable global row index across pages (does not restart at 1 each page).
+ * Uses pagination meta when present (current_page + per_page), then meta.from.
+ */
 export function tableRowDisplayNumber(meta, index) {
-  const from = meta?.from;
+  if (!meta || typeof meta !== "object") return index + 1;
+
+  const perPage = Number(meta.per_page ?? meta.perPage);
+  const page = Number(meta.current_page ?? meta.currentPage);
+
+  if (
+    Number.isFinite(perPage) &&
+    perPage > 0 &&
+    Number.isFinite(page) &&
+    page >= 1
+  ) {
+    return (page - 1) * perPage + index + 1;
+  }
+
+  const from = meta.from;
   if (from != null && !Number.isNaN(Number(from))) {
     return Number(from) + index;
   }
-  const perPage = Number(meta?.per_page ?? 10);
-  const page = Number(meta?.current_page ?? 1);
-  if (
-    Number.isNaN(perPage) ||
-    Number.isNaN(page) ||
-    perPage < 1 ||
-    page < 1
-  ) {
-    return index + 1;
-  }
-  return (page - 1) * perPage + index + 1;
+
+  return index + 1;
 }

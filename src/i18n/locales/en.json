@@ -193,7 +193,15 @@
 
     "payment": "Payment: Cash on delivery",
     "apply": "Apply Coupon",
-    "coupon": "Coupon Code"
+    "coupon": "Coupon Code",
+    "couponRequired": "Please enter a coupon code.",
+    "couponApplyFailed": "Could not apply this coupon.",
+    "couponNewTotal": "New order total: {{total}}",
+    "couponConfirmTitle": "Use this coupon?",
+    "couponConfirmBody": "This coupon can only be used once. This action cannot be undone. Do you want to continue?",
+    "couponConfirmCancel": "Cancel",
+    "couponConfirmApply": "Yes, apply coupon",
+    "couponApplying": "Applying…"
   },
   "wishlist": {
     "wishlist": "Wishlist",

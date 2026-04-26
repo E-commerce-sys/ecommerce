@@ -189,7 +189,15 @@
 
     "payment": "پارەدان: پارەدان لە کاتی گەیاندن",
     "apply": "بەکاربردنی کۆپۆن",
-    "coupon": "کۆدی کۆپۆن"
+    "coupon": "کۆدی کۆپۆن",
+    "couponRequired": "تکایە کۆدی کۆپۆن بنوسە.",
+    "couponApplyFailed": "ئەم کۆپۆنە جێبەجێ نەکرا.",
+    "couponNewTotal": "کۆی نوێی داواکاری: {{total}}",
+    "couponConfirmTitle": "ئەم کۆپۆنە بەکاربهێنیت؟",
+    "couponConfirmBody": "ئەم کۆپۆنە تەنها جارێک دەتوانرێت بەکاربهێنرێت. دواتر گەڕانەوە نییە. دەتەوێت بەردەوام بیت؟",
+    "couponConfirmCancel": "پاشگەزبوونەوە",
+    "couponConfirmApply": "بەڵێ، کۆپۆن جێبەجێ بکە",
+    "couponApplying": "جێبەجێ دەکرێت…"
   },
   "wishlist": {
     "wishlist": "لیستی دڵخوازەکان",
