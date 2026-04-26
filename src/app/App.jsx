@@ -15,6 +15,7 @@ function App() {
       }}
     >
       <Suspense fallback={null}>
+        {/* Data router: required for route loaders, errorElement, useNavigation, useLoaderData */}
         <RouterProvider router={router} />
       </Suspense>
     </ErrorBoundary>
