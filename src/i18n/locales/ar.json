@@ -214,17 +214,79 @@
     "confirmPassword": "تأكيد كلمة المرور الجديدة"
   },
   "addressPage": {
-  "editAddress": "تعديل العنوان",
-  "currentAddress": "العنوان الحالي",
-  "newAddress": "عنوان جديد",
-  "addressName": "اسم العنوان",
-  "houseNumber": "رقم المنزل",
-  "streetName": "اسم الشارع",
-  "city": "المدينة",
-  "state": "المحافظة",
-  "country": "الدولة",
-  "zipCode": "الرمز البريدي"
-},
+    "editAddress": "تعديل العنوان",
+    "currentAddress": "العنوان الحالي",
+    "newAddress": "عنوان جديد",
+    "addressName": "اسم العنوان",
+    "houseNumber": "رقم المنزل",
+    "streetName": "اسم الشارع",
+    "city": "المدينة",
+    "state": "المحافظة",
+    "country": "الدولة",
+    "zipCode": "الرمز البريدي",
+    "delete": "حذف",
+    "addressLabel": "عنوان #{{id}}"
+  },
+  "accountFeature": {
+    "layout": {
+      "welcome": "مرحباً!",
+      "manageAccount": "إدارة حسابي",
+      "myProfile": "ملفي الشخصي",
+      "addressBook": "دفتر العناوين",
+      "myOrders": "طلباتي",
+      "inProgress": "قيد التنفيذ",
+      "arrived": "وصلت",
+      "cancelled": "ملغاة",
+      "navAriaLabel": "الحساب"
+    },
+    "profile": {
+      "loading": "جاري التحميل…",
+      "userNotFound": "المستخدم غير موجود",
+      "passwordAllFields": "يرجى تعبئة جميع حقول كلمة المرور",
+      "passwordMismatch": "كلمتا المرور الجديدتان غير متطابقتين"
+    },
+    "orders": {
+      "loading": "جاري التحميل…",
+      "progressTitle": "تقدم طلباتك",
+      "progressHint": "يمكنك إلغاء الطلب فقط عندما يكون قيد الانتظار أو التحضير",
+      "loadError": "تعذر تحميل طلباتك.",
+      "cancelError": "تعذر إلغاء هذا الطلب.",
+      "emptyProgress": "لا توجد طلبات نشطة.",
+      "orderDate": "تاريخ الطلب: {{date}}",
+      "itemsCount": "العناصر: {{count}}",
+      "totalPayment": "إجمالي الدفع: {{amount}} $",
+      "tapExpand": "اضغط لعرض بنود الطلب",
+      "tapCollapse": "اضغط لإخفاء بنود الطلب",
+      "cancel": "إلغاء",
+      "cancelModalTitle": "إلغاء الطلب",
+      "cancelModalBody": "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟",
+      "cancelOrderConfirm": "تأكيد الإلغاء",
+      "cancelOrderLoading": "جاري الإلغاء…",
+      "goBack": "رجوع",
+      "arrivedTitle": "الطلبات الواصلة",
+      "arrivedEmpty": "لا توجد طلبات واصلة بعد.",
+      "arrivedLoadError": "تعذر تحميل الطلبات الواصلة.",
+      "cancelledTitle": "الطلبات الملغاة",
+      "cancelledEmpty": "لا توجد طلبات ملغاة بعد.",
+      "cancelledLoadError": "تعذر تحميل الطلبات الملغاة."
+    },
+    "orderTable": {
+      "product": "المنتج",
+      "price": "السعر",
+      "color": "اللون",
+      "size": "المقاس",
+      "quantity": "الكمية",
+      "subtotal": "المجموع الفرعي",
+      "quantityLabel": "الكمية: {{qty}}"
+    },
+    "orderStatus": {
+      "pending": "قيد الانتظار",
+      "preparing": "قيد التحضير",
+      "shipping": "قيد الشحن",
+      "delivering": "قيد التوصيل",
+      "arrived": "وصل"
+    }
+  },
   "errors": {
     "generic": {
       "title": "حدث خطأ ما",

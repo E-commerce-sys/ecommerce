@@ -216,16 +216,79 @@
     "confirmPassword": "پشتڕاستکردنەوەی وشەی نهێنی نوێ"
   },
   "addressPage": {
-  "editAddress": "ناونیشانەکەت دەستکاری بکە",
-  "currentAddress": "ناونیشانی ئێستا",
-  "newAddress": "ناونیشانی نوێ",
-  "addressName": "ناوی ناونیشان",
-  "houseNumber": "ژمارەی خانوو",
-  "streetName": "ناوی کوچە",
-  "city": "شار",
-  "state": "پارێزگا",
-  "country": "وڵات",
-  "zipCode": "کۆدی پۆستە"},
+    "editAddress": "ناونیشانەکەت دەستکاری بکە",
+    "currentAddress": "ناونیشانی ئێستا",
+    "newAddress": "ناونیشانی نوێ",
+    "addressName": "ناوی ناونیشان",
+    "houseNumber": "ژمارەی خانوو",
+    "streetName": "ناوی کوچە",
+    "city": "شار",
+    "state": "پارێزگا",
+    "country": "وڵات",
+    "zipCode": "کۆدی پۆستە",
+    "delete": "سڕینەوە",
+    "addressLabel": "ناونیشان #{{id}}"
+  },
+  "accountFeature": {
+    "layout": {
+      "welcome": "بەخێربێیت!",
+      "manageAccount": "بەڕێوەبردنی ئەکاونتم",
+      "myProfile": "پرۆفایلم",
+      "addressBook": "کتێبی ناونیشان",
+      "myOrders": "داواکارییەکانم",
+      "inProgress": "لە جێبەجێکردندا",
+      "arrived": "گەیشتوو",
+      "cancelled": "هەڵوەشاوە",
+      "navAriaLabel": "ئەکاونت"
+    },
+    "profile": {
+      "loading": "بارکردن…",
+      "userNotFound": "بەکارهێنەر نەدۆزرایەوە",
+      "passwordAllFields": "تکایە هەموو خانەکانی وشەی نهێنی پڕ بکەرەوە",
+      "passwordMismatch": "وشەکانی نهێنی نوێ یەکناگرنەوە"
+    },
+    "orders": {
+      "loading": "بارکردن…",
+      "progressTitle": "پێشکەوتنی داواکارییەکانت",
+      "progressHint": "تەنها کاتێک دەتوانیت داواکاری هەڵبوەشێنیت کە لە چاوەڕوانی یان ئامادەکردندا بێت",
+      "loadError": "نەتوانین داواکارییەکانت بار بکەین.",
+      "cancelError": "نەتوانین ئەم داواکارییە هەڵبوەشێنین.",
+      "emptyProgress": "هیچ داواکاری چالاک نییە.",
+      "orderDate": "ڕۆژی داواکاری: {{date}}",
+      "itemsCount": "بەرهەمەکان: {{count}}",
+      "totalPayment": "کۆی پارەدان: {{amount}} $",
+      "tapExpand": "دەست لێبدە بۆ بینینی هێڵەکان",
+      "tapCollapse": "دەست لێبدە بۆ شاردنەوەی هێڵەکان",
+      "cancel": "هەڵوەشاندنەوە",
+      "cancelModalTitle": "هەڵوەشاندنەوەی داواکاری",
+      "cancelModalBody": "دڵنیایت لە هەڵوەشاندنەوەی ئەم داواکارییە؟",
+      "cancelOrderConfirm": "دڵنیاکردنەوەی هەڵوەشاندنەوە",
+      "cancelOrderLoading": "هەڵدەوەشێتەوە…",
+      "goBack": "گەڕانەوە",
+      "arrivedTitle": "داواکارییە گەیشتووەکان",
+      "arrivedEmpty": "هێشتا هیچ داواکارییەکی گەیشتوو نییە.",
+      "arrivedLoadError": "نەتوانین داواکارییە گەیشتووەکان بار بکەین.",
+      "cancelledTitle": "داواکارییە هەڵوەشاوەکان",
+      "cancelledEmpty": "هێشتا هیچ داواکارییەکی هەڵوەشاوە نییە.",
+      "cancelledLoadError": "نەتوانین داواکارییە هەڵوەشاوەکان بار بکەین."
+    },
+    "orderTable": {
+      "product": "بەرهەم",
+      "price": "نرخ",
+      "color": "ڕەنگ",
+      "size": "قەبارە",
+      "quantity": "بڕ",
+      "subtotal": "کۆی لاوەکی",
+      "quantityLabel": "بڕ: {{qty}}"
+    },
+    "orderStatus": {
+      "pending": "چاوەڕوان",
+      "preparing": "ئامادەکردن",
+      "shipping": "ناردن",
+      "delivering": "گەیاندن",
+      "arrived": "گەیشتوو"
+    }
+  },
   "errors": {
     "generic": {
       "title": "هەڵەیەک ڕوویدا",

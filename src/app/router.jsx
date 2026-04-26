@@ -2,91 +2,91 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import MainLayout from "../layout/MainLayout";
 import AdminLayout from "../layout/AdminLayout";
-
-import HomePage from "../pages/HomePage";
-import ProductsPage from "../pages/ProductsPage";
-import ProductDetailPage from "../pages/ProductDetailPage";
-import AboutPage from "../pages/AboutPage";
-import ContactPage from "../pages/ContactPage";
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
-import CartPage from "../pages/CartPage";
-import WishlistPage from "../pages/WishlistPage";
-import AccountLayout from "../pages/account/AccountLayout";
-import ProfilePage from "../features/account/ProfilePage.jsx";
-import AddressPage from "../features/account/AddressPage.jsx";
-import ProgressPage from "../features/account/ProgressPage.jsx";
-import ArrivedPage from "../features/account/ArrivedPage.jsx";
-import CancelledPage from "../features/account/CancelledPage.jsx";
-
-import Dashboard from "../pages/admin/Dashboard.jsx";
-import Products from "../pages/admin/managements/Products.jsx";
-import Category from "../pages/admin/managements/Category.jsx";
-import Orders from "../pages/admin/managements/Orders.jsx";
-import Users from "../pages/admin/managements/Users.jsx";
-import Staff from "../pages/admin/managements/Staff.jsx";
-import Coupons from "../pages/admin/marketing/Coupons.jsx";
-import Discounts from "../pages/admin/marketing/Discounts.jsx";
-import Contacts from "../pages/admin/content/Contacts.jsx";
-
-import NotFoundPage from "../pages/NotFoundPage";
-
-// Route Guards
 import ProtectedRoute from "../routes/ProtectedRoute";
 import AdminRoute from "../routes/AdminRoute";
-import SuperAdminRoute from "../routes/SuperAdminRoute";
-import TOSPage from "../pages/TOSPage.jsx";
-import FAQPage from "../pages/FAQPage.jsx";
-import PrivacyPage from "../pages/PrivacyPage.jsx";
 import RouteErrorUI from "./RouteErrorUI";
 
-import { getCategories } from "../features/admin/categories/api/getCategories.js";
-import { getOrders } from "../features/admin/orders/api/getOrders";
-import { getProductsWithFilters } from "../features/admin/discount/api/getProductsWithFilters.js";
-import { getContacts } from "../features/admin/contact/getContacts.js";
-import { getUsers } from "../features/admin/users/api/getUsers.js";
-import { getCoupone } from "../features/admin/coupon/api/getCoupone.js";
+/** Default export → RR `lazy` route module */
+const page = (importer) =>
+  importer().then((m) => ({ Component: m.default }));
 
+/**
+ * Route-based code splitting: avoid static imports of every page + admin loader
+ * in this file. Otherwise the first load (e.g. `/` or `/admin`) pulls one large
+ * JS graph — Network shows “the other side’s” chunk even though those loaders
+ * only run when their path matches.
+ */
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     errorElement: <RouteErrorUI />,
     children: [
+      { index: true, lazy: () => page(() => import("../pages/HomePage")) },
       {
-        index: true,
-        element: <HomePage />,
+        path: "search",
+        lazy: () => page(() => import("../pages/ProductsPage")),
       },
-
-      { path: "search", element: <ProductsPage /> },
-      { path: "products/:productId", element: <ProductDetailPage /> },
-
-      { path: "about", element: <AboutPage /> },
-      { path: "contact", element: <ContactPage /> },
-
-      { path: "login", element: <LoginPage /> },
-      { path: "register", element: <RegisterPage /> },
-      { path: "TOS", element: <TOSPage /> },
-      { path: "FAQ", element: <FAQPage /> },
-      { path: "Privacy&Policy", element: <PrivacyPage /> },
+      {
+        path: "products/:productId",
+        lazy: () => page(() => import("../pages/ProductDetailPage")),
+      },
+      { path: "about", lazy: () => page(() => import("../pages/AboutPage")) },
+      {
+        path: "contact",
+        lazy: () => page(() => import("../pages/ContactPage")),
+      },
+      { path: "login", lazy: () => page(() => import("../pages/LoginPage")) },
+      {
+        path: "register",
+        lazy: () => page(() => import("../pages/RegisterPage")),
+      },
+      { path: "TOS", lazy: () => page(() => import("../pages/TOSPage.jsx")) },
+      { path: "FAQ", lazy: () => page(() => import("../pages/FAQPage.jsx")) },
+      {
+        path: "Privacy&Policy",
+        lazy: () => page(() => import("../pages/PrivacyPage.jsx")),
+      },
 
       {
         element: <ProtectedRoute />,
         children: [
-          { path: "cart", element: <CartPage /> },
-          { path: "wishlist", element: <WishlistPage /> },
-          // { path: "checkout", element: <CheckoutPage /> },
-
+          { path: "cart", lazy: () => page(() => import("../pages/CartPage")) },
+          {
+            path: "wishlist",
+            lazy: () => page(() => import("../pages/WishlistPage")),
+          },
           {
             path: "account",
-            element: <AccountLayout />,
+            lazy: () =>
+              page(() => import("../pages/account/AccountLayout")),
             children: [
               { index: true, element: <Navigate to="profile" replace /> },
-              { path: "profile", element: <ProfilePage /> },
-              { path: "address", element: <AddressPage /> },
-              { path: "progress", element: <ProgressPage /> },
-              { path: "arrived", element: <ArrivedPage /> },
-              { path: "cancelled", element: <CancelledPage /> },
+              {
+                path: "profile",
+                lazy: () =>
+                  page(() => import("../features/account/ProfilePage.jsx")),
+              },
+              {
+                path: "address",
+                lazy: () =>
+                  page(() => import("../features/account/AddressPage.jsx")),
+              },
+              {
+                path: "progress",
+                lazy: () =>
+                  page(() => import("../features/account/ProgressPage.jsx")),
+              },
+              {
+                path: "arrived",
+                lazy: () =>
+                  page(() => import("../features/account/ArrivedPage.jsx")),
+              },
+              {
+                path: "cancelled",
+                lazy: () =>
+                  page(() => import("../features/account/CancelledPage.jsx")),
+              },
             ],
           },
         ],
@@ -104,35 +104,103 @@ export const router = createBrowserRouter([
     errorElement: <RouteErrorUI showLayout={true} />,
     children: [
       { index: true, element: <Navigate to="/admin/dashboard" replace /> },
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "products", element: <Products /> },
+      {
+        path: "dashboard",
+        lazy: () => page(() => import("../pages/admin/Dashboard.jsx")),
+      },
+      {
+        path: "products",
+        lazy: () =>
+          page(() => import("../pages/admin/managements/Products.jsx")),
+      },
       {
         path: "categories",
-        element: <Category />,
-        loader: getCategories,
+        lazy: async () => {
+          const [{ default: Component }, { getCategories }] =
+            await Promise.all([
+              import("../pages/admin/managements/Category.jsx"),
+              import("../features/admin/categories/api/getCategories.js"),
+            ]);
+          return { Component, loader: getCategories };
+        },
       },
-      { path: "orders", element: <Orders />, loader: getOrders },
-      { path: "users", element: <Users />, loader: getUsers },
+      {
+        path: "orders",
+        lazy: async () => {
+          const [{ default: Component }, { getOrders }] = await Promise.all([
+            import("../pages/admin/managements/Orders.jsx"),
+            import("../features/admin/orders/api/getOrders"),
+          ]);
+          return { Component, loader: getOrders };
+        },
+      },
+      {
+        path: "users",
+        lazy: async () => {
+          const [{ default: Component }, { getUsers }] = await Promise.all([
+            import("../pages/admin/managements/Users.jsx"),
+            import("../features/admin/users/api/getUsers.js"),
+          ]);
+          return { Component, loader: getUsers };
+        },
+      },
       {
         path: "staff",
-        element: (
-          <SuperAdminRoute>
-            <Staff />
-          </SuperAdminRoute>
-        ),
+        lazy: async () => {
+          const [{ default: Staff }, { default: SuperAdminRoute }] =
+            await Promise.all([
+              import("../pages/admin/managements/Staff.jsx"),
+              import("../routes/SuperAdminRoute.jsx"),
+            ]);
+          function StaffGate() {
+            return (
+              <SuperAdminRoute>
+                <Staff />
+              </SuperAdminRoute>
+            );
+          }
+          return { Component: StaffGate };
+        },
       },
-      { path: "coupons", element: <Coupons />, loader: getCoupone },
+      {
+        path: "coupons",
+        lazy: async () => {
+          const [{ default: Component }, { getCoupone }] = await Promise.all([
+            import("../pages/admin/marketing/Coupons.jsx"),
+            import("../features/admin/coupon/api/getCoupone.js"),
+          ]);
+          return { Component, loader: getCoupone };
+        },
+      },
       {
         path: "discounts",
-        element: <Discounts />,
-        loader: getProductsWithFilters,
+        lazy: async () => {
+          const [{ default: Component }, { getProductsWithFilters }] =
+            await Promise.all([
+              import("../pages/admin/marketing/Discounts.jsx"),
+              import(
+                "../features/admin/discount/api/getProductsWithFilters.js"
+              ),
+            ]);
+          return { Component, loader: getProductsWithFilters };
+        },
       },
-      { path: "contacts", element: <Contacts />, loader: getContacts },
+      {
+        path: "contacts",
+        lazy: async () => {
+          const [{ default: Component }, { getContacts }] =
+            await Promise.all([
+              import("../pages/admin/content/Contacts.jsx"),
+              import("../features/admin/contact/getContacts.js"),
+            ]);
+          return { Component, loader: getContacts };
+        },
+      },
     ],
   },
 
   {
     path: "*",
-    element: <NotFoundPage />,
+    lazy: () => page(() => import("../pages/NotFoundPage")),
   },
 ]);

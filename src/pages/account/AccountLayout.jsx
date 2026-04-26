@@ -32,7 +32,7 @@ function AccountLayout() {
             </span>
           </div>
           <p className="shrink-0 text-sm text-[rgb(var(--color-text-main))] md:text-base">
-            Welcome!{" "}
+            {t("accountFeature.layout.welcome")}{" "}
             <span className="text-[rgb(var(--color-primary-main))]">
               {capitalize(user?.attributes.firstName)}{" "}
               {capitalize(user?.attributes.lastName)}
@@ -43,24 +43,24 @@ function AccountLayout() {
         <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-start lg:gap-12 xl:gap-16">
           <aside className="w-full min-w-0 shrink-0 lg:w-56 xl:w-62.5">
             <nav
-              aria-label="Account"
+              aria-label={t("accountFeature.layout.navAriaLabel")}
               className="flex flex-wrap items-center gap-2 border-b border-[rgb(var(--color-border))] pb-4 lg:flex-col lg:items-stretch lg:gap-8 lg:border-b-0 lg:pb-0"
             >
               <p className="hidden w-full text-base font-medium text-[rgb(var(--color-text-main))] lg:block md:text-lg">
-                Manage My Account
+                {t("accountFeature.layout.manageAccount")}
               </p>
               <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-2 lg:flex-col lg:items-stretch lg:gap-2 lg:pl-6">
                 <NavLink
                   to="/account/profile"
                   className={({ isActive }) => navClass(isActive)}
                 >
-                  My Profile
+                  {t("accountFeature.layout.myProfile")}
                 </NavLink>
                 <NavLink
                   to="/account/address"
                   className={({ isActive }) => navClass(isActive)}
                 >
-                  Address Book
+                  {t("accountFeature.layout.addressBook")}
                 </NavLink>
               </div>
 
@@ -70,26 +70,26 @@ function AccountLayout() {
               />
 
               <p className="hidden w-full text-base font-medium text-[rgb(var(--color-text-main))] lg:block md:text-lg">
-                My Orders
+                {t("accountFeature.layout.myOrders")}
               </p>
               <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-2 lg:flex-col lg:items-stretch lg:gap-2 lg:pl-6">
                 <NavLink
                   to="/account/progress"
                   className={({ isActive }) => navClass(isActive)}
                 >
-                  In Progress
+                  {t("accountFeature.layout.inProgress")}
                 </NavLink>
                 <NavLink
                   to="/account/arrived"
                   className={({ isActive }) => navClass(isActive)}
                 >
-                  Arrived
+                  {t("accountFeature.layout.arrived")}
                 </NavLink>
                 <NavLink
                   to="/account/cancelled"
                   className={({ isActive }) => navClass(isActive)}
                 >
-                  Cancelled
+                  {t("accountFeature.layout.cancelled")}
                 </NavLink>
               </div>
             </nav>

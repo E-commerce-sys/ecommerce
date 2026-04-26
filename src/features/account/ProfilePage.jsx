@@ -19,6 +19,7 @@ function ProfilePage() {
     confirmPassword: "",
   });
   const [savedData, setSavedData] = useState({ ...formData });
+  const [passwordFormError, setPasswordFormError] = useState("");
 
   useEffect(() => {
     if (user) {
@@ -42,7 +43,15 @@ function ProfilePage() {
   }, [user]);
 
   function handleChange(e) {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name } = e.target;
+    if (
+      name === "currentPassword" ||
+      name === "newPassword" ||
+      name === "confirmPassword"
+    ) {
+      setPasswordFormError("");
+    }
+    setFormData((prev) => ({ ...prev, [name]: e.target.value }));
   }
 
   function handleEdit() {
@@ -56,6 +65,7 @@ function ProfilePage() {
 
   async function handleSave(e) {
     e.preventDefault();
+    setPasswordFormError("");
 
     try {
       const payload = {};
@@ -82,12 +92,12 @@ function ProfilePage() {
           !formData.newPassword ||
           !formData.confirmPassword
         ) {
-          alert("Please fill all password fields");
+          setPasswordFormError(t("accountFeature.profile.passwordAllFields"));
           return;
         }
 
         if (formData.newPassword !== formData.confirmPassword) {
-          alert("Passwords do not match");
+          setPasswordFormError(t("accountFeature.profile.passwordMismatch"));
           return;
         }
 
@@ -111,8 +121,20 @@ function ProfilePage() {
     }
   }
 
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>User not found</div>;
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-4xl p-6 text-sm text-[rgb(var(--color-text-main-3))]">
+        {t("accountFeature.profile.loading")}
+      </div>
+    );
+  }
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-4xl p-6 text-sm text-[rgb(var(--color-text-main-3))]">
+        {t("accountFeature.profile.userNotFound")}
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto mb-16 border border-[rgb(var(--color-border))] flex w-full min-w-0 max-w-4xl flex-col gap-6 rounded-xl p-6 sm:mb-24 sm:gap-8 md:p-8 lg:mb-32">
@@ -212,6 +234,11 @@ function ProfilePage() {
             disabled={!isEditing}
             className="bg-[rgb(var(--color-grey))] py-[13px] px-4"
           />
+          {passwordFormError ? (
+            <p className="text-sm text-red-600" role="alert">
+              {passwordFormError}
+            </p>
+          ) : null}
         </div>
 
         {isEditing && (
