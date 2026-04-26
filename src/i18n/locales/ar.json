@@ -187,7 +187,15 @@
 
     "payment": "الدفع: الدفع عند الاستلام",
     "apply": "تطبيق الكوبون",
-    "coupon": "رمز القسيمة"
+    "coupon": "رمز القسيمة",
+    "couponRequired": "يرجى إدخال رمز القسيمة.",
+    "couponApplyFailed": "تعذر تطبيق هذه القسيمة.",
+    "couponNewTotal": "الإجمالي الجديد: {{total}}",
+    "couponConfirmTitle": "استخدام هذه القسيمة؟",
+    "couponConfirmBody": "يمكن استخدام هذه القسيمة مرة واحدة فقط. لا يمكن التراجع عن هذا الإجراء. هل تريد المتابعة؟",
+    "couponConfirmCancel": "إلغاء",
+    "couponConfirmApply": "نعم، تطبيق القسيمة",
+    "couponApplying": "جاري التطبيق…"
   },
   "wishlist": {
     "wishlist": "قائمة الأمنيات",

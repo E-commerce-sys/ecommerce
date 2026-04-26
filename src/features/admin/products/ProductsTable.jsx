@@ -7,9 +7,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { tableRowDisplayNumber } from "../utils/tableMeta";
 
-function ProductsTable({ products, onEdit, onDelete }) {
-  console.log(products);
+function ProductsTable({ products, meta, onEdit, onDelete }) {
   return (
     <Table>
       <TableCaption>A list of your products.</TableCaption>
@@ -25,7 +25,14 @@ function ProductsTable({ products, onEdit, onDelete }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {products.map((product, index) => {
+        {products.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={7} className="py-8 text-center text-gray-500">
+              No products found
+            </TableCell>
+          </TableRow>
+        ) : (
+          products.map((product, index) => {
           const tags = [
             product.attributes.isBestSelling && "Best Selling",
             product.attributes.isNewArrival && "New Arrival",
@@ -34,7 +41,9 @@ function ProductsTable({ products, onEdit, onDelete }) {
           ].filter(Boolean);
           return (
             <TableRow key={product.id}>
-              <TableCell className="font-medium">{index + 1}</TableCell>
+              <TableCell className="font-medium">
+                {tableRowDisplayNumber(meta, index)}
+              </TableCell>
               <TableCell className="font-medium">
                 <div className="h-16 w-16">
                   {product.included?.images?.[0]?.attributes?.image ? (
@@ -81,7 +90,8 @@ function ProductsTable({ products, onEdit, onDelete }) {
               </TableCell>
             </TableRow>
           );
-        })}
+        })
+        )}
       </TableBody>
     </Table>
   );

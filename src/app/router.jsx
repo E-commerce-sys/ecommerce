@@ -34,6 +34,7 @@ import NotFoundPage from "../pages/NotFoundPage";
 // Route Guards
 import ProtectedRoute from "../routes/ProtectedRoute";
 import AdminRoute from "../routes/AdminRoute";
+import SuperAdminRoute from "../routes/SuperAdminRoute";
 import TOSPage from "../pages/TOSPage.jsx";
 import FAQPage from "../pages/FAQPage.jsx";
 import PrivacyPage from "../pages/PrivacyPage.jsx";
@@ -112,7 +113,14 @@ export const router = createBrowserRouter([
       },
       { path: "orders", element: <Orders />, loader: getOrders },
       { path: "users", element: <Users />, loader: getUsers },
-      { path: "staff", element: <Staff /> },
+      {
+        path: "staff",
+        element: (
+          <SuperAdminRoute>
+            <Staff />
+          </SuperAdminRoute>
+        ),
+      },
       { path: "coupons", element: <Coupons />, loader: getCoupone },
       {
         path: "discounts",
