@@ -1,5 +1,23 @@
+import React, { useEffect, useState } from "react";
+import {
+  useLoaderData,
+  useRevalidator,
+  useSearchParams,
+} from "react-router-dom";
 import Button from "@/components/Button";
 import GivenCouponsTable from "./GivenCouponsTable";
+import { createCoupone } from "./api/createCoupone";
+import { fetchAdminUsersForSelect } from "../users/api/getUsers";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import {
   AlertDialog,
@@ -11,28 +29,104 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useState } from "react";
+
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const emptyForm = () => ({
-  userEmail: "",
+  userId: "",
   couponCode: "",
-  discountValue: "",
-  discountType: "percent",
+  discountPercentage: "",
   expireDate: "",
-  minOrder: "",
+  maxApplicablePrice: "",
 });
 
+/** HTML date input (yyyy-mm-dd) → API e.g. "3 October 2026" */
+function formatExpiresAtForApi(htmlDateValue) {
+  if (!htmlDateValue) return "";
+  const [y, m, d] = htmlDateValue.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const date = new Date(y, m - 1, d);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}
+
+function buildPageNumbers(current, last) {
+  if (!last || last < 1) return [];
+  if (last <= 5) return Array.from({ length: last }, (_, i) => i + 1);
+
+  const set = new Set([1, last, current - 1, current, current + 1]);
+  return [...set].filter((n) => n >= 1 && n <= last).sort((a, b) => a - b);
+}
+
 function Coupon() {
+  const loaderData = useLoaderData();
+  const revalidator = useRevalidator();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [users, setUsers] = useState([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersError, setUsersError] = useState("");
+
+  const coupons = loaderData?.data ?? [];
+  const meta = loaderData?.meta ?? {};
+  const currentPage = Number(meta.current_page ?? 1);
+  const lastPage = Number(meta.last_page ?? 1);
+  const pages = buildPageNumbers(currentPage, lastPage);
 
   function resetForm() {
     setForm(emptyForm());
     setErrors({});
     setSubmitting(false);
+    setSubmitError("");
   }
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    let cancelled = false;
+
+    (async () => {
+      setUsersLoading(true);
+      setUsersError("");
+      try {
+        let page = 1;
+        let lastPage = 1;
+        const acc = [];
+        do {
+          const data = await fetchAdminUsersForSelect({ page: String(page) });
+          if (cancelled) return;
+          acc.push(...(data?.data ?? []));
+          lastPage = Number(data?.meta?.last_page ?? 1);
+          page += 1;
+        } while (page <= lastPage);
+
+        if (!cancelled) setUsers(acc);
+      } catch {
+        if (!cancelled) setUsersError("Could not load users.");
+      } finally {
+        if (!cancelled) setUsersLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [open]);
 
   const handleOpenChange = (next) => {
     setOpen(next);
@@ -60,50 +154,58 @@ function Coupon() {
   function validate(values) {
     const nextErrors = {};
 
-    const email = values.userEmail.trim();
     const code = values.couponCode.trim();
-    const discount = Number(values.discountValue);
-    const minOrder = values.minOrder === "" ? null : Number(values.minOrder);
+    const discount = Number(values.discountPercentage);
+    const maxPrice =
+      values.maxApplicablePrice === ""
+        ? null
+        : Number(values.maxApplicablePrice);
 
-    if (!email) nextErrors.userEmail = "User email is required.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      nextErrors.userEmail = "Enter a valid email address.";
-    }
+    if (!values.userId) nextErrors.userId = "Please select a user.";
 
     if (!code) nextErrors.couponCode = "Coupon code is required.";
     else if (code.length < 3) {
       nextErrors.couponCode = "Coupon code should be at least 3 characters.";
     }
 
-    if (values.discountValue === "") {
-      nextErrors.discountValue = "Discount value is required.";
+    if (values.discountPercentage === "") {
+      nextErrors.discountPercentage = "Discount percentage is required.";
     } else if (Number.isNaN(discount) || discount <= 0) {
-      nextErrors.discountValue = "Discount value must be greater than 0.";
-    } else if (values.discountType === "percent" && discount > 100) {
-      nextErrors.discountValue = "Percent discount cannot be more than 100.";
+      nextErrors.discountPercentage = "Discount must be greater than 0.";
+    } else if (discount > 100) {
+      nextErrors.discountPercentage = "Discount cannot be more than 100%.";
     }
 
     if (!values.expireDate) {
       nextErrors.expireDate = "Expire date is required.";
     }
 
-    if (minOrder != null && (Number.isNaN(minOrder) || minOrder < 0)) {
-      nextErrors.minOrder = "Min order must be 0 or greater.";
+    if (values.maxApplicablePrice === "") {
+      nextErrors.maxApplicablePrice = "Max applicable price is required.";
+    } else if (maxPrice != null && (Number.isNaN(maxPrice) || maxPrice < 0)) {
+      nextErrors.maxApplicablePrice =
+        "Max applicable price must be 0 or greater.";
     }
 
     return nextErrors;
   }
 
   function buildPayload(values) {
+    const expiresAt = formatExpiresAtForApi(values.expireDate);
     return {
       data: {
         attributes: {
-          userEmail: values.userEmail.trim(),
-          couponCode: values.couponCode.trim().toUpperCase(),
-          discountValue: Number(values.discountValue),
-          discountType: values.discountType,
-          expireDate: values.expireDate,
-          minOrder: values.minOrder === "" ? null : Number(values.minOrder),
+          code: values.couponCode.trim().toUpperCase(),
+          discountPercentage: Number(values.discountPercentage),
+          expiresAt,
+          maxApplicablePrice: Number(values.maxApplicablePrice),
+        },
+        relationships: {
+          user: {
+            data: {
+              id: Number(values.userId),
+            },
+          },
         },
       },
     };
@@ -115,14 +217,21 @@ function Coupon() {
     if (Object.keys(nextErrors).length > 0) return;
 
     setSubmitting(true);
+    setSubmitError("");
     try {
       const payload = buildPayload(form);
-      // TODO: Replace with API call later (e.g., await createCoupon(payload))
-      console.log("Coupon payload ready for API:", payload);
+      await createCoupone(payload);
       setOpen(false);
       resetForm();
+      revalidator.revalidate();
     } catch (error) {
-      console.error("Failed to prepare coupon:", error);
+      const msg =
+        error?.response?.data?.errors?.[0]?.message ??
+        error?.response?.data?.message ??
+        error?.message ??
+        "Could not create coupon.";
+      setSubmitError(String(msg));
+      console.error("Failed to create coupon:", error);
     } finally {
       setSubmitting(false);
     }
@@ -132,7 +241,7 @@ function Coupon() {
     <div className="flex w-full flex-col gap-10">
       <div className="flex justify-between gap-4">
         <div className="flex flex-col gap-1">
-          <p className="text-2xl font-semibold">Coupon</p>
+          <p className="text-2xl font-semibold">Coupons</p>
           <p className="text-sm text-gray-500">Give users special discounts</p>
         </div>
 
@@ -159,23 +268,57 @@ function Coupon() {
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div className="space-y-1.5 sm:col-span-2">
-                <label
-                  htmlFor="coupon-user-email"
-                  className="text-sm font-medium"
+                <label className="text-sm font-medium">User</label>
+                <Select
+                  value={form.userId || undefined}
+                  onValueChange={(value) => {
+                    setForm((prev) => ({ ...prev, userId: value }));
+                    if (errors.userId) {
+                      setErrors((prev) => ({ ...prev, userId: "" }));
+                    }
+                  }}
+                  disabled={usersLoading || !!usersError}
                 >
-                  User Email
-                </label>
-                <input
-                  id="coupon-user-email"
-                  name="userEmail"
-                  type="email"
-                  value={form.userEmail}
-                  onChange={handleChange}
-                  placeholder="example@email.com"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[rgb(var(--color-primary-main))]"
-                />
-                {errors.userEmail ? (
-                  <p className="text-xs text-red-600">{errors.userEmail}</p>
+                  <SelectTrigger
+                    size="default"
+                    className="h-10 w-full max-w-none rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-none focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
+                  >
+                    <SelectValue
+                      placeholder={
+                        usersLoading
+                          ? "Loading users…"
+                          : usersError
+                            ? "Failed to load users"
+                            : "Select a user"
+                      }
+                    />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Users</SelectLabel>
+                      {users.map((u) => {
+                        const a = u.attributes ?? {};
+                        const label = [a.firstName, a.lastName]
+                          .filter(Boolean)
+                          .join(" ")
+                          .trim();
+                        const email = a.email ?? "";
+                        return (
+                          <SelectItem key={u.id} value={String(u.id)}>
+                            {label
+                              ? `${label} (${email})`
+                              : email || `User #${u.id}`}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {usersError ? (
+                  <p className="text-xs text-red-600">{usersError}</p>
+                ) : null}
+                {errors.userId ? (
+                  <p className="text-xs text-red-600">{errors.userId}</p>
                 ) : null}
               </div>
 
@@ -190,7 +333,7 @@ function Coupon() {
                   value={form.couponCode}
                   onChange={handleChange}
                   placeholder="SAVE20"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm uppercase outline-none focus:ring-2 focus:ring-[rgb(var(--color-primary-main))]"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm uppercase outline-none focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
                 />
                 {errors.couponCode ? (
                   <p className="text-xs text-red-600">{errors.couponCode}</p>
@@ -198,31 +341,28 @@ function Coupon() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium">Discount</label>
-                <div className="flex gap-2">
-                  <input
-                    name="discountValue"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={form.discountValue}
-                    onChange={handleChange}
-                    placeholder="20"
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[rgb(var(--color-primary-main))]"
-                  />
-
-                  <select
-                    name="discountType"
-                    value={form.discountType}
-                    onChange={handleChange}
-                    className="rounded-md border border-gray-300 px-2 text-sm outline-none focus:ring-2 focus:ring-[rgb(var(--color-primary-main))]"
-                  >
-                    <option value="percent">%</option>
-                    <option value="fixed">$</option>
-                  </select>
-                </div>
-                {errors.discountValue ? (
-                  <p className="text-xs text-red-600">{errors.discountValue}</p>
+                <label
+                  htmlFor="coupon-discount"
+                  className="text-sm font-medium"
+                >
+                  Discount Percentage (%)
+                </label>
+                <input
+                  id="coupon-discount"
+                  name="discountPercentage"
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={form.discountPercentage}
+                  onChange={handleChange}
+                  placeholder="20"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
+                />
+                {errors.discountPercentage ? (
+                  <p className="text-xs text-red-600">
+                    {errors.discountPercentage}
+                  </p>
                 ) : null}
               </div>
 
@@ -239,7 +379,7 @@ function Coupon() {
                   type="date"
                   value={form.expireDate}
                   onChange={handleChange}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[rgb(var(--color-primary-main))]"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
                 />
                 {errors.expireDate ? (
                   <p className="text-xs text-red-600">{errors.expireDate}</p>
@@ -248,27 +388,36 @@ function Coupon() {
 
               <div className="space-y-1.5">
                 <label
-                  htmlFor="coupon-min-order"
+                  htmlFor="coupon-max-price"
                   className="text-sm font-medium"
                 >
-                  Min Order (optional)
+                  Max Applicable Price
                 </label>
                 <input
-                  id="coupon-min-order"
-                  name="minOrder"
+                  id="coupon-max-price"
+                  name="maxApplicablePrice"
                   type="number"
                   min="0"
                   step="0.01"
-                  value={form.minOrder}
+                  value={form.maxApplicablePrice}
                   onChange={handleChange}
-                  placeholder="100"
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-[rgb(var(--color-primary-main))]"
+                  placeholder="1000"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-[rgb(var(--color-primary-main))]"
                 />
-                {errors.minOrder ? (
-                  <p className="text-xs text-red-600">{errors.minOrder}</p>
+                <p className="text-xs text-gray-500">
+                  Maximum order total to use this coupon
+                </p>
+                {errors.maxApplicablePrice ? (
+                  <p className="text-xs text-red-600">
+                    {errors.maxApplicablePrice}
+                  </p>
                 ) : null}
               </div>
             </div>
+
+            {submitError ? (
+              <p className="text-sm text-red-600">{submitError}</p>
+            ) : null}
 
             <AlertDialogFooter>
               <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
@@ -279,7 +428,7 @@ function Coupon() {
                 onClick={() => void handleSubmit()}
                 className="min-w-28 rounded-2xl bg-black px-5 py-1 text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {submitting ? "Preparing..." : "Give Coupon"}
+                {submitting ? "Saving..." : "Give Coupon"}
               </button>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -287,8 +436,66 @@ function Coupon() {
       </div>
 
       <div className="w-full">
-        <GivenCouponsTable />
+        <GivenCouponsTable coupons={coupons} />
       </div>
+
+      {lastPage > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage <= 1) return;
+                  const next = new URLSearchParams(searchParams);
+                  next.set("page", String(currentPage - 1));
+                  setSearchParams(next);
+                }}
+              />
+            </PaginationItem>
+            {pages.map((page, index) => {
+              const prev = pages[index - 1];
+              const gap = prev != null && page - prev > 1;
+              return (
+                <React.Fragment key={page}>
+                  {gap ? (
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  ) : null}
+                  <PaginationItem>
+                    <PaginationLink
+                      href="#"
+                      isActive={page === currentPage}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const next = new URLSearchParams(searchParams);
+                        next.set("page", String(page));
+                        setSearchParams(next);
+                      }}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                </React.Fragment>
+              );
+            })}
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage >= lastPage) return;
+                  const next = new URLSearchParams(searchParams);
+                  next.set("page", String(currentPage + 1));
+                  setSearchParams(next);
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }

@@ -17,8 +17,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { updateProduct } from "./api/updateProduct";
+import { tableRowDisplayNumber } from "../utils/tableMeta";
 
-export function TableDemo({ products = [], onUpdateSuccess }) {
+export function TableDemo({ products = [], meta, onUpdateSuccess }) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [discountValue, setDiscountValue] = useState("");
@@ -96,7 +97,9 @@ export function TableDemo({ products = [], onUpdateSuccess }) {
             products.map((product, index) => (
               <React.Fragment key={product.id || index}>
                 <TableRow>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    {tableRowDisplayNumber(meta, index)}
+                  </TableCell>
                   <TableCell>
                     <div className="h-16 w-16">
                       {product.included?.images?.[0]?.attributes?.image ? (

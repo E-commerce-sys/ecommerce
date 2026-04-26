@@ -193,7 +193,15 @@
 
     "payment": "Payment: Cash on delivery",
     "apply": "Apply Coupon",
-    "coupon": "Coupon Code"
+    "coupon": "Coupon Code",
+    "couponRequired": "Please enter a coupon code.",
+    "couponApplyFailed": "Could not apply this coupon.",
+    "couponNewTotal": "New order total: {{total}}",
+    "couponConfirmTitle": "Use this coupon?",
+    "couponConfirmBody": "This coupon can only be used once. This action cannot be undone. Do you want to continue?",
+    "couponConfirmCancel": "Cancel",
+    "couponConfirmApply": "Yes, apply coupon",
+    "couponApplying": "Applying…"
   },
   "wishlist": {
     "wishlist": "Wishlist",
@@ -222,7 +230,68 @@
     "state": "State",
     "country": "Country",
     "zipCode": "Zip Code",
-    "delete": "Delete"
+    "delete": "Delete",
+    "addressLabel": "Address #{{id}}"
+  },
+  "accountFeature": {
+    "layout": {
+      "welcome": "Welcome!",
+      "manageAccount": "Manage My Account",
+      "myProfile": "My Profile",
+      "addressBook": "Address Book",
+      "myOrders": "My Orders",
+      "inProgress": "In Progress",
+      "arrived": "Arrived",
+      "cancelled": "Cancelled",
+      "navAriaLabel": "Account"
+    },
+    "profile": {
+      "loading": "Loading…",
+      "userNotFound": "User not found",
+      "passwordAllFields": "Please fill in all password fields",
+      "passwordMismatch": "New passwords do not match"
+    },
+    "orders": {
+      "loading": "Loading…",
+      "progressTitle": "Your progress",
+      "progressHint": "You can only cancel an order while it is pending or preparing",
+      "loadError": "We could not load your orders.",
+      "cancelError": "We could not cancel this order.",
+      "emptyProgress": "No active orders.",
+      "orderDate": "Order date: {{date}}",
+      "itemsCount": "Items: {{count}}",
+      "totalPayment": "Total payment: {{amount}} $",
+      "tapExpand": "Tap to view line items",
+      "tapCollapse": "Tap to hide line items",
+      "cancel": "Cancel",
+      "cancelModalTitle": "Cancel order",
+      "cancelModalBody": "Are you sure you want to cancel this order?",
+      "cancelOrderConfirm": "Cancel order",
+      "cancelOrderLoading": "Cancelling…",
+      "goBack": "Go back",
+      "arrivedTitle": "Arrived orders",
+      "arrivedEmpty": "No arrived orders yet.",
+      "arrivedLoadError": "We could not load your arrived orders.",
+      "cancelledTitle": "Cancelled orders",
+      "cancelledEmpty": "No cancelled orders yet.",
+      "cancelledLoadError": "We could not load your cancelled orders."
+    },
+    "orderTable": {
+      "product": "Product",
+      "price": "Price",
+      "color": "Color",
+      "size": "Size",
+      "quantity": "Quantity",
+      "subtotal": "Subtotal",
+      "quantityLabel": "Quantity: {{qty}}"
+    },
+    "orderStatus": {
+      "pending": "Pending",
+      "preparing": "Preparing",
+      "shipping": "Shipping",
+      "delivering": "Delivering",
+      "arrived": "Arrived"
+    }
   },
   "errors": {
     "generic": {

@@ -12,6 +12,7 @@ import {
   mapCartTotalsFromResponse,
   formatMoneyTwoDecimals,
 } from "../features/basket/api/getCartItems";
+import { applyCoupone } from "../features/basket/api/applyCoupone";
 import { updateCart } from "../features/basket/api/updateCart";
 import { removeCart } from "../features/basket/api/removeCart";
 
@@ -168,6 +169,32 @@ export function CartProvider({ children }) {
     setCartTotals({ subtotal: 0, shippingCost: 0, totalPrice: 0 });
   }, []);
 
+  const applyCouponCode = useCallback(async (code) => {
+    const trimmed = String(code ?? "").trim();
+    if (!trimmed) {
+      return { ok: false, message: "", totalFormatted: "" };
+    }
+    try {
+      const apiBody = await applyCoupone({ code: trimmed });
+      const mappedTotals = mapCartTotalsFromResponse(apiBody);
+      setCartTotals(mappedTotals);
+      const full = await getCartItems();
+      applyCartFromGetResponse(setCartItems, setCartTotals, full);
+      return {
+        ok: true,
+        message: apiBody?.message ?? "",
+        totalFormatted: formatMoneyTwoDecimals(mappedTotals.totalPrice),
+      };
+    } catch (err) {
+      const msg =
+        err?.response?.data?.errors?.[0]?.message ??
+        err?.response?.data?.message ??
+        err?.message ??
+        "";
+      return { ok: false, message: String(msg), totalFormatted: "" };
+    }
+  }, []);
+
   const value = useMemo(
     () => ({
       cartItems,
@@ -182,6 +209,7 @@ export function CartProvider({ children }) {
       clearCartLocally,
       flushPendingCartSync,
       persistCartItemQuantity,
+      applyCouponCode,
     }),
     [
       cartItems,
@@ -196,6 +224,7 @@ export function CartProvider({ children }) {
       clearCartLocally,
       flushPendingCartSync,
       persistCartItemQuantity,
+      applyCouponCode,
     ],
   );
 

@@ -145,7 +145,11 @@ function Discount() {
           </Select>
         </div>
         <div className="w-full">
-          <TableDemo products={products} onUpdateSuccess={handleUpdateSuccess} />
+          <TableDemo
+            products={products}
+            meta={meta}
+            onUpdateSuccess={handleUpdateSuccess}
+          />
         </div>
       </div>
 
