@@ -5,23 +5,22 @@ export async function getAddressAPI() {
     return res.data.data;
 }
 
-export async function createAddressAPI(addressName="",city,ZIPcode=0,streetName,country="",state="",houseNumber="") {
-    const res = await axiosInstance.post("/api/address",{
-        data:{
-            attributes:{
-                addressName:addressName,
-                city:city,
-                streetName:streetName,
-                country:country,
-                state:state,
-                houseNumber:houseNumber,
-                zipCode:ZIPcode
-            }
-        }
-    } );
-    return res.data;
-}
+export async function createAddressAPI(data) {
+  const attributes = {};
 
+  if (data.city) attributes.city = data.city;
+  if (data.street_name) attributes.streetName = data.street_name;
+  if (data.address_name) attributes.addressName = data.address_name;
+  if (data.country) attributes.country = data.country;
+  if (data.state) attributes.state = data.state;
+  if (data.house_number) attributes.houseNumber = data.house_number;
+  if (data.zip_code) attributes.zipCode = data.zip_code;
+
+  const res = await axiosInstance.post("/api/address", {
+    data: { attributes }
+  });
+  return res.data;
+}
 export async function deleteAddressAPI(addressId) {
     const res = await axiosInstance.delete(`/api/user-addresses/${addressId}`);
     return res.data;
