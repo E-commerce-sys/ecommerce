@@ -16,18 +16,26 @@ const PLACEHOLDER = "";
 /** Set as `orderError` when Place Order runs without a valid saved or manual address. */
 export const ORDER_ERROR_ADDRESS_REQUIRED = "__checkout_address_required__";
 
+/** Label from stored name, else `city | street` (same pattern as saved checkout addresses). */
+function labelFromAddressAttributes(attr) {
+  const name = attr?.addressName;
+  if (name != null && String(name).trim() !== "") {
+    return String(name).trim();
+  }
+  const city = attr?.city != null ? String(attr.city).trim() : "";
+  const street = attr?.streetName != null ? String(attr.streetName).trim() : "";
+  const fromFields = [city, street].filter(Boolean).join(" | ");
+  if (fromFields) return fromFields;
+  return "Address";
+}
+
 /** `address` from AddressContext is `GET /api/user-addresses` → `res.data.data` (array of JSON:API-style rows). */
 function normalizeSavedAddresses(addressList) {
   if (!Array.isArray(addressList)) return [];
   return addressList.map((item) => {
     const id = item?.id;
     const attr = item?.attributes ?? {};
-    const line1 = [attr.addressName]
-      .filter((x) => x != null && String(x).trim() !== "")
-      .join(" ");
-    const label =
-      [line1].filter(Boolean).join(" — ") ||
-      (id != null ? `Address #${id}` : "Address");
+    const label = labelFromAddressAttributes(attr);
     return { id: String(id), label };
   });
 }
@@ -83,6 +91,11 @@ function buildIncludedAddressBody(formData) {
     city,
     streetName,
   };
+  /** Persisted when “save address” is checked — matches dropdown label format. */
+  const displayName = [city, streetName].filter(Boolean).join(" | ");
+  if (displayName) {
+    attributes.addressName = displayName;
+  }
   if (houseNumber !== "") {
     attributes.houseNumber = houseNumber;
   }
