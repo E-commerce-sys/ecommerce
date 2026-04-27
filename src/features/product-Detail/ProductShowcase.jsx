@@ -132,7 +132,12 @@ function ProductShowcase() {
   if (loading) return <div>Loading...</div>;
   if (!product) return <div>Product not found</div>;
 
-  const image = product.attributes.primaryImage;
+  const image = product.included.images;
+  const images = [...image]
+  .sort((a, b) => (b.attributes.isPrimary ? 1 : 0) - (a.attributes.isPrimary ? 1 : 0))
+  .map(img => img.attributes.image);
+
+const sideImages = images.length > 1 ? [images[0], ...images.slice(1)] : [];
   const name =
     i18n.language === "ar"
       ? product.attributes.nameAr
@@ -238,9 +243,8 @@ function ProductShowcase() {
 
   return (
     <>
-      <div className="md:my-25 lg:my-37.5 px-4 md:px-8 lg:mx-18.75 lg:w-9/10">
-        {/* Breadcrumb */}
-        <div className="mb-8 md:mb-25">
+    {/* Breadcrumb */}
+        <div className="mb-8 md:mb-25 md:my-25 lg:my-37.5 px-4 md:px-8 lg:mx-18.75">
           <Link to={from} className="text-[rgb(var(--color-text-main-2))]">
             {from === "/"
               ? "Home"
@@ -251,33 +255,31 @@ function ProductShowcase() {
           </Link>
           <span>{name}</span>
         </div>
+      <div className="flex flex-col items-center md:my-25 lg:my-37.5 px-4 md:px-8 lg:mx-18.75 lg:w-9/10">
+        
 
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex flex-col-reverse lg:flex-row gap-8">
-            <div className="flex flex-row flex-wrap gap-4 lg:flex-col lg:flex-nowrap">
-              <img
-                src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
-              />
-              <img
-                src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
-              />
-              <img
-                src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
-              />
-              <img
-                src={image}
-                className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
-              />
-            </div>
-            <div className="w-full lg:w-auto">
-              <img
-                src={image}
-                className="w-full lg:w-125 h-75 md:h-112.5 lg:h-150 bg-[rgb(var(--color-grey))] px-6.75 py-10 lg:py-38.5 object-contain"
-              />
-            </div>{" "}
+           <div className="flex flex-col-reverse lg:flex-row gap-8">
+  {sideImages.length > 0 && (
+    <div className="flex flex-row flex-wrap gap-4 lg:flex-col lg:flex-nowrap">
+      {sideImages.map((img, index) => (
+        <img
+          key={index}
+          src={img}
+          className="aspect-square w-[calc(50%-0.5rem)] md:w-41 md:h-30 lg:w-42.5 lg:h-33.75 bg-[rgb(var(--color-grey))] px-6 py-3 object-contain"
+        />
+      ))}
+    </div>
+  )}
+
+  <div className="w-full lg:w-auto">
+    <img
+      src={images[0]}
+      className="w-full lg:w-125 h-75 md:h-112.5 lg:h-150 bg-[rgb(var(--color-grey))] px-6.75 py-10 lg:py-38.5 object-contain"
+    />
+  </div>
+</div>
           </div>
 
           {/* Product Info */}
