@@ -150,11 +150,11 @@ function VerifyOTPModal({ email, closePath = "/", onClose }) {
   }
 
   async function handleResend() {
-    if (!canResend || !hasUserId) return;
+    if (!canResend || !hasEmail) return;
 
     try {
       setError("");
-      await resendOTP({ userId: numericUserId, email });
+      await resendOTP({ email: emailTrimmed });
       setTimer(60);
       setCanResend(false);
     } catch (err) {
