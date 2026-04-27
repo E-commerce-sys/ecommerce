@@ -19,14 +19,15 @@ function parseLoginApiError(error) {
     (typeof data?.message === "string" && data.message) ||
     errorsField?.message ||
     "Invalid email or password";
-  let userId = null;
   let status = null;
+  /** e.g. "emailVerification" — show “Send code” when login is blocked for OTP */
+  let source = null;
 
   if (Array.isArray(errorsField) && errorsField[0]) {
     const first = errorsField[0];
     if (first?.message) message = String(first.message);
     status = first?.status ?? null;
-    userId = first?.userId ?? first?.user_id ?? null;
+    source = first?.source ?? null;
   } else if (
     errorsField &&
     typeof errorsField === "object" &&
@@ -34,15 +35,14 @@ function parseLoginApiError(error) {
   ) {
     if (errorsField.message) message = String(errorsField.message);
     status = errorsField.status ?? null;
-    userId = errorsField.userId ?? errorsField.user_id ?? null;
+    source = errorsField.source ?? null;
   }
 
   const nStatus = status != null ? Number(status) : NaN;
-  const nUserId = userId != null ? Number(userId) : NaN;
 
   return {
     message,
-    userId: Number.isFinite(nUserId) ? nUserId : null,
+    source: source != null ? String(source) : null,
     status: Number.isFinite(nStatus) ? nStatus : null,
   };
 }
@@ -54,7 +54,6 @@ function LoginForm() {
 
   const from = location.state?.from?.pathname || "/";
 
-  const [userId, setUserId] = useState(null);
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -63,7 +62,7 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const { login } = useAuth();
   const [resendLoading, setResendLoading] = useState(false);
-  const [authErrorStatus, setAuthErrorStatus] = useState(null);
+  const [authErrorSource, setAuthErrorSource] = useState(null);
   const isFormValid =
     email.trim() !== "" &&
     password.trim() !== "" &&
@@ -83,8 +82,7 @@ function LoginForm() {
 
     setErrors({});
     setFormError("");
-    setAuthErrorStatus(null);
-    setUserId(null);
+    setAuthErrorSource(null);
 
     try {
       setLoading(true);
@@ -104,10 +102,7 @@ function LoginForm() {
 
       const parsed = parseLoginApiError(error);
       setFormError(parsed.message);
-      setAuthErrorStatus(parsed.status);
-      if (parsed.status === 403 && parsed.userId != null) {
-        setUserId(parsed.userId);
-      }
+      setAuthErrorSource(parsed.source);
     } finally {
       setLoading(false);
     }
@@ -121,7 +116,7 @@ function LoginForm() {
       setFormError("");
       await resendOTP({ email: email.trim() });
       setOpenAuthModal(true);
-      setAuthErrorStatus(null);
+      setAuthErrorSource(null);
     } catch (err) {
       const data = err?.response?.data;
       const raw = data?.errors;
@@ -144,7 +139,7 @@ function LoginForm() {
   }
 
   const showSendCode =
-    authErrorStatus === 403 && userId != null && !openAuthModal;
+    authErrorSource === "emailVerification" && !openAuthModal;
 
   return (
     <div className="mt-17 flex lg:items-center justify-center lg:justify-normal gap-32.5">
@@ -170,8 +165,7 @@ function LoginForm() {
                 setEmail(e.target.value);
                 setErrors((prev) => ({ ...prev, email: undefined }));
                 setFormError("");
-                setAuthErrorStatus(null);
-                setUserId(null);
+                setAuthErrorSource(null);
               }}
             />
 
@@ -190,8 +184,7 @@ function LoginForm() {
                 setPassword(e.target.value);
                 setErrors((prev) => ({ ...prev, password: undefined }));
                 setFormError("");
-                setAuthErrorStatus(null);
-                setUserId(null);
+                setAuthErrorSource(null);
               }}
             />
 
