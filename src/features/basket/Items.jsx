@@ -8,6 +8,15 @@ import arrow from "../../assets/icons/arrow-left.svg";
 import { useCart } from "../../context/CartContext";
 import { useCheckoutAddress } from "../../context/CheckoutAddressContext";
 
+/** Per line item max (matches backend / product detail). */
+const MAX_CART_LINE_QTY = 100;
+
+function clampLineQuantity(n) {
+  const q = Number(n);
+  if (!Number.isFinite(q)) return 1;
+  return Math.min(MAX_CART_LINE_QTY, Math.max(1, Math.floor(q)));
+}
+
 function displayQuantityForLine(lineQty, item) {
   const raw = lineQty[item.id];
   if (raw === undefined) return String(item.quantity);
@@ -16,10 +25,10 @@ function displayQuantityForLine(lineQty, item) {
 
 function numericQtyForSubtotal(lineQty, item) {
   const raw = lineQty[item.id] ?? String(item.quantity);
-  if (raw === "") return Number(item.quantity) || 1;
+  if (raw === "") return clampLineQuantity(Number(item.quantity) || 1);
   const n = Number(raw);
-  if (isNaN(n) || n < 1) return Number(item.quantity) || 1;
-  return n;
+  if (isNaN(n) || n < 1) return clampLineQuantity(Number(item.quantity) || 1);
+  return clampLineQuantity(n);
 }
 
 function Items() {
@@ -41,7 +50,7 @@ function Items() {
       const next = { ...prev };
       for (const it of cartItems) {
         if (next[it.id] === undefined) {
-          next[it.id] = String(it.quantity);
+          next[it.id] = String(clampLineQuantity(it.quantity));
         }
       }
       for (const k of Object.keys(next)) {
@@ -60,6 +69,7 @@ function Items() {
       q = 1;
       setLineQty((l) => ({ ...l, [item.id]: "1" }));
     } else {
+      q = clampLineQuantity(q);
       setLineQty((l) => ({ ...l, [item.id]: String(q) }));
     }
     updateQuantity(item.id, q);
@@ -157,7 +167,8 @@ function Items() {
                   <td className="py-6 px-3 md:px-6 md:py-8.5">
                     <input
                       type="number"
-                      min="1"
+                      min={1}
+                      max={MAX_CART_LINE_QTY}
                       value={displayQuantityForLine(lineQty, item)}
                       onChange={(e) => {
                         clearOutOfStockHighlight();
@@ -256,7 +267,8 @@ function Items() {
                 <p className="w-[20%]">{t("cart.quantity")}</p>
                 <input
                   type="number"
-                  min="1"
+                  min={1}
+                  max={MAX_CART_LINE_QTY}
                   value={displayQuantityForLine(lineQty, item)}
                   onChange={(e) => {
                     clearOutOfStockHighlight();
