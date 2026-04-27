@@ -2,13 +2,15 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { createOrder } from "../features/basket/api/createOrder";
+import { getAddressAPI } from "../features/account/API/addressAPI";
 import { useCart } from "./CartContext";
-import { useAddress } from "./AddressContext";
+import { useAuth } from "./AuthContext";
 const CheckoutAddressContext = createContext(null);
 
 const PLACEHOLDER = "";
@@ -16,26 +18,17 @@ const PLACEHOLDER = "";
 /** Set as `orderError` when Place Order runs without a valid saved or manual address. */
 export const ORDER_ERROR_ADDRESS_REQUIRED = "__checkout_address_required__";
 
-/** Label from stored name, else `city | street` (same pattern as saved checkout addresses). */
-function labelFromAddressAttributes(attr) {
-  const name = attr?.addressName;
-  if (name != null && String(name).trim() !== "") {
-    return String(name).trim();
-  }
-  const city = attr?.city != null ? String(attr.city).trim() : "";
-  const street = attr?.streetName != null ? String(attr.streetName).trim() : "";
-  const fromFields = [city, street].filter(Boolean).join(" | ");
-  if (fromFields) return fromFields;
-  return "Address";
-}
-
-/** `address` from AddressContext is `GET /api/user-addresses` → `res.data.data` (array of JSON:API-style rows). */
-function normalizeSavedAddresses(addressList) {
+/** Dropdown label = `addressName` only (GET `/api/user-addresses`). */
+function mapCheckoutSavedOptions(addressList) {
   if (!Array.isArray(addressList)) return [];
   return addressList.map((item) => {
     const id = item?.id;
     const attr = item?.attributes ?? {};
-    const label = labelFromAddressAttributes(attr);
+    const raw = attr?.addressName;
+    const label =
+      raw != null && String(raw).trim() !== ""
+        ? String(raw).trim()
+        : "—";
     return { id: String(id), label };
   });
 }
@@ -133,14 +126,40 @@ function isSavedAddressSelection(selectedOption, savedAddresses) {
 }
 
 export function CheckoutAddressProvider({ children }) {
-  const { address, loading: addressLoading } = useAddress();
+  const { loggedIn } = useAuth();
   const navigate = useNavigate();
   const { fetchCart, clearCartLocally } = useCart();
 
-  const savedAddresses = useMemo(
-    () => normalizeSavedAddresses(address),
-    [address],
-  );
+  const [savedAddresses, setSavedAddresses] = useState([]);
+  const [addressLoading, setAddressLoading] = useState(false);
+
+  useEffect(() => {
+    if (!loggedIn) {
+      setSavedAddresses([]);
+      setAddressLoading(false);
+      return;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      setAddressLoading(true);
+      try {
+        const data = await getAddressAPI();
+        if (!cancelled) {
+          setSavedAddresses(mapCheckoutSavedOptions(data ?? []));
+        }
+      } catch {
+        if (!cancelled) setSavedAddresses([]);
+      } finally {
+        if (!cancelled) setAddressLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loggedIn]);
 
   const [selectedOption, setSelectedOption] = useState(PLACEHOLDER);
   const [formData, setFormData] = useState({

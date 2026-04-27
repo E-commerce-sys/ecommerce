@@ -210,8 +210,12 @@ export default function TableDemo({ categories }) {
                   <TableRow key={child.id} className="bg-gray-50">
                     <TableCell>{""}</TableCell>
 
-                    <TableCell className="pl-8 flex gap-3">
-                      ↳ <span>{child.attributes.nameEn}</span>
+                    <TableCell className="pl-8 flex gap-3 items-center">
+                      ↳{" "}
+                      <div className="w-10 h-10">
+                        <img src={child.attributes.icon} alt="" />
+                      </div>
+                      <span>{child.attributes.nameEn}</span>
                       <span> {child.attributes.nameKu}</span>
                       <span> {child.attributes.nameAr}</span>
                     </TableCell>
