@@ -182,29 +182,30 @@ function Products() {
     }
 
     setFormData({
-      attributes: {
-        ...emptyProduct.attributes,
-        ...fullProduct.attributes,
-        price: fullProduct.attributes.originalPrice,
-      },
-      images: existingFiles.length ? existingFiles : [null],
-      existingImages: [],
-      included: {
-        variants: fullProduct.included?.variants?.length
-          ? fullProduct.included.variants.map((v) => ({
-              color: v.included?.color?.attributes?.hexCode || "",
-              colorName: v.included?.color?.attributes?.name || "",
-              size: v.included?.size?.attributes?.sizeLabel || "",
-              stock: v.attributes?.stock || "",
-              extraPrice: v.included?.size?.attributes?.extraPrice || "",
-            }))
-          : [],
-      },
-      tags: Object.keys(TAGS).filter((key) => !!fullProduct.attributes?.[key]),
-      categoryId,
-      subcategoryId,
-    });
-
+  attributes: {
+    ...emptyProduct.attributes,
+    ...fullProduct.attributes,
+    price: fullProduct.attributes.originalPrice,
+    hasColor: !!fullProduct.attributes.hasColor, // ← force boolean
+    hasSize: !!fullProduct.attributes.hasSize,   // ← force boolean
+  },
+  images: existingFiles.length ? existingFiles : [null],
+  existingImages: [],
+  included: {
+    variants: fullProduct.included?.variants?.length
+      ? fullProduct.included.variants.map((v) => ({
+          color: v.included?.color?.attributes?.hexCode || "",
+          colorName: v.included?.color?.attributes?.name || "",
+          size: v.included?.size?.attributes?.sizeLabel || "",
+          stock: v.attributes?.stock || "",
+          extraPrice: v.included?.size?.attributes?.extraPrice || "",
+        }))
+      : [],
+  },
+  tags: Object.keys(TAGS).filter((key) => !!fullProduct.attributes?.[key]),
+  categoryId,
+  subcategoryId,
+});
     setIsEditMode(true);
     setIsModalOpen(true);
   };
