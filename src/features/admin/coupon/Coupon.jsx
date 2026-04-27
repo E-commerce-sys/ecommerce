@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useLoaderData,
   useRevalidator,
@@ -30,15 +30,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { AdminPagination } from "../utils/AdminPagination.jsx";
 
 const emptyForm = () => ({
   userId: "",
@@ -61,14 +53,6 @@ function formatExpiresAtForApi(htmlDateValue) {
   }).format(date);
 }
 
-function buildPageNumbers(current, last) {
-  if (!last || last < 1) return [];
-  if (last <= 5) return Array.from({ length: last }, (_, i) => i + 1);
-
-  const set = new Set([1, last, current - 1, current, current + 1]);
-  return [...set].filter((n) => n >= 1 && n <= last).sort((a, b) => a - b);
-}
-
 function Coupon() {
   const loaderData = useLoaderData();
   const revalidator = useRevalidator();
@@ -86,7 +70,7 @@ function Coupon() {
   const meta = loaderData?.meta ?? {};
   const currentPage = Number(meta.current_page ?? 1);
   const lastPage = Number(meta.last_page ?? 1);
-  const pages = buildPageNumbers(currentPage, lastPage);
+  const hasItems = coupons.length > 0;
 
   function resetForm() {
     setForm(emptyForm());
@@ -439,63 +423,14 @@ function Coupon() {
         <GivenCouponsTable coupons={coupons} />
       </div>
 
-      {lastPage > 1 && (
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage <= 1) return;
-                  const next = new URLSearchParams(searchParams);
-                  next.set("page", String(currentPage - 1));
-                  setSearchParams(next);
-                }}
-              />
-            </PaginationItem>
-            {pages.map((page, index) => {
-              const prev = pages[index - 1];
-              const gap = prev != null && page - prev > 1;
-              return (
-                <React.Fragment key={page}>
-                  {gap ? (
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                  ) : null}
-                  <PaginationItem>
-                    <PaginationLink
-                      href="#"
-                      isActive={page === currentPage}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const next = new URLSearchParams(searchParams);
-                        next.set("page", String(page));
-                        setSearchParams(next);
-                      }}
-                    >
-                      {page}
-                    </PaginationLink>
-                  </PaginationItem>
-                </React.Fragment>
-              );
-            })}
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage >= lastPage) return;
-                  const next = new URLSearchParams(searchParams);
-                  next.set("page", String(currentPage + 1));
-                  setSearchParams(next);
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
+      {hasItems ? (
+        <AdminPagination
+          currentPage={currentPage}
+          lastPage={lastPage}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
+      ) : null}
     </div>
   );
 }

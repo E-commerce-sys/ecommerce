@@ -24,7 +24,6 @@ function RegisterForm() {
     confirmPassword: "",
   });
 
-  const [userId, setUserId] = useState(null);
   const [errors, setErrors] = useState({});
   const [registerError, setRegisterError] = useState("");
 
@@ -87,9 +86,8 @@ function RegisterForm() {
         form.password,
         form.confirmPassword,
       );
-      const id = res.data.user.id;
-      if (id != null) {
-        setUserId(id);
+      const user = res.data?.user;
+      if (user != null && form.email.trim()) {
         setOpenAuthModal(true);
       } else {
         setRegisterError(t("register.missing_user_id"));
@@ -259,7 +257,6 @@ function RegisterForm() {
       </div>
       {openAuthModal && (
         <VerifyOTPModal
-          userId={userId}
           email={form.email}
           closePath="/register"
           onClose={() => setOpenAuthModal(false)}

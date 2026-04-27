@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   useLoaderData,
   useSearchParams,
@@ -9,15 +9,7 @@ import Button from "@/components/Button";
 import TableDemo from "./TableDemo";
 import { updateOrdersState } from "./api/updateOrdersState";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import { AdminPagination } from "../utils/AdminPagination.jsx";
 
 import {
   Select,
@@ -62,7 +54,7 @@ function Order() {
   const meta = loaderData?.meta ?? {};
   const currentPage = Number(meta.current_page ?? 1);
   const lastPage = Number(meta.last_page ?? 1);
-  const pages = buildPageNumbers(currentPage, lastPage);
+  const hasItems = orders.length > 0;
 
   function setSection(value) {
     const next = new URLSearchParams();
@@ -231,61 +223,14 @@ function Order() {
         </div>
       </div>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (currentPage <= 1) return;
-                const next = new URLSearchParams(searchParams);
-                next.set("page", String(currentPage - 1));
-                setSearchParams(next);
-              }}
-            />
-          </PaginationItem>
-          {pages.map((page, index) => {
-            const prev = pages[index - 1];
-            const gap = prev != null && page - prev > 1;
-            return (
-              <React.Fragment key={page}>
-                {gap ? (
-                  <PaginationItem>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                ) : null}
-                <PaginationItem>
-                  <PaginationLink
-                    href="#"
-                    isActive={page === currentPage}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const next = new URLSearchParams(searchParams);
-                      next.set("page", String(page));
-                      setSearchParams(next);
-                    }}
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              </React.Fragment>
-            );
-          })}
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (currentPage >= lastPage) return;
-                const next = new URLSearchParams(searchParams);
-                next.set("page", String(currentPage + 1));
-                setSearchParams(next);
-              }}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      {hasItems ? (
+        <AdminPagination
+          currentPage={currentPage}
+          lastPage={lastPage}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+        />
+      ) : null}
     </div>
   );
 }

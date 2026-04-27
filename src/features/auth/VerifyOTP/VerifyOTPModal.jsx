@@ -20,7 +20,7 @@ function getBackendErrorMessage(err) {
   return null;
 }
 
-function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
+function VerifyOTPModal({ email, closePath = "/", onClose }) {
   const { login } = useAuth();
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar" || i18n.language === "ku";
@@ -37,8 +37,8 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
 
   const code = otp.join("");
   const isComplete = code.length === 6;
-  const numericUserId = userId != null ? Number(userId) : NaN;
-  const hasUserId = !Number.isNaN(numericUserId);
+  const emailTrimmed = String(email ?? "").trim();
+  const hasEmail = emailTrimmed.length > 0;
 
   function handleClose() {
     onClose?.();
@@ -63,7 +63,7 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
   }, [timer]);
 
   useEffect(() => {
-    if (!isComplete || status !== "idle" || !hasUserId) return;
+    if (!isComplete || status !== "idle" || !hasEmail) return;
     if (lastVerifyCodeRef.current === code) return;
 
     lastVerifyCodeRef.current = code;
@@ -75,7 +75,7 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
         setError("");
 
         const data = await verifyOTP({
-          userId: numericUserId,
+          email: emailTrimmed,
           otp: Number(otpValue),
         });
 
@@ -118,7 +118,7 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
         }, 900);
       }
     })();
-  }, [code, isComplete, status, hasUserId, numericUserId, login, navigate, t]);
+  }, [code, isComplete, status, hasEmail, emailTrimmed, login, navigate, t]);
 
   function handleChange(value, index) {
     if (!/^[0-9]?$/.test(value)) return;
@@ -163,7 +163,7 @@ function VerifyOTPModal({ userId, email, closePath = "/", onClose }) {
     }
   }
 
-  if (!hasUserId) {
+  if (!hasEmail) {
     return null;
   }
 

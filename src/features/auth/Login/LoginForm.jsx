@@ -114,12 +114,12 @@ function LoginForm() {
   }
 
   async function handleSendVerificationCode() {
-    if (userId == null || !email.trim()) return;
+    if (!email.trim()) return;
 
     try {
       setResendLoading(true);
       setFormError("");
-      await resendOTP({ userId, email: email.trim() });
+      await resendOTP({ email: email.trim() });
       setOpenAuthModal(true);
       setAuthErrorStatus(null);
     } catch (err) {
@@ -245,7 +245,6 @@ function LoginForm() {
       </div>
       {openAuthModal && (
         <VerifyOTPModal
-          userId={userId}
           email={email}
           closePath="/login"
           onClose={() => setOpenAuthModal(false)}

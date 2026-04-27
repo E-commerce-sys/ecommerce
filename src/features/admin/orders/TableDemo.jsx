@@ -162,7 +162,17 @@ export function TableDemo({
         </TableHeader>
 
         <TableBody>
-          {rows.map((order, index) => {
+          {rows.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={9}
+                className="text-center text-gray-500 py-8"
+              >
+                No orders found
+              </TableCell>
+            </TableRow>
+          ) : (
+            rows.map((order, index) => {
             const isRowSelected = selectedNextOrders?.includes(order.id);
             return (
               <React.Fragment key={order.id}>
@@ -310,7 +320,8 @@ export function TableDemo({
                 </TableRow>
               </React.Fragment>
             );
-          })}
+          })
+          )}
         </TableBody>
       </Table>
 
