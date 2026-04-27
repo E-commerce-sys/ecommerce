@@ -23,32 +23,36 @@ function AddressPage() {
   const [savedData, setSavedData] = useState([]);
 
   useEffect(() => {
-    if (!address?.length) {
-      setSelectedIndex(-1);
-      setIsEditing(true);
-      return;
-    }
+  fetchAddress(); // fetch fresh data on mount
+}, []);
 
-    const mapped = address
-      .filter((addr) => addr?.attributes)
-      .map((addr) => ({
-        id: addr.id,
-        address_name:
-          addr.attributes.addressName ??
-          t("addressPage.addressLabel", { id: addr.id }),
-        house_number: addr.attributes.houseNumber ?? "",
-        street_name: addr.attributes.streetName ?? "",
-        city: addr.attributes.city ?? "",
-        state: addr.attributes.state ?? "",
-        zip_code: addr.attributes.zipCode ?? "",
-        country: addr.attributes.country ?? "",
-      }));
+useEffect(() => {
+  if (!address?.length) {
+    setSelectedIndex(-1);
+    setIsEditing(true);
+    return;
+  }
 
-    setFormData(mapped);
-    setSavedData(mapped);
-    setSelectedIndex(0);
-    setIsEditing(false);
-  }, [address, t]);
+  const mapped = address
+    .filter((addr) => addr?.attributes)
+    .map((addr) => ({
+      id: addr.id,
+      address_name:
+        addr.attributes.addressName ??
+        t("addressPage.addressLabel", { id: addr.id }),
+      house_number: addr.attributes.houseNumber ?? "",
+      street_name: addr.attributes.streetName ?? "",
+      city: addr.attributes.city ?? "",
+      state: addr.attributes.state ?? "",
+      zip_code: addr.attributes.zipCode ?? "",
+      country: addr.attributes.country ?? "",
+    }));
+
+  setFormData(mapped);
+  setSavedData(mapped);
+  setSelectedIndex(mapped.length - 1); // ← select the newly added address
+  setIsEditing(false);
+}, [address, t]);
 
   function handleChange(e) {
     const { name, value } = e.target;
