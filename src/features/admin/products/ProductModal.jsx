@@ -20,6 +20,7 @@ import {
 } from "../../../components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { addProduct,getsubCategories,editProduct } from "./adminProducts"
+import { Label } from "@/components/ui/label"
 
 function ProductModal({
   isOpen,
@@ -150,15 +151,10 @@ const handleSubmit = async () => {
     });
 
     // derived flags
-    fd.append(
-      "data[attributes][hasColor]",
-      validVariants.some((v) => v.color?.startsWith("#")) ? 1 : 0
-    );
-
-    fd.append(
-      "data[attributes][hasSize]",
-      validVariants.some((v) => v.size?.trim()) ? 1 : 0
-    );
+    fd.append("data[attributes][hasColor]", formData.attributes.hasColor ?1 : 0);
+    fd.append("data[attributes][hasSize]",  formData.attributes.hasSize  ?1 : 0);
+    console.log("hasColor:", formData.attributes.hasColor, typeof formData.attributes.hasColor);
+console.log("hasSize:", formData.attributes.hasSize, typeof formData.attributes.hasSize);
 
     // ── API CALL ──────────────────────────────
     if (isEditMode) {
@@ -481,6 +477,42 @@ const removeVariant = (index) => {
       + Add photo
     </button>
   )}
+</div>
+{/* Has Color / Has Size toggles */}
+<div className="flex items-center gap-6">
+  <Label>Does your product have? </Label>
+  <div className="flex items-center gap-2">
+    <Checkbox
+      id="hasColor"
+      checked={formData.attributes.hasColor ?? false}
+      onCheckedChange={(checked) =>
+        setFormData((prev) => ({
+          ...prev,
+          attributes: { ...prev.attributes, hasColor: checked },
+        }))
+      }
+    />
+    <label htmlFor="hasColor" className="text-sm font-medium cursor-pointer">
+      Has Color
+    </label>
+  </div>
+
+  <div className="flex items-center gap-2">
+    
+    <Checkbox
+      id="hasSize"
+      checked={formData.attributes.hasSize ?? false}
+      onCheckedChange={(checked) =>
+        setFormData((prev) => ({
+          ...prev,
+          attributes: { ...prev.attributes, hasSize: checked },
+        }))
+      }
+    />
+    <label htmlFor="hasSize" className="text-sm font-medium cursor-pointer">
+      Has Size
+    </label>
+  </div>
 </div>
 
        {/* Variants */}
