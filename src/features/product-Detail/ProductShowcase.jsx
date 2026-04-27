@@ -19,7 +19,28 @@ import AuthModal from "../auth/AuthModal";
 import { addToCart } from "../basket/api/addToCart";
 
 
-const MAX_QTY = 500;
+/** Must match backend cart line max quantity per item. */
+const MAX_QTY = 100;
+
+function getAddToCartApiError(error) {
+  const data = error?.response?.data;
+  const errorsField = data?.errors;
+  if (typeof data?.message === "string" && data.message.trim() !== "") {
+    return data.message;
+  }
+  if (Array.isArray(errorsField) && errorsField[0]?.message) {
+    return String(errorsField[0].message);
+  }
+  if (
+    errorsField &&
+    typeof errorsField === "object" &&
+    !Array.isArray(errorsField) &&
+    errorsField.message != null
+  ) {
+    return String(errorsField.message);
+  }
+  return "Failed to add to cart";
+}
 function uniqueColorsFromVariants(variants) {
   const map = new Map();
   for (const v of variants) {
@@ -192,17 +213,17 @@ function ProductShowcase() {
       }
 
       const res = await addToCart(activeVariant.id, quantity);
+      setErrorMessage(null);
       setSuccessMessage(res.message || "Product added to cart successfully!");
     } catch (error) {
       if (error.response?.status === 401) {
+        setSuccessMessage(null);
         setErrorMessage(t("products.sessionExpired"));
         openAuthModal("cart");
         return;
       }
-      const apiError =
-        error.response?.data?.errors?.[0]?.message || "Failed to add to cart";
-
-      setErrorMessage(apiError);
+      setSuccessMessage(null);
+      setErrorMessage(getAddToCartApiError(error));
 
       console.error("Failed to add to cart:", error.response?.data);
     }
@@ -371,12 +392,14 @@ function ProductShowcase() {
 
                     if (isNaN(val)) val = 0;
 
-                    setQuantity(Math.min(500, val));
+                    setQuantity(Math.min(MAX_QTY, Math.max(1, val)));
                   }}
                   className="w-[40px] h-full text-center outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 <button
-                onClick={() => setQuantity((prev) => Math.min(500, prev + 1))}
+                onClick={() =>
+                  setQuantity((prev) => Math.min(MAX_QTY, prev + 1))
+                }
                 className="w-[40px] h-full flex items-center justify-center border-l border-gray-300 hover:bg-[rgb(var(--color-primary-main))] cursor-pointer hover:text-white active:bg-[rgb(var(--color-primary-main))] active:text-white text-[24px]"
               >
                 +
@@ -404,9 +427,9 @@ function ProductShowcase() {
               </button>
             </div>
             <p
-              className={`text-sm ${successMessage ? "text-green-600" : "text-red-600"}`}
+              className={`text-sm ${errorMessage ? "text-red-600" : "text-green-600"}`}
             >
-              {successMessage ? successMessage : errorMessage}
+              {errorMessage || successMessage}
             </p>
             {/* Delivery Info */}
             <div className="border border-gray-300 rounded w-full mt-8 lg:mt-12.5">
