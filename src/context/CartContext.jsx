@@ -127,20 +127,36 @@ export function CartProvider({ children }) {
   }, []);
 
   const updateQuantity = useCallback((id, value) => {
-    if (value === "") {
-      setCartItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, quantity: "" } : item)),
-      );
-      return;
-    }
-
-    const quantity = Number(value);
-    if (isNaN(quantity) || quantity < 1) return;
-
+  if (value === "") {
     setCartItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity } : item)),
+      prev.map((item) => (item.id === id ? { ...item, quantity: "" } : item)),
     );
-  }, []);
+    return;
+  }
+
+  const quantity = Number(value);
+  if (isNaN(quantity) || quantity < 1) return;
+
+  setCartItems((prev) =>
+    prev.map((item) => (item.id === id ? { ...item, quantity } : item)),
+  );
+
+  // ✅ Optimistically recompute subtotal from the updated items
+  setCartTotals((prev) => {
+    const updatedItems = cartItemsRef.current.map((item) =>
+      item.id === id ? { ...item, quantity } : item,
+    );
+    const newSubtotal = updatedItems.reduce(
+      (sum, item) => sum + Number(item.price) * Number(item.quantity || 0),
+      0,
+    );
+    return {
+      ...prev,
+      subtotal: newSubtotal,
+      totalPrice: newSubtotal + Number(prev.shippingCost),
+    };
+  });
+}, []);
 
   const removeItem = useCallback(async (cartItemId) => {
     try {
