@@ -227,7 +227,8 @@
     "country": "وڵات",
     "zipCode": "کۆدی پۆستە",
     "delete": "سڕینەوە",
-    "addressLabel": "ناونیشان #{{id}}"
+    "addressLabel": "ناونیشان #{{id}}",
+    "setAsMainAddress": "ئەمە وەک ناونیشانی سەرەکی دابنێ"
   },
   "accountFeature": {
     "layout": {

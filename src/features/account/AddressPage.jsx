@@ -21,6 +21,7 @@ function AddressPage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [formData, setFormData] = useState([]);
   const [savedData, setSavedData] = useState([]);
+  const [setAsMainAddress, setSetAsMainAddress] = useState(false);
 
   useEffect(() => {
   fetchAddress(); // fetch fresh data on mount
@@ -81,6 +82,7 @@ useEffect(() => {
     setIsEditing(false);
     if (selectedIndex === -1) {
       setSelectedIndex(0);
+      setSetAsMainAddress(false);
       setNewAddress({
         address_name: "",
         house_number: "",
@@ -104,11 +106,14 @@ useEffect(() => {
   }
 
   if (selectedIndex === -1) {
-    await createAddress(newAddress); // ← pass whole object
+    await createAddress(newAddress, {
+      isMain: setAsMainAddress,
+    });
 
     await fetchAddress();
 
     setSelectedIndex(0);
+    setSetAsMainAddress(false);
     setNewAddress({
       address_name: "",
       house_number: "",
@@ -160,6 +165,7 @@ useEffect(() => {
               const val = Number(e.target.value);
               setSelectedIndex(val);
               setIsEditing(val === -1);
+              if (val !== -1) setSetAsMainAddress(false);
             }}
           >
             {formData.map((address, i) => (
@@ -186,6 +192,25 @@ useEffect(() => {
                   onChange={handleChange}
                   className="bg-[rgb(var(--color-grey))] py-[13px] px-4"
                 />
+              </div>
+            )}
+            {selectedIndex === -1 && (
+              <div className="w-full min-w-0 rounded-lg border border-[rgb(var(--color-border))] bg-[rgb(var(--color-grey))]/40 px-4 py-3.5 sm:px-5 sm:py-4">
+                <label
+                  htmlFor="address-set-main"
+                  className="flex cursor-pointer items-start gap-3"
+                >
+                  <input
+                    id="address-set-main"
+                    type="checkbox"
+                    checked={setAsMainAddress}
+                    onChange={(e) => setSetAsMainAddress(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 shrink-0 rounded border-[rgb(var(--color-border))] text-[rgb(var(--color-primary-main))] focus:ring-2 focus:ring-[rgb(var(--color-primary-main))] focus:ring-offset-0"
+                  />
+                  <span className="text-sm leading-snug text-[rgb(var(--color-text-main))]">
+                    {t("addressPage.setAsMainAddress")}
+                  </span>
+                </label>
               </div>
             )}
             <div className="w-full min-w-0">

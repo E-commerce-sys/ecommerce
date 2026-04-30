@@ -231,7 +231,8 @@
     "country": "Country",
     "zipCode": "Zip Code",
     "delete": "Delete",
-    "addressLabel": "Address #{{id}}"
+    "addressLabel": "Address #{{id}}",
+    "setAsMainAddress": "Set this as my main address"
   },
   "accountFeature": {
     "layout": {

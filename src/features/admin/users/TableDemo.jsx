@@ -25,6 +25,7 @@ import { unblockUser } from "./api/unblockUser";
 
 export function TableDemo({ users }) {
   const data = users?.data ?? [];
+  console.log(data);
   const { revalidate } = useRevalidator();
 
   const [editingUserId, setEditingUserId] = useState(null);
@@ -245,7 +246,13 @@ export function TableDemo({ users }) {
                       )}
                     </TableCell>
                     <TableCell className="text-center">
-                      {user.attributes?.address || "-"}
+                      {[
+                        user.included?.mainAddress?.attributes?.city,
+                        user.included?.mainAddress?.attributes?.streetName,
+                        user.included?.mainAddress?.attributes?.houseNumber,
+                      ]
+                        .filter(Boolean)
+                        .join(", ") || "-"}
                     </TableCell>
                     <TableCell className="text-center">
                       {user.attributes.numOfOrders || 0}

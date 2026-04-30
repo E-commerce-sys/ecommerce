@@ -32,12 +32,10 @@ export function AddressProvider({ children }) {
     }
   };
 
-  const createAddress = async (
-    data
-  ) => {
+  const createAddress = async (data, options = {}) => {
     try {
       setLoading(true);
-      const newAddress = await createAddressAPI(data);
+      const newAddress = await createAddressAPI(data, options);
       setAddress((prev) => [...prev, newAddress]);
       setError(null);
     } catch (err) {
