@@ -225,7 +225,8 @@
     "country": "الدولة",
     "zipCode": "الرمز البريدي",
     "delete": "حذف",
-    "addressLabel": "عنوان #{{id}}"
+    "addressLabel": "عنوان #{{id}}",
+    "setAsMainAddress": "تعيين هذا كعنواني الرئيسي"
   },
   "accountFeature": {
     "layout": {

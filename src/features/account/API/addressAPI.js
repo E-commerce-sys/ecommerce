@@ -5,7 +5,7 @@ export async function getAddressAPI() {
     return res.data.data;
 }
 
-export async function createAddressAPI(data) {
+export async function createAddressAPI(data, options = {}) {
   const attributes = {};
 
   if (data.city) attributes.city = data.city;
@@ -16,9 +16,14 @@ export async function createAddressAPI(data) {
   if (data.house_number) attributes.houseNumber = data.house_number;
   if (data.zip_code) attributes.zipCode = data.zip_code;
 
-  const res = await axiosInstance.post("/api/address", {
-    data: { attributes }
-  });
+  const config =
+    options.isMain === true ? { params: { isMain: true } } : undefined;
+
+  const res = await axiosInstance.post(
+    "/api/address",
+    { data: { attributes } },
+    config,
+  );
   return res.data;
 }
 export async function deleteAddressAPI(addressId) {
